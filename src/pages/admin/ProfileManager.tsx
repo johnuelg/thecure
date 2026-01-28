@@ -1,0 +1,357 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2, Save, User, Briefcase, Mail, Phone, MapPin, Linkedin, Github, Twitter } from 'lucide-react';
+
+interface Profile {
+  id: string;
+  full_name: string;
+  professional_title: string;
+  bio: string | null;
+  tagline: string | null;
+  email: string | null;
+  phone: string | null;
+  location: string | null;
+  linkedin_url: string | null;
+  github_url: string | null;
+  twitter_url: string | null;
+  profile_image_url: string | null;
+  resume_url: string | null;
+}
+
+const ProfileManager = () => {
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const { toast } = useToast();
+
+  // Form state
+  const [fullName, setFullName] = useState('');
+  const [professionalTitle, setProfessionalTitle] = useState('');
+  const [bio, setBio] = useState('');
+  const [tagline, setTagline] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [location, setLocation] = useState('');
+  const [linkedinUrl, setLinkedinUrl] = useState('');
+  const [githubUrl, setGithubUrl] = useState('');
+  const [twitterUrl, setTwitterUrl] = useState('');
+  const [profileImageUrl, setProfileImageUrl] = useState('');
+  const [resumeUrl, setResumeUrl] = useState('');
+
+  const fetchProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profile')
+        .select('*')
+        .maybeSingle();
+
+      if (error) throw error;
+      
+      if (data) {
+        setProfile(data);
+        setFullName(data.full_name);
+        setProfessionalTitle(data.professional_title);
+        setBio(data.bio || '');
+        setTagline(data.tagline || '');
+        setEmail(data.email || '');
+        setPhone(data.phone || '');
+        setLocation(data.location || '');
+        setLinkedinUrl(data.linkedin_url || '');
+        setGithubUrl(data.github_url || '');
+        setTwitterUrl(data.twitter_url || '');
+        setProfileImageUrl(data.profile_image_url || '');
+        setResumeUrl(data.resume_url || '');
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load profile',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+
+    const profileData = {
+      full_name: fullName,
+      professional_title: professionalTitle,
+      bio: bio || null,
+      tagline: tagline || null,
+      email: email || null,
+      phone: phone || null,
+      location: location || null,
+      linkedin_url: linkedinUrl || null,
+      github_url: githubUrl || null,
+      twitter_url: twitterUrl || null,
+      profile_image_url: profileImageUrl || null,
+      resume_url: resumeUrl || null,
+    };
+
+    try {
+      if (profile) {
+        const { error } = await supabase
+          .from('profile')
+          .update(profileData)
+          .eq('id', profile.id);
+
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('profile')
+          .insert(profileData);
+
+        if (error) throw error;
+      }
+
+      toast({ title: 'Profile saved successfully' });
+      fetchProfile();
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold">Profile</h1>
+        <p className="text-muted-foreground">Manage your personal and professional information</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Basic Info */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <User className="h-5 w-5" />
+              Basic Information
+            </CardTitle>
+            <CardDescription>Your name, title, and bio</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="fullName">Full Name *</Label>
+                <Input
+                  id="fullName"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Your full name"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="professionalTitle">Professional Title *</Label>
+                <Input
+                  id="professionalTitle"
+                  value={professionalTitle}
+                  onChange={(e) => setProfessionalTitle(e.target.value)}
+                  placeholder="e.g., AI Healthcare Consultant"
+                  required
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="tagline">Tagline</Label>
+              <Input
+                id="tagline"
+                value={tagline}
+                onChange={(e) => setTagline(e.target.value)}
+                placeholder="A short tagline for your hero section"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="bio">Bio</Label>
+              <Textarea
+                id="bio"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                placeholder="Tell visitors about yourself, your experience, and what you do..."
+                rows={5}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="profileImageUrl">Profile Photo URL</Label>
+              <Input
+                id="profileImageUrl"
+                value={profileImageUrl}
+                onChange={(e) => setProfileImageUrl(e.target.value)}
+                placeholder="https://..."
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Contact Info */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Mail className="h-5 w-5" />
+              Contact Information
+            </CardTitle>
+            <CardDescription>How visitors can reach you</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="flex items-center gap-2">
+                  <Mail className="h-4 w-4" /> Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone" className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" /> Phone
+                </Label>
+                <Input
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+1 (555) 000-0000"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="location" className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4" /> Location
+                </Label>
+                <Input
+                  id="location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="City, State"
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Social Links */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Linkedin className="h-5 w-5" />
+              Social Links
+            </CardTitle>
+            <CardDescription>Your professional profiles</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="linkedinUrl" className="flex items-center gap-2">
+                  <Linkedin className="h-4 w-4" /> LinkedIn
+                </Label>
+                <Input
+                  id="linkedinUrl"
+                  value={linkedinUrl}
+                  onChange={(e) => setLinkedinUrl(e.target.value)}
+                  placeholder="https://linkedin.com/in/..."
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="githubUrl" className="flex items-center gap-2">
+                  <Github className="h-4 w-4" /> GitHub
+                </Label>
+                <Input
+                  id="githubUrl"
+                  value={githubUrl}
+                  onChange={(e) => setGithubUrl(e.target.value)}
+                  placeholder="https://github.com/..."
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="twitterUrl" className="flex items-center gap-2">
+                  <Twitter className="h-4 w-4" /> Twitter
+                </Label>
+                <Input
+                  id="twitterUrl"
+                  value={twitterUrl}
+                  onChange={(e) => setTwitterUrl(e.target.value)}
+                  placeholder="https://twitter.com/..."
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Resume */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Briefcase className="h-5 w-5" />
+              Resume
+            </CardTitle>
+            <CardDescription>Link to your downloadable resume</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <Label htmlFor="resumeUrl">Resume PDF URL</Label>
+              <Input
+                id="resumeUrl"
+                value={resumeUrl}
+                onChange={(e) => setResumeUrl(e.target.value)}
+                placeholder="https://..."
+              />
+              <p className="text-xs text-muted-foreground">
+                Upload your resume to Supabase Storage and paste the URL here
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Save Button */}
+        <div className="flex justify-end">
+          <Button type="submit" disabled={isSaving} size="lg">
+            {isSaving ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="h-4 w-4 mr-2" />
+                Save Profile
+              </>
+            )}
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default ProfileManager;
