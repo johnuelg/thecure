@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Download, Briefcase, GraduationCap, Award, Code } from "lucide-react";
+import { Download, Briefcase, GraduationCap, Wrench, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,6 +23,12 @@ interface Education {
   degree: string;
   school: string;
   year: string;
+}
+
+interface Tool {
+  id: string;
+  name: string;
+  logo_url: string | null;
 }
 
 interface Skill {
@@ -54,9 +60,9 @@ const fallbackEducation = [
   { id: "2", degree: "M.S. in Computer Science", school: "MIT", year: "2011" },
 ];
 
-const fallbackCertifications = [
-  "AWS Certified Machine Learning - Specialty",
-  "Google Cloud Professional Data Engineer",
+const fallbackTools: Tool[] = [
+  { id: "1", name: "Python", logo_url: null },
+  { id: "2", name: "TensorFlow", logo_url: null },
 ];
 
 const fallbackSkills = [
@@ -104,15 +110,15 @@ export function ResumeSection() {
     },
   });
 
-  const { data: certifications = [] } = useQuery({
-    queryKey: ["public-certifications"],
+  const { data: tools = [] } = useQuery({
+    queryKey: ["public-tools"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("certifications")
-        .select("id, name")
+        .from("tools")
+        .select("id, name, logo_url")
         .order("display_order", { ascending: true });
       if (error) throw error;
-      return data as { id: string; name: string }[];
+      return data as Tool[];
     },
   });
 
@@ -130,7 +136,7 @@ export function ResumeSection() {
 
   const displayExperiences = experiences.length > 0 ? experiences : fallbackExperience;
   const displayEducation = education.length > 0 ? education : fallbackEducation;
-  const displayCertifications = certifications.length > 0 ? certifications.map(c => c.name) : fallbackCertifications;
+  const displayTools = tools.length > 0 ? tools : fallbackTools;
   const displaySkills = skills.length > 0 ? skills : fallbackSkills;
 
   const handleDownloadResume = () => {
@@ -233,21 +239,31 @@ export function ResumeSection() {
               </div>
             </div>
 
-            {/* Certifications */}
+            {/* Tools */}
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Award className="w-5 h-5 text-primary" />
+                  <Wrench className="w-5 h-5 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold">Certifications</h3>
+                <h3 className="text-xl font-semibold">Tools</h3>
               </div>
-              <div className="space-y-2">
-                {displayCertifications.map((cert, index) => (
+              <div className="flex flex-wrap gap-3">
+                {displayTools.map((tool) => (
                   <div
-                    key={index}
-                    className="px-4 py-2 rounded-lg bg-secondary text-sm"
+                    key={tool.id}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary"
                   >
-                    {cert}
+                    {tool.logo_url && (
+                      <img
+                        src={tool.logo_url}
+                        alt={tool.name}
+                        className="w-5 h-5 object-contain"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
+                    )}
+                    <span className="text-sm">{tool.name}</span>
                   </div>
                 ))}
               </div>

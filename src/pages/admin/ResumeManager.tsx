@@ -8,8 +8,9 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Trash2, Loader2, Briefcase, GraduationCap, Award, Code } from 'lucide-react';
+import { Plus, Trash2, Loader2, Briefcase, GraduationCap, Wrench, Code } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface Experience {
   id: string;
@@ -28,9 +29,10 @@ interface Education {
   display_order: number;
 }
 
-interface Certification {
+interface Tool {
   id: string;
   name: string;
+  logo_url: string | null;
   display_order: number;
 }
 
@@ -206,34 +208,46 @@ function EducationCard({
   );
 }
 
-function CertificationCard({ 
-  certification, 
+function ToolCard({ 
+  tool, 
   onUpdate, 
   onDelete,
   isDeleting 
 }: { 
-  certification: Certification; 
-  onUpdate: (data: Partial<Certification> & { id: string }) => void;
+  tool: Tool; 
+  onUpdate: (data: Partial<Tool> & { id: string }) => void;
   onDelete: (id: string) => void;
   isDeleting: boolean;
 }) {
-  const [localData, setLocalData] = useState(certification);
+  const [localData, setLocalData] = useState(tool);
 
   useEffect(() => {
-    setLocalData(certification);
-  }, [certification]);
+    setLocalData(tool);
+  }, [tool]);
 
-  const handleBlur = (field: keyof Certification) => {
-    if (localData[field] !== certification[field]) {
-      onUpdate({ id: certification.id, [field]: localData[field] });
+  const handleBlur = (field: keyof Tool) => {
+    if (localData[field] !== tool[field]) {
+      onUpdate({ id: tool.id, [field]: localData[field] });
     }
+  };
+
+  const handleLogoChange = (url: string) => {
+    setLocalData({ ...localData, logo_url: url });
+    onUpdate({ id: tool.id, logo_url: url });
   };
 
   return (
     <Card>
       <CardContent className="pt-6 space-y-4">
+        <ImageUpload
+          value={localData.logo_url || ''}
+          onChange={handleLogoChange}
+          bucket="portfolio-images"
+          label="Tool Logo"
+          placeholder="Upload tool logo or enter URL"
+        />
         <div className="space-y-2">
-          <Label>Certification Name</Label>
+          <Label>Tool Name</Label>
           <Input
             value={localData.name}
             onChange={(e) => setLocalData({ ...localData, name: e.target.value })}
@@ -252,7 +266,7 @@ function CertificationCard({
         <Button
           variant="destructive"
           size="sm"
-          onClick={() => onDelete(certification.id)}
+          onClick={() => onDelete(tool.id)}
           disabled={isDeleting}
         >
           <Trash2 className="h-4 w-4 mr-2" />
@@ -369,15 +383,15 @@ export default function ResumeManager() {
     },
   });
 
-  const { data: certifications = [], isLoading: loadingCert } = useQuery({
-    queryKey: ['admin-certifications'],
+  const { data: tools = [], isLoading: loadingTools } = useQuery({
+    queryKey: ['admin-tools'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('certifications')
+        .from('tools')
         .select('*')
         .order('display_order', { ascending: true });
       if (error) throw error;
-      return data as Certification[];
+      return data as Tool[];
     },
   });
 
@@ -476,42 +490,42 @@ export default function ResumeManager() {
     },
   });
 
-  // Certification mutations
-  const addCertification = useMutation({
+  // Tool mutations
+  const addTool = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.from('certifications').insert({
-        name: 'New Certification',
-        display_order: certifications.length,
+      const { error } = await supabase.from('tools').insert({
+        name: 'New Tool',
+        display_order: tools.length,
       });
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-certifications'] });
-      toast({ title: 'Certification added' });
+      queryClient.invalidateQueries({ queryKey: ['admin-tools'] });
+      toast({ title: 'Tool added' });
     },
   });
 
-  const updateCertification = useMutation({
-    mutationFn: async (cert: Partial<Certification> & { id: string }) => {
+  const updateTool = useMutation({
+    mutationFn: async (tool: Partial<Tool> & { id: string }) => {
       const { error } = await supabase
-        .from('certifications')
-        .update(cert)
-        .eq('id', cert.id);
+        .from('tools')
+        .update(tool)
+        .eq('id', tool.id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-certifications'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-tools'] });
     },
   });
 
-  const deleteCertification = useMutation({
+  const deleteTool = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('certifications').delete().eq('id', id);
+      const { error } = await supabase.from('tools').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-certifications'] });
-      toast({ title: 'Certification deleted' });
+      queryClient.invalidateQueries({ queryKey: ['admin-tools'] });
+      toast({ title: 'Tool deleted' });
     },
   });
 
@@ -555,7 +569,7 @@ export default function ResumeManager() {
     },
   });
 
-  const isLoading = loadingExp || loadingEdu || loadingCert || loadingSkills;
+  const isLoading = loadingExp || loadingEdu || loadingTools || loadingSkills;
 
   if (isLoading) {
     return (
@@ -570,7 +584,7 @@ export default function ResumeManager() {
       <div>
         <h1 className="text-3xl font-bold">Resume Manager</h1>
         <p className="text-muted-foreground">
-          Manage your experience, education, certifications, and skills
+          Manage your experience, education, tools, and skills
         </p>
       </div>
 
@@ -584,9 +598,9 @@ export default function ResumeManager() {
             <GraduationCap className="h-4 w-4" />
             Education
           </TabsTrigger>
-          <TabsTrigger value="certifications" className="flex items-center gap-2">
-            <Award className="h-4 w-4" />
-            Certifications
+          <TabsTrigger value="tools" className="flex items-center gap-2">
+            <Wrench className="h-4 w-4" />
+            Tools
           </TabsTrigger>
           <TabsTrigger value="skills" className="flex items-center gap-2">
             <Code className="h-4 w-4" />
@@ -642,25 +656,25 @@ export default function ResumeManager() {
           </div>
         </TabsContent>
 
-        {/* Certifications Tab */}
-        <TabsContent value="certifications" className="space-y-4">
-          <Button onClick={() => addCertification.mutate()} disabled={addCertification.isPending}>
+        {/* Tools Tab */}
+        <TabsContent value="tools" className="space-y-4">
+          <Button onClick={() => addTool.mutate()} disabled={addTool.isPending}>
             <Plus className="h-4 w-4 mr-2" />
-            Add Certification
+            Add Tool
           </Button>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {certifications.map((cert) => (
-              <CertificationCard
-                key={cert.id}
-                certification={cert}
-                onUpdate={(data) => updateCertification.mutate(data)}
-                onDelete={(id) => deleteCertification.mutate(id)}
-                isDeleting={deleteCertification.isPending}
+            {tools.map((tool) => (
+              <ToolCard
+                key={tool.id}
+                tool={tool}
+                onUpdate={(data) => updateTool.mutate(data)}
+                onDelete={(id) => deleteTool.mutate(id)}
+                isDeleting={deleteTool.isPending}
               />
             ))}
-            {certifications.length === 0 && (
+            {tools.length === 0 && (
               <p className="text-muted-foreground text-center py-8 col-span-2">
-                No certifications yet. Add your first one!
+                No tools yet. Add your first one!
               </p>
             )}
           </div>
