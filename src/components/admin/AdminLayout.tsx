@@ -18,7 +18,8 @@ import {
   ScrollText,
   BookOpen,
   AlignLeft,
-  Sparkles
+  Sparkles,
+  Link2
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -28,6 +29,7 @@ const navItems = [
   { title: 'Profile', href: '/admin/profile', icon: User },
   { title: 'Section Descriptions', href: '/admin/sections', icon: AlignLeft },
   { title: 'About Highlights', href: '/admin/about-highlights', icon: Sparkles },
+  { title: 'Footer Links', href: '/admin/footer-links', icon: Link2 },
   { title: 'Resume', href: '/admin/resume', icon: ScrollText },
   { title: 'Services', href: '/admin/services', icon: Briefcase },
   { title: 'Projects', href: '/admin/projects', icon: LayoutDashboard },
