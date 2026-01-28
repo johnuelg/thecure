@@ -8,6 +8,8 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/admin/Login";
+import ForgotPassword from "./pages/admin/ForgotPassword";
+import ResetPassword from "./pages/admin/ResetPassword";
 import Dashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
@@ -23,8 +25,12 @@ const App = () => (
             {/* Public routes */}
             <Route path="/" element={<Index />} />
             
-            {/* Admin routes */}
+            {/* Admin auth routes */}
             <Route path="/admin/login" element={<Login />} />
+            <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+            <Route path="/admin/reset-password" element={<ResetPassword />} />
+            
+            {/* Protected admin routes */}
             <Route
               path="/admin"
               element={
