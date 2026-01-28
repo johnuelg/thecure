@@ -62,6 +62,59 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_conversations: {
+        Row: {
+          id: string
+          last_message_at: string
+          session_id: string
+          started_at: string
+        }
+        Insert: {
+          id?: string
+          last_message_at?: string
+          session_id: string
+          started_at?: string
+        }
+        Update: {
+          id?: string
+          last_message_at?: string
+          session_id?: string
+          started_at?: string
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_submissions: {
         Row: {
           email: string
@@ -195,6 +248,39 @@ export type Database = {
           display_order?: number | null
           id?: string
           period?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      knowledge_documents: {
+        Row: {
+          content: string
+          created_at: string
+          display_order: number
+          document_type: string
+          id: string
+          is_active: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          display_order?: number
+          document_type?: string
+          id?: string
+          is_active?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          display_order?: number
+          document_type?: string
+          id?: string
+          is_active?: boolean
           title?: string
           updated_at?: string
         }
