@@ -16,7 +16,8 @@ import {
   ExternalLink,
   BarChart3,
   ScrollText,
-  BookOpen
+  BookOpen,
+  AlignLeft
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -24,6 +25,7 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { title: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { title: 'Profile', href: '/admin/profile', icon: User },
+  { title: 'Section Descriptions', href: '/admin/sections', icon: AlignLeft },
   { title: 'Resume', href: '/admin/resume', icon: ScrollText },
   { title: 'Services', href: '/admin/services', icon: Briefcase },
   { title: 'Projects', href: '/admin/projects', icon: LayoutDashboard },

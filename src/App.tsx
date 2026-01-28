@@ -13,6 +13,7 @@ import ResetPassword from "./pages/admin/ResetPassword";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProfileManager from "./pages/admin/ProfileManager";
+import SectionDescriptionsManager from "./pages/admin/SectionDescriptionsManager";
 import ServicesManager from "./pages/admin/ServicesManager";
 import ProjectsManager from "./pages/admin/ProjectsManager";
 import BlogManager from "./pages/admin/BlogManager";
@@ -51,6 +52,7 @@ const App = () => (
             >
               <Route index element={<AdminDashboard />} />
               <Route path="profile" element={<ProfileManager />} />
+              <Route path="sections" element={<SectionDescriptionsManager />} />
               <Route path="services" element={<ServicesManager />} />
               <Route path="projects" element={<ProjectsManager />} />
               <Route path="visualizations" element={<VisualizationsManager />} />

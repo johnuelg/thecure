@@ -66,6 +66,18 @@ const fallbackProjects: Project[] = [
 export function ProjectsSection() {
   const { ref: sectionRef, isInView } = useScrollAnimation();
 
+  const { data: profile } = useQuery({
+    queryKey: ["public-profile-projects"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profile")
+        .select("projects_description")
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const { data: projects, isLoading } = useQuery({
     queryKey: ["public-projects"],
     queryFn: async () => {
@@ -81,6 +93,9 @@ export function ProjectsSection() {
   });
 
   const displayProjects = projects && projects.length > 0 ? projects : fallbackProjects;
+
+  const sectionDescription = profile?.projects_description || 
+    "A selection of healthcare AI projects demonstrating measurable impact on patient outcomes and operational efficiency.";
 
   // Helper to get display tags from either technologies or metrics
   const getProjectTags = (project: Project | typeof fallbackProjects[0]): string[] => {
@@ -105,8 +120,7 @@ export function ProjectsSection() {
           </span>
           <h2 className="mb-4">Featured Projects</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            A selection of healthcare AI projects demonstrating measurable impact 
-            on patient outcomes and operational efficiency.
+            {sectionDescription}
           </p>
         </motion.div>
 

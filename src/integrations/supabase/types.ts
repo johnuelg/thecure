@@ -288,7 +288,9 @@ export type Database = {
       }
       profile: {
         Row: {
+          analytics_description: string | null
           bio: string | null
+          contact_description: string | null
           created_at: string
           email: string | null
           full_name: string
@@ -299,13 +301,18 @@ export type Database = {
           phone: string | null
           professional_title: string
           profile_image_url: string | null
+          projects_description: string | null
+          resume_description: string | null
           resume_url: string | null
+          services_description: string | null
           tagline: string | null
           twitter_url: string | null
           updated_at: string
         }
         Insert: {
+          analytics_description?: string | null
           bio?: string | null
+          contact_description?: string | null
           created_at?: string
           email?: string | null
           full_name?: string
@@ -316,13 +323,18 @@ export type Database = {
           phone?: string | null
           professional_title?: string
           profile_image_url?: string | null
+          projects_description?: string | null
+          resume_description?: string | null
           resume_url?: string | null
+          services_description?: string | null
           tagline?: string | null
           twitter_url?: string | null
           updated_at?: string
         }
         Update: {
+          analytics_description?: string | null
           bio?: string | null
+          contact_description?: string | null
           created_at?: string
           email?: string | null
           full_name?: string
@@ -333,7 +345,10 @@ export type Database = {
           phone?: string | null
           professional_title?: string
           profile_image_url?: string | null
+          projects_description?: string | null
+          resume_description?: string | null
           resume_url?: string | null
+          services_description?: string | null
           tagline?: string | null
           twitter_url?: string | null
           updated_at?: string
