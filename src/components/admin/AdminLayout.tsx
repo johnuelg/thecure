@@ -13,7 +13,8 @@ import {
   Menu,
   X,
   ChevronLeft,
-  ExternalLink
+  ExternalLink,
+  BarChart3
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -23,6 +24,7 @@ const navItems = [
   { title: 'Profile', href: '/admin/profile', icon: User },
   { title: 'Services', href: '/admin/services', icon: Briefcase },
   { title: 'Projects', href: '/admin/projects', icon: LayoutDashboard },
+  { title: 'Visualizations', href: '/admin/visualizations', icon: BarChart3 },
   { title: 'Blog Posts', href: '/admin/blog', icon: FileText },
   { title: 'Testimonials', href: '/admin/testimonials', icon: Quote },
   { title: 'Messages', href: '/admin/messages', icon: Mail },
