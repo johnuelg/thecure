@@ -16,6 +16,7 @@ interface SectionDescriptions {
   resume_description: string | null;
   contact_description: string | null;
   footer_description: string | null;
+  copyright_text: string | null;
 }
 
 const SectionDescriptionsManager = () => {
@@ -29,7 +30,7 @@ const SectionDescriptionsManager = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('id, about_description, analytics_description, services_description, projects_description, resume_description, contact_description, footer_description')
+        .select('id, about_description, analytics_description, services_description, projects_description, resume_description, contact_description, footer_description, copyright_text')
         .maybeSingle();
       
       if (error) throw error;
@@ -123,6 +124,12 @@ const SectionDescriptionsManager = () => {
       label: 'Footer',
       description: 'Brand description shown in the website footer',
       placeholder: 'Bridging the gap between artificial intelligence and healthcare...',
+    },
+    {
+      key: 'copyright_text' as const,
+      label: 'Copyright Text',
+      description: 'Copyright notice shown at the bottom of the footer (year is added automatically)',
+      placeholder: 'HealthcareAI Consulting. All rights reserved.',
     },
   ];
 

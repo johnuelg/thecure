@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProfileManager from "./pages/admin/ProfileManager";
 import SectionDescriptionsManager from "./pages/admin/SectionDescriptionsManager";
 import AboutHighlightsManager from "./pages/admin/AboutHighlightsManager";
+import FooterLinksManager from "./pages/admin/FooterLinksManager";
 import ServicesManager from "./pages/admin/ServicesManager";
 import ProjectsManager from "./pages/admin/ProjectsManager";
 import BlogManager from "./pages/admin/BlogManager";
@@ -55,6 +56,7 @@ const App = () => (
               <Route path="profile" element={<ProfileManager />} />
               <Route path="sections" element={<SectionDescriptionsManager />} />
               <Route path="about-highlights" element={<AboutHighlightsManager />} />
+              <Route path="footer-links" element={<FooterLinksManager />} />
               <Route path="services" element={<ServicesManager />} />
               <Route path="projects" element={<ProjectsManager />} />
               <Route path="visualizations" element={<VisualizationsManager />} />

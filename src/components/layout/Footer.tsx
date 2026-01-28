@@ -2,26 +2,6 @@ import { Heart, Linkedin, Github, Twitter, Mail } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-const footerLinks = [
-  {
-    title: "Navigation",
-    links: [
-      { label: "About", href: "#about" },
-      { label: "Services", href: "#services" },
-      { label: "Projects", href: "#projects" },
-      { label: "Contact", href: "#contact" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Blog", href: "#blog" },
-      { label: "Resume", href: "#resume" },
-      { label: "Analytics Demo", href: "#visualizations" },
-    ],
-  },
-];
-
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -30,8 +10,22 @@ export function Footer() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('full_name, linkedin_url, github_url, twitter_url, email, footer_description')
+        .select('full_name, linkedin_url, github_url, twitter_url, email, footer_description, copyright_text')
         .maybeSingle();
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: footerLinks } = useQuery({
+    queryKey: ['public-footer-links'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('footer_links')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
       
       if (error) throw error;
       return data;
@@ -46,16 +40,29 @@ export function Footer() {
   ];
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (href.startsWith('#')) {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      window.open(href, '_blank');
     }
   };
 
   const footerDescription = profile?.footer_description || 
     "Bridging the gap between artificial intelligence and healthcare to create impactful solutions that improve patient outcomes and operational efficiency.";
 
-  const displayName = profile?.full_name || "HealthcareAI Consulting";
+  const copyrightText = profile?.copyright_text || "HealthcareAI Consulting. All rights reserved.";
+
+  // Group footer links by group_name
+  const groupedLinks = footerLinks?.reduce((acc, link) => {
+    if (!acc[link.group_name]) {
+      acc[link.group_name] = [];
+    }
+    acc[link.group_name].push(link);
+    return acc;
+  }, {} as Record<string, typeof footerLinks>) || {};
 
   return (
     <footer className="bg-secondary/50 border-t border-border">
@@ -88,13 +95,13 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Links */}
-          {footerLinks.map((group) => (
-            <div key={group.title}>
-              <h4 className="font-semibold mb-4">{group.title}</h4>
+          {/* Dynamic Links */}
+          {Object.entries(groupedLinks).map(([groupName, links]) => (
+            <div key={groupName}>
+              <h4 className="font-semibold mb-4">{groupName}</h4>
               <ul className="space-y-3">
-                {group.links.map((link) => (
-                  <li key={link.label}>
+                {links?.map((link) => (
+                  <li key={link.id}>
                     <button
                       onClick={() => scrollToSection(link.href)}
                       className="text-muted-foreground hover:text-foreground transition-colors text-sm"
@@ -111,7 +118,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} {displayName}. All rights reserved.
+            © {currentYear} {copyrightText}
           </p>
           <p className="text-sm text-muted-foreground flex items-center gap-1">
             Made with <Heart className="w-4 h-4 text-destructive" /> for better healthcare

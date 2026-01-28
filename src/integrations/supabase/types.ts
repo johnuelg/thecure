@@ -286,6 +286,39 @@ export type Database = {
         }
         Relationships: []
       }
+      footer_links: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          group_name: string
+          href: string
+          id: string
+          is_active: boolean | null
+          label: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          group_name: string
+          href: string
+          id?: string
+          is_active?: boolean | null
+          label: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          group_name?: string
+          href?: string
+          id?: string
+          is_active?: boolean | null
+          label?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       knowledge_documents: {
         Row: {
           content: string
@@ -325,6 +358,7 @@ export type Database = {
           analytics_description: string | null
           bio: string | null
           contact_description: string | null
+          copyright_text: string | null
           created_at: string
           email: string | null
           footer_description: string | null
@@ -349,6 +383,7 @@ export type Database = {
           analytics_description?: string | null
           bio?: string | null
           contact_description?: string | null
+          copyright_text?: string | null
           created_at?: string
           email?: string | null
           footer_description?: string | null
@@ -373,6 +408,7 @@ export type Database = {
           analytics_description?: string | null
           bio?: string | null
           contact_description?: string | null
+          copyright_text?: string | null
           created_at?: string
           email?: string | null
           footer_description?: string | null
