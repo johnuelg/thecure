@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Pencil, Trash2, BarChart3, Image, Link2, Eye, EyeOff } from 'lucide-react';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 import {
   LineChart,
   Line,
@@ -507,25 +508,27 @@ export default function VisualizationsManager() {
                     />
                   </div>
                 </>
-              ) : (
+              ) : formData.visualization_type === 'embed' ? (
                 <div className="space-y-2">
-                  <Label htmlFor="media_url">
-                    {formData.visualization_type === 'embed' ? 'Embed URL' : 'Image/GIF URL'} *
-                  </Label>
+                  <Label htmlFor="media_url">Embed URL *</Label>
                   <Input
                     id="media_url"
                     value={formData.media_url}
                     onChange={(e) => setFormData(prev => ({ ...prev, media_url: e.target.value }))}
-                    placeholder={formData.visualization_type === 'embed' 
-                      ? 'https://observablehq.com/embed/...' 
-                      : 'https://example.com/image.gif'}
+                    placeholder="https://observablehq.com/embed/..."
                   />
                   <p className="text-xs text-muted-foreground">
-                    {formData.visualization_type === 'embed' 
-                      ? 'Enter the embed URL from Observable, CodePen, Tableau, etc.'
-                      : 'Enter the URL of your image or GIF. You can upload to Supabase Storage first.'}
+                    Enter the embed URL from Observable, CodePen, Tableau, etc.
                   </p>
                 </div>
+              ) : (
+                <ImageUpload
+                  label={formData.visualization_type === 'gif' ? 'Animated GIF' : 'Image'}
+                  value={formData.media_url}
+                  onChange={(url) => setFormData(prev => ({ ...prev, media_url: url }))}
+                  bucket="portfolio-images"
+                  accept={formData.visualization_type === 'gif' ? 'image/gif' : 'image/*'}
+                />
               )}
 
               <div className="space-y-2">

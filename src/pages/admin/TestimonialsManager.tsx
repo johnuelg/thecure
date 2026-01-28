@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Pencil, Trash2, Loader2, Star, Quote } from 'lucide-react';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface Testimonial {
   id: string;
@@ -306,15 +307,13 @@ const TestimonialsManager = () => {
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="authorImageUrl">Author Photo URL</Label>
-                <Input
-                  id="authorImageUrl"
-                  value={authorImageUrl}
-                  onChange={(e) => setAuthorImageUrl(e.target.value)}
-                  placeholder="https://..."
-                />
-              </div>
+              <ImageUpload
+                label="Author Photo"
+                value={authorImageUrl}
+                onChange={setAuthorImageUrl}
+                bucket="portfolio-images"
+                accept="image/*"
+              />
               <div className="flex items-center gap-2">
                 <Switch
                   id="isFeatured"

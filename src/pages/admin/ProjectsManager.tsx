@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Pencil, Trash2, Loader2, Star, ExternalLink } from 'lucide-react';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface Project {
   id: string;
@@ -375,15 +376,13 @@ const ProjectsManager = () => {
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="imageUrl">Image URL</Label>
-                  <Input
-                    id="imageUrl"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    placeholder="https://..."
-                  />
-                </div>
+                <ImageUpload
+                  label="Project Image"
+                  value={imageUrl}
+                  onChange={setImageUrl}
+                  bucket="portfolio-images"
+                  accept="image/*"
+                />
                 <div className="space-y-2">
                   <Label htmlFor="demoUrl">Demo URL</Label>
                   <Input
