@@ -14,6 +14,7 @@ interface SectionDescriptions {
   projects_description: string | null;
   resume_description: string | null;
   contact_description: string | null;
+  footer_description: string | null;
 }
 
 const SectionDescriptionsManager = () => {
@@ -27,7 +28,7 @@ const SectionDescriptionsManager = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('id, analytics_description, services_description, projects_description, resume_description, contact_description')
+        .select('id, analytics_description, services_description, projects_description, resume_description, contact_description, footer_description')
         .maybeSingle();
       
       if (error) throw error;
@@ -109,6 +110,12 @@ const SectionDescriptionsManager = () => {
       label: 'Contact Section',
       description: 'Description shown below the "Let\'s Work Together" heading',
       placeholder: 'Ready to bring AI innovation to your healthcare organization?...',
+    },
+    {
+      key: 'footer_description' as const,
+      label: 'Footer',
+      description: 'Brand description shown in the website footer',
+      placeholder: 'Bridging the gap between artificial intelligence and healthcare...',
     },
   ];
 
