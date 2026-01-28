@@ -1,11 +1,6 @@
 import { Heart, Linkedin, Github, Twitter, Mail } from "lucide-react";
-
-const socialLinks = [
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Github, href: "#", label: "GitHub" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Mail, href: "mailto:hello@example.com", label: "Email" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const footerLinks = [
   {
@@ -30,12 +25,37 @@ const footerLinks = [
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
+  const { data: profile } = useQuery({
+    queryKey: ['public-profile'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('profile')
+        .select('full_name, linkedin_url, github_url, twitter_url, email, footer_description')
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const socialLinks = [
+    { icon: Linkedin, href: profile?.linkedin_url || "#", label: "LinkedIn" },
+    { icon: Github, href: profile?.github_url || "#", label: "GitHub" },
+    { icon: Twitter, href: profile?.twitter_url || "#", label: "Twitter" },
+    { icon: Mail, href: profile?.email ? `mailto:${profile.email}` : "mailto:hello@example.com", label: "Email" },
+  ];
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const footerDescription = profile?.footer_description || 
+    "Bridging the gap between artificial intelligence and healthcare to create impactful solutions that improve patient outcomes and operational efficiency.";
+
+  const displayName = profile?.full_name || "HealthcareAI Consulting";
 
   return (
     <footer className="bg-secondary/50 border-t border-border">
@@ -52,9 +72,7 @@ export function Footer() {
               </span>
             </div>
             <p className="text-muted-foreground max-w-md mb-6">
-              Bridging the gap between artificial intelligence and healthcare to 
-              create impactful solutions that improve patient outcomes and 
-              operational efficiency.
+              {footerDescription}
             </p>
             <div className="flex items-center gap-3">
               {socialLinks.map((social) => (
@@ -93,7 +111,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} HealthcareAI Consulting. All rights reserved.
+            © {currentYear} {displayName}. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground flex items-center gap-1">
             Made with <Heart className="w-4 h-4 text-destructive" /> for better healthcare
