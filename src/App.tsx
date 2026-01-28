@@ -10,7 +10,14 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/admin/Login";
 import ForgotPassword from "./pages/admin/ForgotPassword";
 import ResetPassword from "./pages/admin/ResetPassword";
-import Dashboard from "./pages/admin/Dashboard";
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ProfileManager from "./pages/admin/ProfileManager";
+import ServicesManager from "./pages/admin/ServicesManager";
+import ProjectsManager from "./pages/admin/ProjectsManager";
+import BlogManager from "./pages/admin/BlogManager";
+import TestimonialsManager from "./pages/admin/TestimonialsManager";
+import MessagesManager from "./pages/admin/MessagesManager";
 
 const queryClient = new QueryClient();
 
@@ -30,23 +37,23 @@ const App = () => (
             <Route path="/admin/forgot-password" element={<ForgotPassword />} />
             <Route path="/admin/reset-password" element={<ResetPassword />} />
             
-            {/* Protected admin routes */}
+            {/* Protected admin routes with layout */}
             <Route
               path="/admin"
               element={
                 <ProtectedRoute requireAdmin>
-                  <Dashboard />
+                  <AdminLayout />
                 </ProtectedRoute>
               }
-            />
-            <Route
-              path="/admin/*"
-              element={
-                <ProtectedRoute requireAdmin>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="profile" element={<ProfileManager />} />
+              <Route path="services" element={<ServicesManager />} />
+              <Route path="projects" element={<ProjectsManager />} />
+              <Route path="blog" element={<BlogManager />} />
+              <Route path="testimonials" element={<TestimonialsManager />} />
+              <Route path="messages" element={<MessagesManager />} />
+            </Route>
             
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
