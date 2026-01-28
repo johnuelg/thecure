@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Save, User, Briefcase, Mail, Phone, MapPin, Linkedin, Github, Twitter } from 'lucide-react';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface Profile {
   id: string;
@@ -199,15 +200,13 @@ const ProfileManager = () => {
                 rows={5}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="profileImageUrl">Profile Photo URL</Label>
-              <Input
-                id="profileImageUrl"
-                value={profileImageUrl}
-                onChange={(e) => setProfileImageUrl(e.target.value)}
-                placeholder="https://..."
-              />
-            </div>
+            <ImageUpload
+              label="Profile Photo"
+              value={profileImageUrl}
+              onChange={setProfileImageUrl}
+              bucket="portfolio-images"
+              accept="image/*"
+            />
           </CardContent>
         </Card>
 
@@ -318,18 +317,13 @@ const ProfileManager = () => {
             <CardDescription>Link to your downloadable resume</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              <Label htmlFor="resumeUrl">Resume PDF URL</Label>
-              <Input
-                id="resumeUrl"
-                value={resumeUrl}
-                onChange={(e) => setResumeUrl(e.target.value)}
-                placeholder="https://..."
-              />
-              <p className="text-xs text-muted-foreground">
-                Upload your resume to Supabase Storage and paste the URL here
-              </p>
-            </div>
+            <ImageUpload
+              label="Resume PDF"
+              value={resumeUrl}
+              onChange={setResumeUrl}
+              bucket="resume"
+              accept=".pdf,application/pdf"
+            />
           </CardContent>
         </Card>
 
