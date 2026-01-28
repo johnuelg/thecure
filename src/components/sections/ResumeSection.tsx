@@ -86,7 +86,13 @@ export function ResumeSection() {
 
   const handleDownloadResume = () => {
     if (profile?.resume_url) {
-      window.open(profile.resume_url, "_blank");
+      const link = document.createElement('a');
+      link.href = profile.resume_url;
+      link.download = 'resume.pdf';
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
