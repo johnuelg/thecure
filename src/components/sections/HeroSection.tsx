@@ -1,20 +1,48 @@
 import { motion } from "framer-motion";
 import { ArrowDown, Activity, Brain, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-const stats = [
+const defaultStats = [
   { icon: Brain, value: "10+", label: "Years Experience" },
   { icon: Activity, value: "50+", label: "Healthcare Projects" },
   { icon: TrendingUp, value: "95%", label: "Client Satisfaction" },
 ];
 
+interface Profile {
+  full_name: string;
+  professional_title: string;
+  tagline: string | null;
+  bio: string | null;
+}
+
 export function HeroSection() {
+  const { data: profile } = useQuery({
+    queryKey: ["public-profile"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profile")
+        .select("full_name, professional_title, tagline, bio")
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data as Profile | null;
+    },
+  });
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  // Extract headline parts from tagline or use defaults
+  const headlineParts = profile?.tagline?.split("|").map(s => s.trim()) || [
+    "Transforming Healthcare",
+    "Through Intelligent Solutions"
+  ];
 
   return (
     <section
@@ -43,7 +71,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8"
           >
             <Activity className="w-4 h-4" />
-            AI Healthcare Consultant & Developer
+            {profile?.professional_title || "AI Healthcare Consultant & Developer"}
           </motion.div>
 
           {/* Heading */}
@@ -53,8 +81,10 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mb-6"
           >
-            Transforming Healthcare
-            <span className="block healthcare-gradient-text">Through Intelligent Solutions</span>
+            {headlineParts[0]}
+            {headlineParts[1] && (
+              <span className="block healthcare-gradient-text">{headlineParts[1]}</span>
+            )}
           </motion.h1>
 
           {/* Description */}
@@ -64,9 +94,7 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
           >
-            I help healthcare organizations leverage artificial intelligence to improve 
-            patient outcomes, streamline operations, and unlock insights from complex 
-            medical data.
+            {profile?.bio || "I help healthcare organizations leverage artificial intelligence to improve patient outcomes, streamline operations, and unlock insights from complex medical data."}
           </motion.p>
 
           {/* CTAs */}
@@ -99,7 +127,7 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto"
           >
-            {stats.map((stat, index) => (
+            {defaultStats.map((stat, index) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, scale: 0.9 }}

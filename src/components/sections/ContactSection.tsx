@@ -7,55 +7,95 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-const contactInfo = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "hello@healthcareai.consulting",
-    href: "mailto:hello@healthcareai.consulting",
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
-  },
-  {
-    icon: MapPin,
-    label: "Location",
-    value: "San Francisco, CA",
-    href: "#",
-  },
-];
+interface Profile {
+  email: string | null;
+  phone: string | null;
+  location: string | null;
+}
 
 export function ContactSection() {
   const { ref: sectionRef, isInView } = useScrollAnimation();
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    organization: "",
+    subject: "",
     message: "",
   });
 
+  // Fetch profile contact info
+  const { data: profile } = useQuery({
+    queryKey: ["public-profile-contact"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profile")
+        .select("email, phone, location")
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data as Profile | null;
+    },
+  });
+
+  // Submit contact form
+  const submitMutation = useMutation({
+    mutationFn: async (data: { name: string; email: string; subject: string; message: string }) => {
+      const { error } = await supabase
+        .from("contact_submissions")
+        .insert([{
+          name: data.name,
+          email: data.email,
+          subject: data.subject || null,
+          message: data.message,
+        }]);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      setIsSubmitted(true);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      toast({
+        title: "Message sent!",
+        description: "Thank you for reaching out. I'll get back to you soon.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const contactInfo = [
+    {
+      icon: Mail,
+      label: "Email",
+      value: profile?.email || "hello@example.com",
+      href: `mailto:${profile?.email || "hello@example.com"}`,
+    },
+    {
+      icon: Phone,
+      label: "Phone",
+      value: profile?.phone || "+1 (555) 123-4567",
+      href: `tel:${profile?.phone?.replace(/\D/g, "") || "+15551234567"}`,
+    },
+    {
+      icon: MapPin,
+      label: "Location",
+      value: profile?.location || "San Francisco, CA",
+      href: "#",
+    },
+  ];
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate form submission (will be replaced with Supabase)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({ name: "", email: "", organization: "", message: "" });
-
-    toast({
-      title: "Message sent!",
-      description: "Thank you for reaching out. I'll get back to you soon.",
-    });
+    submitMutation.mutate(formData);
   };
 
   const handleChange = (
@@ -186,12 +226,12 @@ export function ContactSection() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="organization">Organization</Label>
+                    <Label htmlFor="subject">Subject</Label>
                     <Input
-                      id="organization"
-                      name="organization"
-                      placeholder="ABC Health System"
-                      value={formData.organization}
+                      id="subject"
+                      name="subject"
+                      placeholder="Project inquiry"
+                      value={formData.subject}
                       onChange={handleChange}
                     />
                   </div>
@@ -213,9 +253,9 @@ export function ContactSection() {
                     type="submit"
                     size="lg"
                     className="w-full healthcare-gradient border-0"
-                    disabled={isSubmitting}
+                    disabled={submitMutation.isPending}
                   >
-                    {isSubmitting ? (
+                    {submitMutation.isPending ? (
                       "Sending..."
                     ) : (
                       <>
