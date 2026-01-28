@@ -92,6 +92,51 @@ export type Database = {
         }
         Relationships: []
       }
+      data_visualizations: {
+        Row: {
+          chart_config: Json | null
+          chart_data: Json | null
+          chart_type: string | null
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          is_active: boolean
+          media_url: string | null
+          title: string
+          updated_at: string
+          visualization_type: string
+        }
+        Insert: {
+          chart_config?: Json | null
+          chart_data?: Json | null
+          chart_type?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+          title: string
+          updated_at?: string
+          visualization_type?: string
+        }
+        Update: {
+          chart_config?: Json | null
+          chart_data?: Json | null
+          chart_type?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+          title?: string
+          updated_at?: string
+          visualization_type?: string
+        }
+        Relationships: []
+      }
       profile: {
         Row: {
           bio: string | null
