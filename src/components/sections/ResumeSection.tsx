@@ -2,6 +2,13 @@ import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Download, Briefcase, GraduationCap, Award, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Profile {
+  resume_url: string | null;
+  bio: string | null;
+}
 
 const experience = [
   {
@@ -64,6 +71,25 @@ const skills = [
 export function ResumeSection() {
   const { ref: sectionRef, isInView } = useScrollAnimation();
 
+  const { data: profile } = useQuery({
+    queryKey: ["public-profile-resume"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profile")
+        .select("resume_url, bio")
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data as Profile | null;
+    },
+  });
+
+  const handleDownloadResume = () => {
+    if (profile?.resume_url) {
+      window.open(profile.resume_url, "_blank");
+    }
+  };
+
   return (
     <section id="resume" className="section-padding">
       <div className="container-wide">
@@ -81,7 +107,11 @@ export function ResumeSection() {
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg mb-6">
             Over a decade of experience bridging AI technology and healthcare delivery.
           </p>
-          <Button className="healthcare-gradient border-0">
+          <Button 
+            className="healthcare-gradient border-0"
+            onClick={handleDownloadResume}
+            disabled={!profile?.resume_url}
+          >
             <Download className="mr-2 w-4 h-4" />
             Download Full Resume
           </Button>
