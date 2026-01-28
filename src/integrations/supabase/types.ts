@@ -62,6 +62,27 @@ export type Database = {
         }
         Relationships: []
       }
+      certifications: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           email: string
@@ -134,6 +155,69 @@ export type Database = {
           title?: string
           updated_at?: string
           visualization_type?: string
+        }
+        Relationships: []
+      }
+      education: {
+        Row: {
+          created_at: string
+          degree: string
+          display_order: number | null
+          id: string
+          school: string
+          updated_at: string
+          year: string
+        }
+        Insert: {
+          created_at?: string
+          degree: string
+          display_order?: number | null
+          id?: string
+          school: string
+          updated_at?: string
+          year: string
+        }
+        Update: {
+          created_at?: string
+          degree?: string
+          display_order?: number | null
+          id?: string
+          school?: string
+          updated_at?: string
+          year?: string
+        }
+        Relationships: []
+      }
+      experiences: {
+        Row: {
+          company: string
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          period: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          period: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          period?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -275,6 +359,30 @@ export type Database = {
           is_active?: boolean | null
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          level: number
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          level?: number
+          name: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          level?: number
+          name?: string
         }
         Relationships: []
       }
