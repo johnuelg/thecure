@@ -79,10 +79,10 @@ export function ResumeSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("resume_url, bio")
+        .select("resume_url, bio, resume_description")
         .maybeSingle();
       if (error) throw error;
-      return data as Profile | null;
+      return data as (Profile & { resume_description: string | null }) | null;
     },
   });
 
@@ -139,6 +139,9 @@ export function ResumeSection() {
   const displayTools = tools.length > 0 ? tools : fallbackTools;
   const displaySkills = skills.length > 0 ? skills : fallbackSkills;
 
+  const sectionDescription = profile?.resume_description || 
+    "Over a decade of experience bridging AI technology and healthcare delivery.";
+
   const handleDownloadResume = () => {
     if (profile?.resume_url) {
       const link = document.createElement('a');
@@ -166,7 +169,7 @@ export function ResumeSection() {
           </span>
           <h2 className="mb-4">Experience & Background</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg mb-6">
-            Over a decade of experience bridging AI technology and healthcare delivery.
+            {sectionDescription}
           </p>
           <Button 
             className="healthcare-gradient border-0"

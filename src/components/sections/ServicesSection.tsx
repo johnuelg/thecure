@@ -86,6 +86,18 @@ const fallbackServices = [
 export function ServicesSection() {
   const { ref: sectionRef, isInView } = useScrollAnimation();
 
+  const { data: profile } = useQuery({
+    queryKey: ["public-profile-services"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profile")
+        .select("services_description")
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const { data: services, isLoading } = useQuery({
     queryKey: ["public-services"],
     queryFn: async () => {
@@ -101,6 +113,9 @@ export function ServicesSection() {
   });
 
   const displayServices = services && services.length > 0 ? services : fallbackServices;
+
+  const sectionDescription = profile?.services_description || 
+    "From strategy to implementation, I provide end-to-end AI consulting services designed specifically for healthcare organizations.";
 
   const getIcon = (iconName: string | null): LucideIcon => {
     if (iconName && iconMap[iconName]) {
@@ -124,8 +139,7 @@ export function ServicesSection() {
           </span>
           <h2 className="mb-4">How I Can Help</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            From strategy to implementation, I provide end-to-end AI consulting 
-            services designed specifically for healthcare organizations.
+            {sectionDescription}
           </p>
         </motion.div>
 

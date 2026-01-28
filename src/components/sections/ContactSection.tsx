@@ -14,6 +14,7 @@ interface Profile {
   email: string | null;
   phone: string | null;
   location: string | null;
+  contact_description: string | null;
 }
 
 export function ContactSection() {
@@ -33,13 +34,16 @@ export function ContactSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("email, phone, location")
+        .select("email, phone, location, contact_description")
         .maybeSingle();
       
       if (error) throw error;
       return data as Profile | null;
     },
   });
+
+  const sectionDescription = profile?.contact_description || 
+    "Ready to bring AI innovation to your healthcare organization? Let's discuss how I can help you achieve your goals.";
 
   // Submit contact form
   const submitMutation = useMutation({
@@ -122,8 +126,7 @@ export function ContactSection() {
           </span>
           <h2 className="mb-4">Let's Work Together</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Ready to bring AI innovation to your healthcare organization? 
-            Let's discuss how I can help you achieve your goals.
+            {sectionDescription}
           </p>
         </motion.div>
 

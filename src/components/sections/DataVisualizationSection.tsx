@@ -269,6 +269,18 @@ function VisualizationCard({ viz, index, isInView }: { viz: DataVisualization; i
 export function DataVisualizationSection() {
   const { ref: sectionRef, isInView } = useScrollAnimation();
 
+  const { data: profile } = useQuery({
+    queryKey: ["public-profile-analytics"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profile")
+        .select("analytics_description")
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const { data: visualizations, isLoading } = useQuery({
     queryKey: ["public-visualizations"],
     queryFn: async () => {
@@ -288,6 +300,9 @@ export function DataVisualizationSection() {
     ? visualizations 
     : fallbackVisualizations;
 
+  const sectionDescription = profile?.analytics_description || 
+    "Interactive visualizations demonstrating the power of AI in transforming healthcare outcomes and operational efficiency.";
+
   return (
     <section id="visualizations" className="section-padding bg-secondary/30">
       <div className="container-wide">
@@ -303,8 +318,7 @@ export function DataVisualizationSection() {
           </span>
           <h2 className="mb-4">Healthcare AI in Action</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Interactive visualizations demonstrating the power of AI in transforming 
-            healthcare outcomes and operational efficiency.
+            {sectionDescription}
           </p>
         </motion.div>
 
