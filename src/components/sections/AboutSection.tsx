@@ -1,24 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { User, Award, Target, Lightbulb } from "lucide-react";
+import { User } from "lucide-react";
+import { icons } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-const highlights = [
-  {
-    icon: Award,
-    title: "10+ Years Experience",
-    description: "Deep expertise in healthcare AI implementation",
-  },
-  {
-    icon: Target,
-    title: "Results-Driven",
-    description: "Focused on measurable patient outcomes",
-  },
-  {
-    icon: Lightbulb,
-    title: "Innovation Leader",
-    description: "Pioneering AI solutions in healthcare",
-  },
-];
+const getIcon = (iconName: string): LucideIcon => {
+  return (icons as Record<string, LucideIcon>)[iconName] || icons.Award;
+};
 
 export function AboutSection() {
   const { data: profile } = useQuery({
@@ -28,6 +16,20 @@ export function AboutSection() {
         .from('profile')
         .select('full_name, professional_title, bio, about_description, profile_image_url')
         .maybeSingle();
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: highlights } = useQuery({
+    queryKey: ['public-about-highlights'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('about_highlights')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
       
       if (error) throw error;
       return data;
@@ -64,20 +66,25 @@ export function AboutSection() {
             )}
 
             {/* Highlights */}
-            <div className="grid sm:grid-cols-3 gap-4 pt-4">
-              {highlights.map((item) => (
-                <div
-                  key={item.title}
-                  className="p-4 rounded-xl bg-background border border-border hover:border-primary/50 transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                    <item.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
-                  <p className="text-xs text-muted-foreground">{item.description}</p>
-                </div>
-              ))}
-            </div>
+            {highlights && highlights.length > 0 && (
+              <div className="grid sm:grid-cols-3 gap-4 pt-4">
+                {highlights.map((item) => {
+                  const IconComponent = getIcon(item.icon);
+                  return (
+                    <div
+                      key={item.id}
+                      className="p-4 rounded-xl bg-background border border-border hover:border-primary/50 transition-colors"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                        <IconComponent className="w-5 h-5 text-primary" />
+                      </div>
+                      <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
+                      <p className="text-xs text-muted-foreground">{item.description}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Image */}
