@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -38,6 +39,305 @@ interface Skill {
   name: string;
   level: number;
   display_order: number;
+}
+
+// Editable card components with local state
+function ExperienceCard({ 
+  experience, 
+  onUpdate, 
+  onDelete,
+  isDeleting 
+}: { 
+  experience: Experience; 
+  onUpdate: (data: Partial<Experience> & { id: string }) => void;
+  onDelete: (id: string) => void;
+  isDeleting: boolean;
+}) {
+  const [localData, setLocalData] = useState(experience);
+
+  useEffect(() => {
+    setLocalData(experience);
+  }, [experience]);
+
+  const handleBlur = (field: keyof Experience) => {
+    if (localData[field] !== experience[field]) {
+      onUpdate({ id: experience.id, [field]: localData[field] });
+    }
+  };
+
+  return (
+    <Card>
+      <CardContent className="pt-6 space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Job Title</Label>
+            <Input
+              value={localData.title}
+              onChange={(e) => setLocalData({ ...localData, title: e.target.value })}
+              onBlur={() => handleBlur('title')}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Company</Label>
+            <Input
+              value={localData.company}
+              onChange={(e) => setLocalData({ ...localData, company: e.target.value })}
+              onBlur={() => handleBlur('company')}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Period</Label>
+            <Input
+              value={localData.period}
+              onChange={(e) => setLocalData({ ...localData, period: e.target.value })}
+              onBlur={() => handleBlur('period')}
+              placeholder="e.g., 2020 - Present"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Display Order</Label>
+            <Input
+              type="number"
+              value={localData.display_order}
+              onChange={(e) => setLocalData({ ...localData, display_order: parseInt(e.target.value) || 0 })}
+              onBlur={() => handleBlur('display_order')}
+            />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label>Description</Label>
+          <Textarea
+            value={localData.description || ''}
+            onChange={(e) => setLocalData({ ...localData, description: e.target.value })}
+            onBlur={() => handleBlur('description')}
+            rows={3}
+          />
+        </div>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => onDelete(experience.id)}
+          disabled={isDeleting}
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          Delete
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+function EducationCard({ 
+  education, 
+  onUpdate, 
+  onDelete,
+  isDeleting 
+}: { 
+  education: Education; 
+  onUpdate: (data: Partial<Education> & { id: string }) => void;
+  onDelete: (id: string) => void;
+  isDeleting: boolean;
+}) {
+  const [localData, setLocalData] = useState(education);
+
+  useEffect(() => {
+    setLocalData(education);
+  }, [education]);
+
+  const handleBlur = (field: keyof Education) => {
+    if (localData[field] !== education[field]) {
+      onUpdate({ id: education.id, [field]: localData[field] });
+    }
+  };
+
+  return (
+    <Card>
+      <CardContent className="pt-6 space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Degree</Label>
+            <Input
+              value={localData.degree}
+              onChange={(e) => setLocalData({ ...localData, degree: e.target.value })}
+              onBlur={() => handleBlur('degree')}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>School</Label>
+            <Input
+              value={localData.school}
+              onChange={(e) => setLocalData({ ...localData, school: e.target.value })}
+              onBlur={() => handleBlur('school')}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Year</Label>
+            <Input
+              value={localData.year}
+              onChange={(e) => setLocalData({ ...localData, year: e.target.value })}
+              onBlur={() => handleBlur('year')}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Display Order</Label>
+            <Input
+              type="number"
+              value={localData.display_order}
+              onChange={(e) => setLocalData({ ...localData, display_order: parseInt(e.target.value) || 0 })}
+              onBlur={() => handleBlur('display_order')}
+            />
+          </div>
+        </div>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => onDelete(education.id)}
+          disabled={isDeleting}
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          Delete
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+function CertificationCard({ 
+  certification, 
+  onUpdate, 
+  onDelete,
+  isDeleting 
+}: { 
+  certification: Certification; 
+  onUpdate: (data: Partial<Certification> & { id: string }) => void;
+  onDelete: (id: string) => void;
+  isDeleting: boolean;
+}) {
+  const [localData, setLocalData] = useState(certification);
+
+  useEffect(() => {
+    setLocalData(certification);
+  }, [certification]);
+
+  const handleBlur = (field: keyof Certification) => {
+    if (localData[field] !== certification[field]) {
+      onUpdate({ id: certification.id, [field]: localData[field] });
+    }
+  };
+
+  return (
+    <Card>
+      <CardContent className="pt-6 space-y-4">
+        <div className="space-y-2">
+          <Label>Certification Name</Label>
+          <Input
+            value={localData.name}
+            onChange={(e) => setLocalData({ ...localData, name: e.target.value })}
+            onBlur={() => handleBlur('name')}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Display Order</Label>
+          <Input
+            type="number"
+            value={localData.display_order}
+            onChange={(e) => setLocalData({ ...localData, display_order: parseInt(e.target.value) || 0 })}
+            onBlur={() => handleBlur('display_order')}
+          />
+        </div>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => onDelete(certification.id)}
+          disabled={isDeleting}
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          Delete
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+function SkillCard({ 
+  skill, 
+  onUpdate, 
+  onDelete,
+  isDeleting 
+}: { 
+  skill: Skill; 
+  onUpdate: (data: Partial<Skill> & { id: string }) => void;
+  onDelete: (id: string) => void;
+  isDeleting: boolean;
+}) {
+  const [localData, setLocalData] = useState(skill);
+
+  useEffect(() => {
+    setLocalData(skill);
+  }, [skill]);
+
+  const handleBlur = (field: keyof Skill) => {
+    if (localData[field] !== skill[field]) {
+      onUpdate({ id: skill.id, [field]: localData[field] });
+    }
+  };
+
+  const handleSliderChange = (value: number[]) => {
+    setLocalData({ ...localData, level: value[0] });
+  };
+
+  const handleSliderCommit = (value: number[]) => {
+    if (value[0] !== skill.level) {
+      onUpdate({ id: skill.id, level: value[0] });
+    }
+  };
+
+  return (
+    <Card>
+      <CardContent className="pt-6 space-y-4">
+        <div className="space-y-2">
+          <Label>Skill Name</Label>
+          <Input
+            value={localData.name}
+            onChange={(e) => setLocalData({ ...localData, name: e.target.value })}
+            onBlur={() => handleBlur('name')}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Proficiency Level: {localData.level}%</Label>
+          <Slider
+            value={[localData.level]}
+            onValueChange={handleSliderChange}
+            onValueCommit={handleSliderCommit}
+            max={100}
+            step={5}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Display Order</Label>
+          <Input
+            type="number"
+            value={localData.display_order}
+            onChange={(e) => setLocalData({ ...localData, display_order: parseInt(e.target.value) || 0 })}
+            onBlur={() => handleBlur('display_order')}
+          />
+        </div>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => onDelete(skill.id)}
+          disabled={isDeleting}
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          Delete
+        </Button>
+      </CardContent>
+    </Card>
+  );
 }
 
 export default function ResumeManager() {
@@ -275,295 +575,121 @@ export default function ResumeManager() {
       </div>
 
       <Tabs defaultValue="experience" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="experience" className="flex items-center gap-2">
-              <Briefcase className="h-4 w-4" />
-              Experience
-            </TabsTrigger>
-            <TabsTrigger value="education" className="flex items-center gap-2">
-              <GraduationCap className="h-4 w-4" />
-              Education
-            </TabsTrigger>
-            <TabsTrigger value="certifications" className="flex items-center gap-2">
-              <Award className="h-4 w-4" />
-              Certifications
-            </TabsTrigger>
-            <TabsTrigger value="skills" className="flex items-center gap-2">
-              <Code className="h-4 w-4" />
-              Skills
-            </TabsTrigger>
-          </TabsList>
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="experience" className="flex items-center gap-2">
+            <Briefcase className="h-4 w-4" />
+            Experience
+          </TabsTrigger>
+          <TabsTrigger value="education" className="flex items-center gap-2">
+            <GraduationCap className="h-4 w-4" />
+            Education
+          </TabsTrigger>
+          <TabsTrigger value="certifications" className="flex items-center gap-2">
+            <Award className="h-4 w-4" />
+            Certifications
+          </TabsTrigger>
+          <TabsTrigger value="skills" className="flex items-center gap-2">
+            <Code className="h-4 w-4" />
+            Skills
+          </TabsTrigger>
+        </TabsList>
 
-          {/* Experience Tab */}
-          <TabsContent value="experience" className="space-y-4">
-            <Button onClick={() => addExperience.mutate()} disabled={addExperience.isPending}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Experience
-            </Button>
-            <div className="space-y-4">
-              {experiences.map((exp) => (
-                <Card key={exp.id}>
-                  <CardContent className="pt-6 space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Job Title</Label>
-                        <Input
-                          value={exp.title}
-                          onChange={(e) =>
-                            updateExperience.mutate({ id: exp.id, title: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Company</Label>
-                        <Input
-                          value={exp.company}
-                          onChange={(e) =>
-                            updateExperience.mutate({ id: exp.id, company: e.target.value })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Period</Label>
-                        <Input
-                          value={exp.period}
-                          onChange={(e) =>
-                            updateExperience.mutate({ id: exp.id, period: e.target.value })
-                          }
-                          placeholder="e.g., 2020 - Present"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Display Order</Label>
-                        <Input
-                          type="number"
-                          value={exp.display_order}
-                          onChange={(e) =>
-                            updateExperience.mutate({
-                              id: exp.id,
-                              display_order: parseInt(e.target.value) || 0,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Description</Label>
-                      <Textarea
-                        value={exp.description || ''}
-                        onChange={(e) =>
-                          updateExperience.mutate({ id: exp.id, description: e.target.value })
-                        }
-                        rows={3}
-                      />
-                    </div>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => deleteExperience.mutate(exp.id)}
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-              {experiences.length === 0 && (
-                <p className="text-muted-foreground text-center py-8">
-                  No experience entries yet. Add your first one!
-                </p>
-              )}
-            </div>
-          </TabsContent>
+        {/* Experience Tab */}
+        <TabsContent value="experience" className="space-y-4">
+          <Button onClick={() => addExperience.mutate()} disabled={addExperience.isPending}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Experience
+          </Button>
+          <div className="space-y-4">
+            {experiences.map((exp) => (
+              <ExperienceCard
+                key={exp.id}
+                experience={exp}
+                onUpdate={(data) => updateExperience.mutate(data)}
+                onDelete={(id) => deleteExperience.mutate(id)}
+                isDeleting={deleteExperience.isPending}
+              />
+            ))}
+            {experiences.length === 0 && (
+              <p className="text-muted-foreground text-center py-8">
+                No experience entries yet. Add your first one!
+              </p>
+            )}
+          </div>
+        </TabsContent>
 
-          {/* Education Tab */}
-          <TabsContent value="education" className="space-y-4">
-            <Button onClick={() => addEducation.mutate()} disabled={addEducation.isPending}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Education
-            </Button>
-            <div className="space-y-4">
-              {education.map((edu) => (
-                <Card key={edu.id}>
-                  <CardContent className="pt-6 space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Degree</Label>
-                        <Input
-                          value={edu.degree}
-                          onChange={(e) =>
-                            updateEducation.mutate({ id: edu.id, degree: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>School</Label>
-                        <Input
-                          value={edu.school}
-                          onChange={(e) =>
-                            updateEducation.mutate({ id: edu.id, school: e.target.value })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Year</Label>
-                        <Input
-                          value={edu.year}
-                          onChange={(e) =>
-                            updateEducation.mutate({ id: edu.id, year: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Display Order</Label>
-                        <Input
-                          type="number"
-                          value={edu.display_order}
-                          onChange={(e) =>
-                            updateEducation.mutate({
-                              id: edu.id,
-                              display_order: parseInt(e.target.value) || 0,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => deleteEducation.mutate(edu.id)}
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-              {education.length === 0 && (
-                <p className="text-muted-foreground text-center py-8">
-                  No education entries yet. Add your first one!
-                </p>
-              )}
-            </div>
-          </TabsContent>
+        {/* Education Tab */}
+        <TabsContent value="education" className="space-y-4">
+          <Button onClick={() => addEducation.mutate()} disabled={addEducation.isPending}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Education
+          </Button>
+          <div className="space-y-4">
+            {education.map((edu) => (
+              <EducationCard
+                key={edu.id}
+                education={edu}
+                onUpdate={(data) => updateEducation.mutate(data)}
+                onDelete={(id) => deleteEducation.mutate(id)}
+                isDeleting={deleteEducation.isPending}
+              />
+            ))}
+            {education.length === 0 && (
+              <p className="text-muted-foreground text-center py-8">
+                No education entries yet. Add your first one!
+              </p>
+            )}
+          </div>
+        </TabsContent>
 
-          {/* Certifications Tab */}
-          <TabsContent value="certifications" className="space-y-4">
-            <Button onClick={() => addCertification.mutate()} disabled={addCertification.isPending}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Certification
-            </Button>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {certifications.map((cert) => (
-                <Card key={cert.id}>
-                  <CardContent className="pt-6 space-y-4">
-                    <div className="space-y-2">
-                      <Label>Certification Name</Label>
-                      <Input
-                        value={cert.name}
-                        onChange={(e) =>
-                          updateCertification.mutate({ id: cert.id, name: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Display Order</Label>
-                      <Input
-                        type="number"
-                        value={cert.display_order}
-                        onChange={(e) =>
-                          updateCertification.mutate({
-                            id: cert.id,
-                            display_order: parseInt(e.target.value) || 0,
-                          })
-                        }
-                      />
-                    </div>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => deleteCertification.mutate(cert.id)}
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-              {certifications.length === 0 && (
-                <p className="text-muted-foreground text-center py-8 col-span-2">
-                  No certifications yet. Add your first one!
-                </p>
-              )}
-            </div>
-          </TabsContent>
+        {/* Certifications Tab */}
+        <TabsContent value="certifications" className="space-y-4">
+          <Button onClick={() => addCertification.mutate()} disabled={addCertification.isPending}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Certification
+          </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {certifications.map((cert) => (
+              <CertificationCard
+                key={cert.id}
+                certification={cert}
+                onUpdate={(data) => updateCertification.mutate(data)}
+                onDelete={(id) => deleteCertification.mutate(id)}
+                isDeleting={deleteCertification.isPending}
+              />
+            ))}
+            {certifications.length === 0 && (
+              <p className="text-muted-foreground text-center py-8 col-span-2">
+                No certifications yet. Add your first one!
+              </p>
+            )}
+          </div>
+        </TabsContent>
 
-          {/* Skills Tab */}
-          <TabsContent value="skills" className="space-y-4">
-            <Button onClick={() => addSkill.mutate()} disabled={addSkill.isPending}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Skill
-            </Button>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {skills.map((skill) => (
-                <Card key={skill.id}>
-                  <CardContent className="pt-6 space-y-4">
-                    <div className="space-y-2">
-                      <Label>Skill Name</Label>
-                      <Input
-                        value={skill.name}
-                        onChange={(e) =>
-                          updateSkill.mutate({ id: skill.id, name: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Proficiency Level: {skill.level}%</Label>
-                      <Slider
-                        value={[skill.level]}
-                        onValueChange={(value) =>
-                          updateSkill.mutate({ id: skill.id, level: value[0] })
-                        }
-                        max={100}
-                        step={1}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Display Order</Label>
-                      <Input
-                        type="number"
-                        value={skill.display_order}
-                        onChange={(e) =>
-                          updateSkill.mutate({
-                            id: skill.id,
-                            display_order: parseInt(e.target.value) || 0,
-                          })
-                        }
-                      />
-                    </div>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => deleteSkill.mutate(skill.id)}
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-              {skills.length === 0 && (
-                <p className="text-muted-foreground text-center py-8 col-span-2">
-                  No skills yet. Add your first one!
-                </p>
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+        {/* Skills Tab */}
+        <TabsContent value="skills" className="space-y-4">
+          <Button onClick={() => addSkill.mutate()} disabled={addSkill.isPending}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Skill
+          </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {skills.map((skill) => (
+              <SkillCard
+                key={skill.id}
+                skill={skill}
+                onUpdate={(data) => updateSkill.mutate(data)}
+                onDelete={(id) => deleteSkill.mutate(id)}
+                isDeleting={deleteSkill.isPending}
+              />
+            ))}
+            {skills.length === 0 && (
+              <p className="text-muted-foreground text-center py-8 col-span-2">
+                No skills yet. Add your first one!
+              </p>
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }
