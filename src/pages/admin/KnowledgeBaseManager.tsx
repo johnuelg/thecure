@@ -4,14 +4,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, FileText, Trash2, Edit, GripVertical, BookOpen } from "lucide-react";
+import { Plus, FileText, Trash2, Edit, GripVertical, BookOpen, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DocumentUpload } from "@/components/admin/DocumentUpload";
 
 interface KnowledgeDocument {
   id: string;
@@ -213,6 +214,16 @@ const KnowledgeBaseManager = () => {
                   </SelectContent>
                 </Select>
               </div>
+
+              <DocumentUpload 
+                onContentExtracted={(content, fileName) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    content: content,
+                    title: prev.title || fileName.replace(/\.[^/.]+$/, ''),
+                  }));
+                }}
+              />
 
               <div className="space-y-2">
                 <Label htmlFor="content">Content</Label>
