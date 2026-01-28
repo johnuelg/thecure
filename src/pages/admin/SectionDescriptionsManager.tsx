@@ -9,6 +9,7 @@ import { FileText, Loader2 } from 'lucide-react';
 
 interface SectionDescriptions {
   id: string;
+  about_description: string | null;
   analytics_description: string | null;
   services_description: string | null;
   projects_description: string | null;
@@ -28,7 +29,7 @@ const SectionDescriptionsManager = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('id, analytics_description, services_description, projects_description, resume_description, contact_description, footer_description')
+        .select('id, about_description, analytics_description, services_description, projects_description, resume_description, contact_description, footer_description')
         .maybeSingle();
       
       if (error) throw error;
@@ -81,6 +82,12 @@ const SectionDescriptionsManager = () => {
   };
 
   const sections = [
+    {
+      key: 'about_description' as const,
+      label: 'About Section',
+      description: 'Main description shown in the "Who I Am" section',
+      placeholder: 'I am a passionate Healthcare AI Consultant dedicated to...',
+    },
     {
       key: 'analytics_description' as const,
       label: 'Data Analytics Section',
