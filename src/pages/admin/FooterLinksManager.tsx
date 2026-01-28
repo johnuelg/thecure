@@ -10,6 +10,23 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link2, Plus, Trash2, GripVertical, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 const groupOptions = ['Navigation', 'Resources'];
 
@@ -20,6 +37,71 @@ interface FooterLink {
   href: string;
   display_order: number;
   is_active: boolean;
+}
+
+interface SortableLinkProps {
+  link: FooterLink;
+  onEdit: (link: FooterLink) => void;
+  onToggleActive: (id: string, is_active: boolean) => void;
+  onDelete: (id: string) => void;
+}
+
+function SortableLink({ link, onEdit, onToggleActive, onDelete }: SortableLinkProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: link.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <Card
+      ref={setNodeRef}
+      style={style}
+      className={!link.is_active ? 'opacity-60' : ''}
+    >
+      <CardContent className="flex items-center gap-4 py-3 px-4">
+        <button
+          {...attributes}
+          {...listeners}
+          className="touch-none cursor-grab active:cursor-grabbing"
+        >
+          <GripVertical className="h-4 w-4 text-muted-foreground" />
+        </button>
+        
+        <div className="flex-1 min-w-0">
+          <span className="font-medium">{link.label}</span>
+          <span className="text-sm text-muted-foreground ml-2">→ {link.href}</span>
+        </div>
+        
+        <Switch
+          checked={link.is_active}
+          onCheckedChange={(checked) => onToggleActive(link.id, checked)}
+        />
+        
+        <Button variant="ghost" size="sm" onClick={() => onEdit(link)}>
+          Edit
+        </Button>
+        
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-destructive hover:text-destructive"
+          onClick={() => onDelete(link.id)}
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </CardContent>
+    </Card>
+  );
 }
 
 const FooterLinksManager = () => {
@@ -33,6 +115,13 @@ const FooterLinksManager = () => {
     href: '',
     is_active: true,
   });
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const { data: links, isLoading } = useQuery({
     queryKey: ['admin-footer-links'],
@@ -80,6 +169,26 @@ const FooterLinksManager = () => {
       queryClient.invalidateQueries({ queryKey: ['public-footer-links'] });
       toast({ title: 'Link updated' });
       resetForm();
+    },
+    onError: (error) => {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    },
+  });
+
+  const reorderMutation = useMutation({
+    mutationFn: async (reorderedItems: { id: string; display_order: number }[]) => {
+      const updates = reorderedItems.map(item =>
+        supabase
+          .from('footer_links')
+          .update({ display_order: item.display_order })
+          .eq('id', item.id)
+      );
+      await Promise.all(updates);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-footer-links'] });
+      queryClient.invalidateQueries({ queryKey: ['public-footer-links'] });
+      toast({ title: 'Order updated' });
     },
     onError: (error) => {
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
@@ -134,6 +243,23 @@ const FooterLinksManager = () => {
     updateMutation.mutate({ id, is_active });
   };
 
+  const handleDragEnd = (event: DragEndEvent, groupLinks: FooterLink[]) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = groupLinks.findIndex((item) => item.id === active.id);
+      const newIndex = groupLinks.findIndex((item) => item.id === over.id);
+      
+      const reordered = arrayMove(groupLinks, oldIndex, newIndex);
+      const updates = reordered.map((item, index) => ({
+        id: item.id,
+        display_order: index + 1,
+      }));
+      
+      reorderMutation.mutate(updates);
+    }
+  };
+
   // Group links by group_name
   const groupedLinks = links?.reduce((acc, link) => {
     if (!acc[link.group_name]) {
@@ -160,7 +286,7 @@ const FooterLinksManager = () => {
             Footer Links
           </h1>
           <p className="text-muted-foreground">
-            Manage the navigation links shown in the website footer.
+            Manage the navigation links shown in the website footer. Drag to reorder within each group.
           </p>
         </div>
         
@@ -254,38 +380,28 @@ const FooterLinksManager = () => {
             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
               {groupName}
             </h3>
-            <div className="grid gap-2">
-              {groupLinks.map((link) => (
-                <Card key={link.id} className={!link.is_active ? 'opacity-60' : ''}>
-                  <CardContent className="flex items-center gap-4 py-3 px-4">
-                    <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
-                    
-                    <div className="flex-1 min-w-0">
-                      <span className="font-medium">{link.label}</span>
-                      <span className="text-sm text-muted-foreground ml-2">→ {link.href}</span>
-                    </div>
-                    
-                    <Switch
-                      checked={link.is_active}
-                      onCheckedChange={(checked) => handleToggleActive(link.id, checked)}
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={(event) => handleDragEnd(event, groupLinks)}
+            >
+              <SortableContext
+                items={groupLinks.map(l => l.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="grid gap-2">
+                  {groupLinks.map((link) => (
+                    <SortableLink
+                      key={link.id}
+                      link={link}
+                      onEdit={handleEdit}
+                      onToggleActive={handleToggleActive}
+                      onDelete={(id) => deleteMutation.mutate(id)}
                     />
-                    
-                    <Button variant="ghost" size="sm" onClick={() => handleEdit(link)}>
-                      Edit
-                    </Button>
-                    
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-destructive hover:text-destructive"
-                      onClick={() => deleteMutation.mutate(link.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
           </div>
         ))
       )}
