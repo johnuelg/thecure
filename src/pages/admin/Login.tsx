@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -129,7 +129,16 @@ const Login = () => {
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-4 text-center">
+            <Link 
+              to="/admin/forgot-password" 
+              className="text-sm text-primary hover:underline transition-colors"
+            >
+              Forgot your password?
+            </Link>
+          </div>
+
+          <div className="mt-4 text-center">
             <a href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
               ← Back to website
             </a>
