@@ -14,7 +14,8 @@ import {
   X,
   ChevronLeft,
   ExternalLink,
-  BarChart3
+  BarChart3,
+  ScrollText
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -22,6 +23,7 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { title: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { title: 'Profile', href: '/admin/profile', icon: User },
+  { title: 'Resume', href: '/admin/resume', icon: ScrollText },
   { title: 'Services', href: '/admin/services', icon: Briefcase },
   { title: 'Projects', href: '/admin/projects', icon: LayoutDashboard },
   { title: 'Visualizations', href: '/admin/visualizations', icon: BarChart3 },

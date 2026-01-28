@@ -19,6 +19,7 @@ import BlogManager from "./pages/admin/BlogManager";
 import TestimonialsManager from "./pages/admin/TestimonialsManager";
 import MessagesManager from "./pages/admin/MessagesManager";
 import VisualizationsManager from "./pages/admin/VisualizationsManager";
+import ResumeManager from "./pages/admin/ResumeManager";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
               <Route path="services" element={<ServicesManager />} />
               <Route path="projects" element={<ProjectsManager />} />
               <Route path="visualizations" element={<VisualizationsManager />} />
+              <Route path="resume" element={<ResumeManager />} />
               <Route path="blog" element={<BlogManager />} />
               <Route path="testimonials" element={<TestimonialsManager />} />
               <Route path="messages" element={<MessagesManager />} />

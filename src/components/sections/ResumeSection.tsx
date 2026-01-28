@@ -10,62 +10,59 @@ interface Profile {
   bio: string | null;
 }
 
-const experience = [
+interface Experience {
+  id: string;
+  title: string;
+  company: string;
+  period: string;
+  description: string | null;
+}
+
+interface Education {
+  id: string;
+  degree: string;
+  school: string;
+  year: string;
+}
+
+interface Skill {
+  id: string;
+  name: string;
+  level: number;
+}
+
+// Fallback data
+const fallbackExperience = [
   {
+    id: "1",
     title: "Senior AI Consultant",
     company: "Healthcare Innovation Partners",
     period: "2021 - Present",
-    description:
-      "Lead AI strategy and implementation for major health systems. Delivered $10M+ in documented value through ML solutions.",
+    description: "Lead AI strategy and implementation for major health systems.",
   },
   {
+    id: "2",
     title: "Machine Learning Engineer",
     company: "MedTech Solutions Inc.",
     period: "2018 - 2021",
-    description:
-      "Built predictive models for patient outcomes and clinical decision support systems. Led team of 5 data scientists.",
-  },
-  {
-    title: "Data Scientist",
-    company: "Regional Health Network",
-    period: "2015 - 2018",
-    description:
-      "Developed analytics infrastructure and population health dashboards serving 200+ healthcare facilities.",
+    description: "Built predictive models for patient outcomes and clinical decision support.",
   },
 ];
 
-const education = [
-  {
-    degree: "Ph.D. in Biomedical Informatics",
-    school: "Stanford University",
-    year: "2015",
-  },
-  {
-    degree: "M.S. in Computer Science",
-    school: "MIT",
-    year: "2011",
-  },
-  {
-    degree: "B.S. in Computational Biology",
-    school: "UC Berkeley",
-    year: "2009",
-  },
+const fallbackEducation = [
+  { id: "1", degree: "Ph.D. in Biomedical Informatics", school: "Stanford University", year: "2015" },
+  { id: "2", degree: "M.S. in Computer Science", school: "MIT", year: "2011" },
 ];
 
-const certifications = [
+const fallbackCertifications = [
   "AWS Certified Machine Learning - Specialty",
   "Google Cloud Professional Data Engineer",
-  "HIPAA Security Certification",
-  "HL7 FHIR Fundamentals",
 ];
 
-const skills = [
-  { name: "Python/ML", level: 95 },
-  { name: "Healthcare Data", level: 90 },
-  { name: "Cloud Architecture", level: 85 },
-  { name: "NLP/LLMs", level: 88 },
-  { name: "Data Visualization", level: 92 },
-  { name: "HIPAA/Compliance", level: 85 },
+const fallbackSkills = [
+  { id: "1", name: "Python/ML", level: 95 },
+  { id: "2", name: "Healthcare Data", level: 90 },
+  { id: "3", name: "Cloud Architecture", level: 85 },
 ];
 
 export function ResumeSection() {
@@ -78,11 +75,63 @@ export function ResumeSection() {
         .from("profile")
         .select("resume_url, bio")
         .maybeSingle();
-      
       if (error) throw error;
       return data as Profile | null;
     },
   });
+
+  const { data: experiences = [] } = useQuery({
+    queryKey: ["public-experiences"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("experiences")
+        .select("id, title, company, period, description")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data as Experience[];
+    },
+  });
+
+  const { data: education = [] } = useQuery({
+    queryKey: ["public-education"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("education")
+        .select("id, degree, school, year")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data as Education[];
+    },
+  });
+
+  const { data: certifications = [] } = useQuery({
+    queryKey: ["public-certifications"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("certifications")
+        .select("id, name")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data as { id: string; name: string }[];
+    },
+  });
+
+  const { data: skills = [] } = useQuery({
+    queryKey: ["public-skills"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("skills")
+        .select("id, name, level")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data as Skill[];
+    },
+  });
+
+  const displayExperiences = experiences.length > 0 ? experiences : fallbackExperience;
+  const displayEducation = education.length > 0 ? education : fallbackEducation;
+  const displayCertifications = certifications.length > 0 ? certifications.map(c => c.name) : fallbackCertifications;
+  const displaySkills = skills.length > 0 ? skills : fallbackSkills;
 
   const handleDownloadResume = () => {
     if (profile?.resume_url) {
@@ -139,9 +188,9 @@ export function ResumeSection() {
             </div>
 
             <div className="space-y-6">
-              {experience.map((job, index) => (
+              {displayExperiences.map((job, index) => (
                 <motion.div
-                  key={job.title}
+                  key={job.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                   transition={{ duration: 0.3, delay: 0.2 + index * 0.1 }}
@@ -174,8 +223,8 @@ export function ResumeSection() {
                 <h3 className="text-xl font-semibold">Education</h3>
               </div>
               <div className="space-y-4">
-                {education.map((edu) => (
-                  <div key={edu.degree} className="card-medical p-4">
+                {displayEducation.map((edu) => (
+                  <div key={edu.id} className="card-medical p-4">
                     <h4 className="font-medium text-sm">{edu.degree}</h4>
                     <p className="text-muted-foreground text-sm">{edu.school}</p>
                     <p className="text-xs text-primary">{edu.year}</p>
@@ -193,9 +242,9 @@ export function ResumeSection() {
                 <h3 className="text-xl font-semibold">Certifications</h3>
               </div>
               <div className="space-y-2">
-                {certifications.map((cert) => (
+                {displayCertifications.map((cert, index) => (
                   <div
-                    key={cert}
+                    key={index}
                     className="px-4 py-2 rounded-lg bg-secondary text-sm"
                   >
                     {cert}
@@ -213,8 +262,8 @@ export function ResumeSection() {
                 <h3 className="text-xl font-semibold">Skills</h3>
               </div>
               <div className="space-y-4">
-                {skills.map((skill) => (
-                  <div key={skill.name}>
+                {displaySkills.map((skill) => (
+                  <div key={skill.id}>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="font-medium">{skill.name}</span>
                       <span className="text-muted-foreground">{skill.level}%</span>
