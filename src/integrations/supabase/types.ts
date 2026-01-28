@@ -62,27 +62,6 @@ export type Database = {
         }
         Relationships: []
       }
-      certifications: {
-        Row: {
-          created_at: string
-          display_order: number | null
-          id: string
-          name: string
-        }
-        Insert: {
-          created_at?: string
-          display_order?: number | null
-          id?: string
-          name: string
-        }
-        Update: {
-          created_at?: string
-          display_order?: number | null
-          id?: string
-          name?: string
-        }
-        Relationships: []
-      }
       contact_submissions: {
         Row: {
           email: string
@@ -419,6 +398,30 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           quote?: string
+        }
+        Relationships: []
+      }
+      tools: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          logo_url: string | null
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          logo_url?: string | null
+          name: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          logo_url?: string | null
+          name?: string
         }
         Relationships: []
       }
