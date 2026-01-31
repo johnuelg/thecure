@@ -45,6 +45,23 @@ export function ContactSection() {
   const sectionDescription = profile?.contact_description || 
     "Ready to bring AI innovation to your healthcare organization? Let's discuss how I can help you achieve your goals.";
 
+  // Send email notification (non-blocking)
+  const sendEmailNotification = async (data: { name: string; email: string; subject: string; message: string }) => {
+    try {
+      await supabase.functions.invoke("send-contact-notification", {
+        body: {
+          name: data.name,
+          email: data.email,
+          subject: data.subject || null,
+          message: data.message,
+        },
+      });
+    } catch (error) {
+      // Log but don't fail the form submission if email fails
+      console.error("Failed to send email notification:", error);
+    }
+  };
+
   // Submit contact form
   const submitMutation = useMutation({
     mutationFn: async (data: { name: string; email: string; subject: string; message: string }) => {
@@ -58,6 +75,9 @@ export function ContactSection() {
         }]);
       
       if (error) throw error;
+      
+      // Send email notification in the background (non-blocking)
+      sendEmailNotification(data);
     },
     onSuccess: () => {
       setIsSubmitted(true);
