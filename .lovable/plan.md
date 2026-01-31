@@ -1,152 +1,66 @@
 
 
-# Data Analytics Showcase CMS Implementation
+# Email Notifications for Contact Form Submissions
 
 ## Overview
+Add email notifications so you receive an immediate alert whenever someone submits a message through the contact form on your landing page.
 
-Add a new "Data Visualizations" section to the Admin CMS that allows you to create, edit, and manage medical data visualization demos. Each visualization can include animated GIFs, static images, embedded charts, or even custom interactive visualizations using D3.js/JavaScript snippets.
+## How It Will Work
+1. When a visitor submits the contact form, the message gets saved to the database (already working)
+2. After saving, the frontend will call a new edge function to send you an email notification
+3. You'll receive an email with the sender's name, email, subject, and message content
+
+## What You'll Need to Provide
+**Resend API Key** - We'll use Resend.com for reliable email delivery. You'll need to:
+1. Sign up at https://resend.com (free tier includes 100 emails/day)
+2. Add and verify your email domain at https://resend.com/domains
+3. Create an API key at https://resend.com/api-keys
+
+## Implementation Steps
+
+### Step 1: Create the Email Notification Edge Function
+Create a new `supabase/functions/send-contact-notification/index.ts` that:
+- Receives contact form data (name, email, subject, message)
+- Fetches your profile email from the database as the recipient
+- Sends a formatted HTML email using Resend
+- Includes proper CORS handling and error responses
+
+### Step 2: Update Supabase Configuration
+Add the new function to `supabase/config.toml` with `verify_jwt = false` so it can be called from the public contact form.
+
+### Step 3: Update the Contact Form
+Modify `src/components/sections/ContactSection.tsx` to:
+- Call the new edge function after successfully saving the message to the database
+- Handle the notification in the background (non-blocking)
+- Not affect the user experience if the email fails to send
 
 ---
 
-## What You'll Be Able to Do
+## Technical Details
 
-- **Create visualization demos**: Add new healthcare data visualizations with titles, descriptions, and visual content
-- **Upload GIF animations**: Showcase animated D3.js visualizations as GIFs or videos
-- **Manage chart data**: Store JSON data for dynamic Recharts-based visualizations
-- **Control visibility**: Toggle which visualizations appear on the public site
-- **Reorder displays**: Set the order of visualizations in the showcase grid
-
----
-
-## Implementation Approach
-
-### Visualization Types Supported
-
-1. **Image/GIF**: Upload animated GIFs of D3.js visualizations
-2. **Static Image**: Screenshots or diagrams of data analysis
-3. **Embedded JSON Charts**: Dynamic Recharts visualizations with editable data
-4. **Embed URL**: External visualization links (Observable, Tableau, etc.)
-
----
-
-## Technical Implementation
-
-### Phase 1: Database Setup
-
-Create a new `data_visualizations` table:
-
-```
-Columns:
-- id (UUID, primary key)
-- title (text, required) - e.g., "Patient Recovery Rates"
-- description (text) - Brief explanation of the visualization
-- visualization_type (text) - 'image', 'gif', 'chart', 'embed'
-- chart_type (text, nullable) - 'line', 'bar', 'pie', 'area' for Recharts
-- chart_data (JSONB, nullable) - Data for dynamic charts
-- media_url (text, nullable) - URL for GIF/image/embed
-- chart_config (JSONB, nullable) - Styling and axis configuration
-- is_active (boolean, default true) - Show/hide on public site
-- display_order (integer, default 0) - Sort order
-- created_at, updated_at (timestamps)
+### Edge Function Structure
+```text
+supabase/functions/send-contact-notification/
+  └── index.ts
 ```
 
-RLS Policies:
-- Anyone can view active visualizations
-- Admins can perform all CRUD operations
+### Email Template
+The notification email will include:
+- Subject: "New Contact Form Message: [Subject]" or "New Contact Form Message from [Name]"
+- Sender details (name and email with reply link)
+- Message content
+- Timestamp
+- Direct link to reply via email
 
-### Phase 2: Admin CMS Page
+### Security Considerations
+- The edge function only sends to your profile email (not user-provided)
+- No sensitive data is exposed
+- Rate limiting is handled by Resend's API
 
-Create `VisualizationsManager.tsx` with:
-
-1. **List View**: Grid display of all visualizations with preview thumbnails
-2. **Add/Edit Dialog**:
-   - Title and description fields
-   - Visualization type selector (Image/GIF, Chart, Embed)
-   - Conditional fields based on type:
-     - **Image/GIF**: Media URL input + preview
-     - **Chart**: Chart type dropdown + JSON data editor + preview
-     - **Embed**: URL input for external visualizations
-   - Active toggle and display order
-
-3. **Features**:
-   - Live preview of charts when editing JSON data
-   - Image URL preview
-   - Drag-and-drop reordering (future enhancement)
-
-### Phase 3: Update Admin Navigation
-
-Add "Visualizations" to the sidebar in `AdminLayout.tsx`:
-- Icon: BarChart3 from Lucide
-- Route: `/admin/visualizations`
-
-### Phase 4: Update Public Section
-
-Modify `DataVisualizationSection.tsx` to:
-- Fetch visualizations from the database
-- Render different visualization types dynamically
-- Fall back to default charts if no data exists
-- Support both database-driven and static demo charts
-
----
-
-## File Changes Summary
-
+### Files to Create/Modify
 | File | Action |
 |------|--------|
-| New migration | Create `data_visualizations` table with RLS |
-| `src/pages/admin/VisualizationsManager.tsx` | New - CMS management page |
-| `src/components/admin/AdminLayout.tsx` | Update - Add navigation item |
-| `src/App.tsx` | Update - Add route |
-| `src/components/sections/DataVisualizationSection.tsx` | Update - Fetch from database |
-
----
-
-## About D3.js and GIF Visualizations
-
-Since Lovable is built on React and doesn't support raw D3.js scripts directly in the CMS, here's how to add D3.js animations:
-
-1. **Create D3.js visualizations locally** using your preferred development environment
-2. **Record as GIF or video** using tools like ScreenToGif, Gifox, or LICEcap
-3. **Upload the GIF** to Supabase Storage (portfolio-images bucket)
-4. **Add to CMS** using the media URL
-
-For interactive visualizations, you could:
-- Use the built-in Recharts integration with custom JSON data
-- Embed external visualizations from Observable, CodePen, or Tableau
-- Create React components that wrap D3.js (requires code changes)
-
----
-
-## Sample Visualization Data Structure
-
-```json
-{
-  "title": "AI Diagnostic Accuracy",
-  "description": "Monthly accuracy improvements in AI-assisted diagnostics",
-  "visualization_type": "chart",
-  "chart_type": "line",
-  "chart_data": [
-    { "month": "Jan", "accuracy": 78, "traditional": 65 },
-    { "month": "Feb", "accuracy": 82, "traditional": 66 },
-    { "month": "Mar", "accuracy": 87, "traditional": 67 }
-  ],
-  "chart_config": {
-    "xAxisKey": "month",
-    "lines": [
-      { "dataKey": "accuracy", "name": "AI-Assisted", "color": "primary" },
-      { "dataKey": "traditional", "name": "Traditional", "color": "muted" }
-    ]
-  }
-}
-```
-
----
-
-## Next Steps After Approval
-
-1. Create the database migration for `data_visualizations`
-2. Build the `VisualizationsManager.tsx` admin page
-3. Add navigation and routing
-4. Update the public section to use database data
-5. Test the complete flow
+| `supabase/functions/send-contact-notification/index.ts` | Create |
+| `supabase/config.toml` | Add function config |
+| `src/components/sections/ContactSection.tsx` | Add edge function call |
 
