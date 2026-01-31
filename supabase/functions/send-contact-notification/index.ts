@@ -62,14 +62,10 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const recipientEmail = profile?.email;
-    if (!recipientEmail) {
-      console.error("No recipient email configured in profile");
-      return new Response(
-        JSON.stringify({ error: "No recipient email configured" }),
-        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
-    }
+    // In Resend testing mode, emails can only be sent to the verified owner email
+    // Override to use the verified testing email address
+    const recipientEmail = "shielaj.projects@outlook.com";
+    console.log("Sending notification to:", recipientEmail);
 
     const emailSubject = subject 
       ? `New Contact Form Message: ${subject}` 
