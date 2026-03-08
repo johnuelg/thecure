@@ -37,6 +37,14 @@ interface Skill {
   level: number;
 }
 
+interface Certification {
+  id: string;
+  title: string;
+  issuer: string;
+  date_obtained: string;
+  credential_url: string | null;
+}
+
 // Fallback data
 const fallbackExperience = [
   {
