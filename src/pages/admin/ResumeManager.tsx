@@ -43,6 +43,15 @@ interface Skill {
   display_order: number;
 }
 
+interface Certification {
+  id: string;
+  title: string;
+  issuer: string;
+  date_obtained: string;
+  credential_url: string | null;
+  display_order: number;
+}
+
 // Editable card components with local state
 function ExperienceCard({ 
   experience, 
