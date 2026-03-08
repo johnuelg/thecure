@@ -503,6 +503,18 @@ export default function ResumeManager() {
     },
   });
 
+  const { data: certifications = [], isLoading: loadingCerts } = useQuery({
+    queryKey: ['admin-certifications'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('certifications')
+        .select('*')
+        .order('display_order', { ascending: true });
+      if (error) throw error;
+      return data as Certification[];
+    },
+  });
+
   // Experience mutations
   const addExperience = useMutation({
     mutationFn: async () => {
