@@ -262,6 +262,39 @@ export function ResumeSection() {
               </div>
             </div>
 
+            {/* Certifications */}
+            {certifications.length > 0 && (
+              <div>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Award className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold">Certifications</h3>
+                </div>
+                <div className="space-y-4">
+                  {certifications.map((cert) => (
+                    <div key={cert.id} className="card-medical p-4">
+                      <h4 className="font-medium text-sm">{cert.title}</h4>
+                      <p className="text-muted-foreground text-sm">{cert.issuer}</p>
+                      <div className="flex items-center justify-between mt-1">
+                        <p className="text-xs text-primary">{cert.date_obtained}</p>
+                        {cert.credential_url && (
+                          <a
+                            href={cert.credential_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-primary hover:underline flex items-center gap-1"
+                          >
+                            View <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Tools */}
             <div>
               <div className="flex items-center gap-3 mb-6">
