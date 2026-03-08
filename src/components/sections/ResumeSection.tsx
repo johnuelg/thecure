@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Download, Briefcase, GraduationCap, Wrench, Code } from "lucide-react";
+import { Download, Briefcase, GraduationCap, Wrench, Code, Award, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,6 +35,14 @@ interface Skill {
   id: string;
   name: string;
   level: number;
+}
+
+interface Certification {
+  id: string;
+  title: string;
+  issuer: string;
+  date_obtained: string;
+  credential_url: string | null;
 }
 
 // Fallback data
@@ -131,6 +139,18 @@ export function ResumeSection() {
         .order("display_order", { ascending: true });
       if (error) throw error;
       return data as Skill[];
+    },
+  });
+
+  const { data: certifications = [] } = useQuery({
+    queryKey: ["public-certifications"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("certifications")
+        .select("id, title, issuer, date_obtained, credential_url")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data as Certification[];
     },
   });
 
@@ -241,6 +261,39 @@ export function ResumeSection() {
                 ))}
               </div>
             </div>
+
+            {/* Certifications */}
+            {certifications.length > 0 && (
+              <div>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Award className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold">Certifications</h3>
+                </div>
+                <div className="space-y-4">
+                  {certifications.map((cert) => (
+                    <div key={cert.id} className="card-medical p-4">
+                      <h4 className="font-medium text-sm">{cert.title}</h4>
+                      <p className="text-muted-foreground text-sm">{cert.issuer}</p>
+                      <div className="flex items-center justify-between mt-1">
+                        <p className="text-xs text-primary">{cert.date_obtained}</p>
+                        {cert.credential_url && (
+                          <a
+                            href={cert.credential_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-primary hover:underline flex items-center gap-1"
+                          >
+                            View <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Tools */}
             <div>
