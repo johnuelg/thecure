@@ -142,6 +142,18 @@ export function ResumeSection() {
     },
   });
 
+  const { data: certifications = [] } = useQuery({
+    queryKey: ["public-certifications"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("certifications")
+        .select("id, title, issuer, date_obtained, credential_url")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data as Certification[];
+    },
+  });
+
   const displayExperiences = experiences.length > 0 ? experiences : fallbackExperience;
   const displayEducation = education.length > 0 ? education : fallbackEducation;
   const displayTools = tools.length > 0 ? tools : fallbackTools;
