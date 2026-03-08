@@ -856,6 +856,30 @@ export default function ResumeManager() {
             )}
           </div>
         </TabsContent>
+
+        {/* Certifications Tab */}
+        <TabsContent value="certifications" className="space-y-4">
+          <Button onClick={() => addCertification.mutate()} disabled={addCertification.isPending}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Certification
+          </Button>
+          <div className="space-y-4">
+            {certifications.map((cert) => (
+              <CertificationCard
+                key={cert.id}
+                certification={cert}
+                onUpdate={(data) => updateCertification.mutate(data)}
+                onDelete={(id) => deleteCertification.mutate(id)}
+                isDeleting={deleteCertification.isPending}
+              />
+            ))}
+            {certifications.length === 0 && (
+              <p className="text-muted-foreground text-center py-8">
+                No certifications yet. Add your first one!
+              </p>
+            )}
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );
