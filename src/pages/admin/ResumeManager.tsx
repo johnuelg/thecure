@@ -363,6 +363,93 @@ function SkillCard({
   );
 }
 
+function CertificationCard({ 
+  certification, 
+  onUpdate, 
+  onDelete,
+  isDeleting 
+}: { 
+  certification: Certification; 
+  onUpdate: (data: Partial<Certification> & { id: string }) => void;
+  onDelete: (id: string) => void;
+  isDeleting: boolean;
+}) {
+  const [localData, setLocalData] = useState(certification);
+
+  useEffect(() => {
+    setLocalData(certification);
+  }, [certification]);
+
+  const handleBlur = (field: keyof Certification) => {
+    if (localData[field] !== certification[field]) {
+      onUpdate({ id: certification.id, [field]: localData[field] });
+    }
+  };
+
+  return (
+    <Card>
+      <CardContent className="pt-6 space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Certification Title</Label>
+            <Input
+              value={localData.title}
+              onChange={(e) => setLocalData({ ...localData, title: e.target.value })}
+              onBlur={() => handleBlur('title')}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Issuing Organization</Label>
+            <Input
+              value={localData.issuer}
+              onChange={(e) => setLocalData({ ...localData, issuer: e.target.value })}
+              onBlur={() => handleBlur('issuer')}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Date Obtained</Label>
+            <Input
+              value={localData.date_obtained}
+              onChange={(e) => setLocalData({ ...localData, date_obtained: e.target.value })}
+              onBlur={() => handleBlur('date_obtained')}
+              placeholder="e.g., Jan 2024"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Display Order</Label>
+            <Input
+              type="number"
+              value={localData.display_order}
+              onChange={(e) => setLocalData({ ...localData, display_order: parseInt(e.target.value) || 0 })}
+              onBlur={() => handleBlur('display_order')}
+            />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label>Credential URL (optional)</Label>
+          <Input
+            value={localData.credential_url || ''}
+            onChange={(e) => setLocalData({ ...localData, credential_url: e.target.value })}
+            onBlur={() => handleBlur('credential_url')}
+            placeholder="https://..."
+          />
+        </div>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => onDelete(certification.id)}
+          disabled={isDeleting}
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          Delete
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function ResumeManager() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
