@@ -677,7 +677,48 @@ export default function ResumeManager() {
     },
   });
 
-  const isLoading = loadingExp || loadingEdu || loadingTools || loadingSkills;
+  // Certification mutations
+  const addCertification = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.from('certifications').insert({
+        title: 'New Certification',
+        issuer: 'Issuing Organization',
+        date_obtained: '2024',
+        display_order: certifications.length,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-certifications'] });
+      toast({ title: 'Certification added' });
+    },
+  });
+
+  const updateCertification = useMutation({
+    mutationFn: async (cert: Partial<Certification> & { id: string }) => {
+      const { error } = await supabase
+        .from('certifications')
+        .update(cert)
+        .eq('id', cert.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-certifications'] });
+    },
+  });
+
+  const deleteCertification = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('certifications').delete().eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-certifications'] });
+      toast({ title: 'Certification deleted' });
+    },
+  });
+
+  const isLoading = loadingExp || loadingEdu || loadingTools || loadingSkills || loadingCerts;
 
   if (isLoading) {
     return (
