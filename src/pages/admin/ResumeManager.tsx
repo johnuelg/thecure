@@ -733,12 +733,12 @@ export default function ResumeManager() {
       <div>
         <h1 className="text-3xl font-bold">Resume Manager</h1>
         <p className="text-muted-foreground">
-          Manage your experience, education, tools, and skills
+          Manage your experience, education, tools, skills, and certifications
         </p>
       </div>
 
       <Tabs defaultValue="experience" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="experience" className="flex items-center gap-2">
             <Briefcase className="h-4 w-4" />
             Experience
@@ -746,6 +746,10 @@ export default function ResumeManager() {
           <TabsTrigger value="education" className="flex items-center gap-2">
             <GraduationCap className="h-4 w-4" />
             Education
+          </TabsTrigger>
+          <TabsTrigger value="certifications" className="flex items-center gap-2">
+            <Award className="h-4 w-4" />
+            Certifications
           </TabsTrigger>
           <TabsTrigger value="tools" className="flex items-center gap-2">
             <Wrench className="h-4 w-4" />
