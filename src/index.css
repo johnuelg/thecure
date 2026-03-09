@@ -196,6 +196,38 @@
   }
 }
 
+/* CTA Button glow micro-animations */
+@layer components {
+  .btn-glow {
+    @apply relative transition-all duration-200;
+  }
+
+  .btn-glow::after {
+    content: '';
+    @apply absolute inset-0 rounded-md opacity-0 transition-opacity duration-200;
+    box-shadow: 0 0 20px 4px hsl(var(--healthcare-teal) / 0.4),
+                0 0 40px 8px hsl(var(--healthcare-blue) / 0.2);
+  }
+
+  .btn-glow:hover::after {
+    @apply opacity-100;
+  }
+
+  .btn-glow:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-glow-outline {
+    @apply relative transition-all duration-200;
+  }
+
+  .btn-glow-outline:hover {
+    @apply border-primary;
+    transform: translateY(-1px);
+    box-shadow: 0 0 16px 2px hsl(var(--healthcare-blue) / 0.2);
+  }
+}
+
 /* Custom scrollbar for clinical feel */
 @layer utilities {
   .scrollbar-thin {
