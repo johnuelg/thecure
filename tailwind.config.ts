@@ -109,8 +109,7 @@ export default {
         },
         "ecg-draw": {
           "0%": { strokeDashoffset: "2400" },
-          "50%": { strokeDashoffset: "0" },
-          "100%": { strokeDashoffset: "-2400" },
+          "100%": { strokeDashoffset: "0" },
         },
       },
       animation: {
@@ -122,7 +121,7 @@ export default {
         "slide-in-right": "slide-in-right 0.5s ease-out",
         "scale-in": "scale-in 0.4s ease-out",
         "pulse-line": "pulse-line 2s ease-in-out infinite",
-        "ecg-draw": "ecg-draw 6.5s linear infinite",
+        "ecg-draw": "ecg-draw 4s linear infinite",
       },
     },
   },
