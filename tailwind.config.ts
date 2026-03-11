@@ -128,6 +128,7 @@ export default {
         "scale-in": "scale-in 0.4s ease-out",
         "pulse-line": "pulse-line 2s ease-in-out infinite",
         "ecg-sweep": "ecg-sweep 5s linear infinite",
+        "qrs-pulse": "qrs-pulse 5s ease-in-out infinite",
       },
     },
   },
