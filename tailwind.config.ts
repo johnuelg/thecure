@@ -112,11 +112,10 @@ export default {
           "100%": { strokeDashoffset: "-2100" },
         },
         "qrs-pulse": {
-          "0%": { opacity: "0" },
-          "1%": { opacity: "0.9" },
-          "3%": { opacity: "0.5" },
-          "6%": { opacity: "0" },
-          "100%": { opacity: "0" },
+          "0%, 70%, 100%": { opacity: "0", r: "3" },
+          "15%": { opacity: "0.9", r: "8" },
+          "30%": { opacity: "0.4", r: "12" },
+          "50%": { opacity: "0", r: "6" },
         },
       },
       animation: {
