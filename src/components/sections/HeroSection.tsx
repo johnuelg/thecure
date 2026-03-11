@@ -53,12 +53,14 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-healthcare-light-blue/50 to-background" />
       <div className="absolute inset-0 dna-pattern opacity-30" />
       
-      {/* Animated pulse lines */}
-      <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-healthcare-pulse/30 to-transparent overflow-hidden">
-        <div className="h-full w-1/3 bg-gradient-to-r from-transparent via-healthcare-teal to-transparent animate-pulse-line" />
-      </div>
-      <div className="absolute top-3/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-healthcare-pulse/20 to-transparent overflow-hidden">
-        <div className="h-full w-1/4 bg-gradient-to-r from-transparent via-healthcare-blue to-transparent animate-pulse-line" style={{ animationDelay: "1s" }} />
+      {/* ECG heartbeat background - isolated behind content */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <div className="absolute top-[15%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-healthcare-pulse/20 to-transparent">
+          <div className="h-full w-1/3 bg-gradient-to-r from-transparent via-healthcare-teal/40 to-transparent animate-pulse-line" />
+        </div>
+        <div className="absolute bottom-[18%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-healthcare-pulse/15 to-transparent">
+          <div className="h-full w-1/4 bg-gradient-to-r from-transparent via-healthcare-blue/30 to-transparent animate-pulse-line" style={{ animationDelay: "1s" }} />
+        </div>
       </div>
 
       <div className="container-wide relative z-10 pt-20">
