@@ -32,6 +32,22 @@ export function HeroSection() {
     },
   });
 
+  // Scroll-reactive ECG: fade out and slow down as user scrolls past hero
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroHeight = window.innerHeight;
+      const progress = Math.min(window.scrollY / heroHeight, 1);
+      setScrollProgress(progress);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const ecgOpacity = 1 - scrollProgress;
+  const ecgSpeed = 4 + scrollProgress * 12; // 4s → 16s (slows down)
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
