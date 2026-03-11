@@ -1,33 +1,66 @@
 
 
-## Add Prominent ECG/Heartbeat SVG Animation to Hero Background
+# Email Notifications for Contact Form Submissions
 
-### What
-Replace the current subtle 1px pulse lines with a proper ECG/heartbeat waveform SVG that animates across the hero background — visible but non-intrusive behind the content.
+## Overview
+Add email notifications so you receive an immediate alert whenever someone submits a message through the contact form on your landing page.
 
-### How
+## How It Will Work
+1. When a visitor submits the contact form, the message gets saved to the database (already working)
+2. After saving, the frontend will call a new edge function to send you an email notification
+3. You'll receive an email with the sender's name, email, subject, and message content
 
-**1. Create an inline SVG ECG waveform** in `HeroSection.tsx`:
-- Draw a realistic ECG trace path (flat line → P wave → QRS complex → T wave → flat) using an SVG `<path>`
-- Use `stroke-dasharray` + `stroke-dashoffset` CSS animation to create a "drawing" effect that continuously traces the heartbeat
-- Place two waveform lines at different vertical positions (top ~20%, bottom ~75%) with staggered timing and reduced opacity
+## What You'll Need to Provide
+**Resend API Key** - We'll use Resend.com for reliable email delivery. You'll need to:
+1. Sign up at https://resend.com (free tier includes 100 emails/day)
+2. Add and verify your email domain at https://resend.com/domains
+3. Create an API key at https://resend.com/api-keys
 
-**2. Add keyframes** in `tailwind.config.ts`:
-- `ecg-draw`: animates `stroke-dashoffset` from full length to 0 (draws the line)
-- Keep existing `pulse-line` animation as-is
+## Implementation Steps
 
-**3. Update the hero background container** (lines 57-64 of `HeroSection.tsx`):
-- Replace the current thin gradient divs with SVG elements containing the ECG path
-- Use `opacity-15` / `opacity-10` so they don't compete with text
-- Keep `pointer-events-none` and `z-0` isolation
+### Step 1: Create the Email Notification Edge Function
+Create a new `supabase/functions/send-contact-notification/index.ts` that:
+- Receives contact form data (name, email, subject, message)
+- Fetches your profile email from the database as the recipient
+- Sends a formatted HTML email using Resend
+- Includes proper CORS handling and error responses
 
-### Technical Details
+### Step 2: Update Supabase Configuration
+Add the new function to `supabase/config.toml` with `verify_jwt = false` so it can be called from the public contact form.
 
-The SVG path will approximate a standard ECG PQRST waveform:
+### Step 3: Update the Contact Form
+Modify `src/components/sections/ContactSection.tsx` to:
+- Call the new edge function after successfully saving the message to the database
+- Handle the notification in the background (non-blocking)
+- Not affect the user experience if the email fails to send
+
+---
+
+## Technical Details
+
+### Edge Function Structure
 ```text
-M0,50 L40,50 L45,45 L50,50 L60,50 L65,20 L70,80 L75,50 L85,50 L90,42 L100,50 L140,50
+supabase/functions/send-contact-notification/
+  └── index.ts
 ```
-Repeated across the width. Animation uses CSS `stroke-dasharray` matching total path length, with `stroke-dashoffset` animated from that length to `-length` for continuous replay.
 
-Two SVGs: one wider/slower at top, one narrower/faster at bottom, both using `healthcare-teal` / `healthcare-pulse` stroke colors.
+### Email Template
+The notification email will include:
+- Subject: "New Contact Form Message: [Subject]" or "New Contact Form Message from [Name]"
+- Sender details (name and email with reply link)
+- Message content
+- Timestamp
+- Direct link to reply via email
+
+### Security Considerations
+- The edge function only sends to your profile email (not user-provided)
+- No sensitive data is exposed
+- Rate limiting is handled by Resend's API
+
+### Files to Create/Modify
+| File | Action |
+|------|--------|
+| `supabase/functions/send-contact-notification/index.ts` | Create |
+| `supabase/config.toml` | Add function config |
+| `src/components/sections/ContactSection.tsx` | Add edge function call |
 

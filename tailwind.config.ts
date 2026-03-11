@@ -107,6 +107,11 @@ export default {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
         },
+        "ecg-draw": {
+          "0%": { strokeDashoffset: "3000" },
+          "50%": { strokeDashoffset: "0" },
+          "100%": { strokeDashoffset: "-3000" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -117,6 +122,7 @@ export default {
         "slide-in-right": "slide-in-right 0.5s ease-out",
         "scale-in": "scale-in 0.4s ease-out",
         "pulse-line": "pulse-line 2s ease-in-out infinite",
+        "ecg-draw": "ecg-draw 4s linear infinite",
       },
     },
   },
