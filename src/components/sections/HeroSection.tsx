@@ -140,16 +140,20 @@ export function HeroSection() {
               />
 
               {/* QRS peak pulse flashes */}
-              {[130, 440, 750].map((cx, i) => (
+              {[
+                { cx: 130, delay: 2.55 },
+                { cx: 440, delay: 3.13 },
+                { cx: 750, delay: 3.7 },
+              ].map(({ cx, delay }) => (
                 <circle
                   key={cx}
                   cx={cx}
                   cy="12"
-                  r="4"
+                  r="10"
                   fill="hsl(var(--healthcare-teal))"
                   filter="url(#ecg-glow-outer)"
                   className="animate-qrs-pulse"
-                  style={{ animationDelay: `${i * 1.67}s` }}
+                  style={{ animationDelay: `${delay}s` }}
                 />
               ))}
             </svg>
