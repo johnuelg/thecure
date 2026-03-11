@@ -88,23 +88,17 @@ export function HeroSection() {
             className="pointer-events-none overflow-hidden my-6"
             aria-hidden="true"
           >
-            <svg className="w-full h-20 max-w-2xl mx-auto" viewBox="0 0 600 120" preserveAspectRatio="xMidYMid meet" fill="none">
+            <svg className="w-full h-20" viewBox="0 0 1000 100" preserveAspectRatio="xMidYMid meet" fill="none">
               <defs>
-                {/* Strong outer glow */}
-                <filter id="ecg-glow-strong" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="8" result="blur3" />
-                  <feGaussianBlur stdDeviation="4" result="blur2" />
-                  <feGaussianBlur stdDeviation="2" result="blur1" />
+                <filter id="ecg-glow-outer" x="-10%" y="-50%" width="120%" height="200%">
+                  <feGaussianBlur stdDeviation="6" result="blur" />
                   <feMerge>
-                    <feMergeNode in="blur3" />
-                    <feMergeNode in="blur2" />
-                    <feMergeNode in="blur1" />
+                    <feMergeNode in="blur" />
                     <feMergeNode in="SourceGraphic" />
                   </feMerge>
                 </filter>
-                {/* Subtle glow for mid layer */}
-                <filter id="ecg-glow-mid" x="-30%" y="-30%" width="160%" height="160%">
-                  <feGaussianBlur stdDeviation="4" result="blur" />
+                <filter id="ecg-glow-core" x="-10%" y="-50%" width="120%" height="200%">
+                  <feGaussianBlur stdDeviation="2.5" result="blur" />
                   <feMerge>
                     <feMergeNode in="blur" />
                     <feMergeNode in="SourceGraphic" />
@@ -112,40 +106,37 @@ export function HeroSection() {
                 </filter>
               </defs>
 
-              {/* Single centered heartbeat path: flat → P wave → QRS spike → T wave → flat */}
-              {/* Layer 1: Wide soft glow (outermost) */}
+              {/* Dim persistent base line */}
               <path
-                d="M0,60 L150,60 C155,60 160,58 165,55 C170,52 175,56 178,60 L190,60 L200,58 L205,62 L210,8 L218,110 L226,35 L232,60 L245,60 C250,60 255,54 262,46 C269,38 276,52 282,60 L450,60 L600,60"
+                d="M0,50 L80,50 C84,50 88,48 92,46 C96,44 100,48 102,50 L115,50 L122,49 L126,51 L130,12 L136,88 L142,32 L148,50 L165,50 C169,50 174,44 180,38 C186,32 192,44 196,50 L310,50 L390,50 C394,50 398,48 402,46 C406,44 410,48 412,50 L425,50 L432,49 L436,51 L440,12 L446,88 L452,32 L458,50 L475,50 C479,50 484,44 490,38 C496,32 502,44 506,50 L620,50 L700,50 C704,50 708,48 712,46 C716,44 720,48 722,50 L735,50 L742,49 L746,51 L750,12 L756,88 L762,32 L768,50 L785,50 C789,50 794,44 800,38 C806,32 812,44 816,50 L1000,50"
                 stroke="hsl(var(--healthcare-teal))"
-                strokeWidth="4"
-                strokeOpacity="0.15"
+                strokeWidth="1.5"
+                strokeOpacity="0.1"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                filter="url(#ecg-glow-strong)"
-                className="animate-ecg-draw"
-                style={{ strokeDasharray: 1200, strokeDashoffset: 1200 }}
               />
-              {/* Layer 2: Medium glow */}
+              {/* Sweeping glow layer */}
               <path
-                d="M0,60 L150,60 C155,60 160,58 165,55 C170,52 175,56 178,60 L190,60 L200,58 L205,62 L210,8 L218,110 L226,35 L232,60 L245,60 C250,60 255,54 262,46 C269,38 276,52 282,60 L450,60 L600,60"
+                d="M0,50 L80,50 C84,50 88,48 92,46 C96,44 100,48 102,50 L115,50 L122,49 L126,51 L130,12 L136,88 L142,32 L148,50 L165,50 C169,50 174,44 180,38 C186,32 192,44 196,50 L310,50 L390,50 C394,50 398,48 402,46 C406,44 410,48 412,50 L425,50 L432,49 L436,51 L440,12 L446,88 L452,32 L458,50 L475,50 C479,50 484,44 490,38 C496,32 502,44 506,50 L620,50 L700,50 C704,50 708,48 712,46 C716,44 720,48 722,50 L735,50 L742,49 L746,51 L750,12 L756,88 L762,32 L768,50 L785,50 C789,50 794,44 800,38 C806,32 812,44 816,50 L1000,50"
                 stroke="hsl(var(--healthcare-teal))"
                 strokeWidth="3"
-                strokeOpacity="0.4"
+                strokeOpacity="0.35"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                filter="url(#ecg-glow-mid)"
-                className="animate-ecg-draw"
-                style={{ strokeDasharray: 1200, strokeDashoffset: 1200 }}
+                filter="url(#ecg-glow-outer)"
+                className="animate-ecg-sweep"
+                style={{ strokeDasharray: '250 1850', strokeDashoffset: 2100 }}
               />
-              {/* Layer 3: Bright core line */}
+              {/* Sweeping bright core */}
               <path
-                d="M0,60 L150,60 C155,60 160,58 165,55 C170,52 175,56 178,60 L190,60 L200,58 L205,62 L210,8 L218,110 L226,35 L232,60 L245,60 C250,60 255,54 262,46 C269,38 276,52 282,60 L450,60 L600,60"
+                d="M0,50 L80,50 C84,50 88,48 92,46 C96,44 100,48 102,50 L115,50 L122,49 L126,51 L130,12 L136,88 L142,32 L148,50 L165,50 C169,50 174,44 180,38 C186,32 192,44 196,50 L310,50 L390,50 C394,50 398,48 402,46 C406,44 410,48 412,50 L425,50 L432,49 L436,51 L440,12 L446,88 L452,32 L458,50 L475,50 C479,50 484,44 490,38 C496,32 502,44 506,50 L620,50 L700,50 C704,50 708,48 712,46 C716,44 720,48 722,50 L735,50 L742,49 L746,51 L750,12 L756,88 L762,32 L768,50 L785,50 C789,50 794,44 800,38 C806,32 812,44 816,50 L1000,50"
                 stroke="hsl(var(--healthcare-teal))"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="animate-ecg-draw"
-                style={{ strokeDasharray: 1200, strokeDashoffset: 1200 }}
+                filter="url(#ecg-glow-core)"
+                className="animate-ecg-sweep"
+                style={{ strokeDasharray: '250 1850', strokeDashoffset: 2100 }}
               />
             </svg>
           </motion.div>
