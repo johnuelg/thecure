@@ -51,7 +51,7 @@ export function HeroSection() {
     >
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-b from-healthcare-light-blue/50 to-background" />
-      <div className="absolute inset-0 dna-pattern opacity-30" />
+      
       
 
       <div className="container-wide relative z-10 pt-20">
