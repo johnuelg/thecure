@@ -109,8 +109,9 @@ export default {
         },
         "ecg-draw": {
           "0%": { strokeDashoffset: "1200" },
-          "40%": { strokeDashoffset: "0" },
-          "60%": { strokeDashoffset: "0" },
+          "35%": { strokeDashoffset: "0" },
+          "55%": { strokeDashoffset: "0" },
+          "90%": { strokeDashoffset: "-1200" },
           "100%": { strokeDashoffset: "-1200" },
         },
       },
