@@ -138,20 +138,6 @@ export function HeroSection() {
                 className="animate-ecg-sweep"
                 style={{ strokeDasharray: '250 1850', strokeDashoffset: 2100 }}
               />
-
-              {/* QRS peak pulse flashes */}
-              {[130, 440, 750].map((cx, i) => (
-                <circle
-                  key={cx}
-                  cx={cx}
-                  cy="12"
-                  r="4"
-                  fill="hsl(var(--healthcare-teal))"
-                  filter="url(#ecg-glow-outer)"
-                  className="animate-qrs-pulse"
-                  style={{ animationDelay: `${i * 1.67}s` }}
-                />
-              ))}
             </svg>
           </motion.div>
 
