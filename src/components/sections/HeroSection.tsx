@@ -82,7 +82,7 @@ export function HeroSection() {
             d="M0,55 L80,55 L88,55 C90,55 92,50 94,48 C96,46 98,52 100,55 L120,55 L128,55 L132,54 L134,56 L136,12 L140,88 L144,42 L148,55 L160,55 C162,55 164,50 168,45 C172,40 176,49 180,55 L260,55 L340,55 L348,55 C350,55 352,50 354,48 C356,46 358,52 360,55 L380,55 L388,55 L392,54 L394,56 L396,12 L400,88 L404,42 L408,55 L420,55 C422,55 424,50 428,45 C432,40 436,49 440,55 L520,55 L600,55 L608,55 C610,55 612,50 614,48 C616,46 618,52 620,55 L640,55 L648,55 L652,54 L654,56 L656,12 L660,88 L664,42 L668,55 L680,55 C682,55 684,50 688,45 C692,40 696,49 700,55 L780,55 L900,55"
             stroke="hsl(var(--healthcare-pulse))"
             strokeWidth="1.5"
-            strokeLinecap="round"
+            filter="url(#ecg-glow-top)"
             strokeLinejoin="round"
             className="animate-ecg-draw"
             style={{ strokeDasharray: 2400, strokeDashoffset: 2400, animationDelay: "2s" }}
