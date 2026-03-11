@@ -70,16 +70,19 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-healthcare-light-blue/50 to-background" />
       <div className="absolute inset-0 dna-pattern opacity-30" />
       
-      {/* ECG heartbeat SVG background */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+      {/* ECG heartbeat SVG background — scroll-reactive */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden transition-opacity duration-200"
+        aria-hidden="true"
+        style={{ opacity: ecgOpacity }}
+      >
         {/* Top ECG waveform */}
         <svg className="absolute top-[20%] left-0 w-full h-24 opacity-15" viewBox="0 0 1400 100" preserveAspectRatio="none" fill="none">
           <path
             d="M0,50 L40,50 L45,45 L50,50 L60,50 L65,20 L70,80 L75,50 L85,50 L90,42 L100,50 L140,50 L180,50 L185,45 L190,50 L200,50 L205,20 L210,80 L215,50 L225,50 L230,42 L240,50 L280,50 L320,50 L325,45 L330,50 L340,50 L345,20 L350,80 L355,50 L365,50 L370,42 L380,50 L420,50 L460,50 L465,45 L470,50 L480,50 L485,20 L490,80 L495,50 L505,50 L510,42 L520,50 L560,50 L600,50 L605,45 L610,50 L620,50 L625,20 L630,80 L635,50 L645,50 L650,42 L660,50 L700,50 L740,50 L745,45 L750,50 L760,50 L765,20 L770,80 L775,50 L785,50 L790,42 L800,50 L840,50 L880,50 L885,45 L890,50 L900,50 L905,20 L910,80 L915,50 L925,50 L930,42 L940,50 L980,50 L1020,50 L1025,45 L1030,50 L1040,50 L1045,20 L1050,80 L1055,50 L1065,50 L1070,42 L1080,50 L1120,50 L1160,50 L1165,45 L1170,50 L1180,50 L1185,20 L1190,80 L1195,50 L1205,50 L1210,42 L1220,50 L1260,50 L1300,50 L1305,45 L1310,50 L1320,50 L1325,20 L1330,80 L1335,50 L1345,50 L1350,42 L1360,50 L1400,50"
             stroke="hsl(var(--healthcare-teal))"
             strokeWidth="2"
-            className="animate-ecg-draw"
-            style={{ strokeDasharray: 3000, strokeDashoffset: 3000 }}
+            style={{ strokeDasharray: 3000, strokeDashoffset: 3000, animation: `ecg-draw ${ecgSpeed}s linear infinite` }}
           />
         </svg>
         {/* Bottom ECG waveform */}
@@ -88,8 +91,7 @@ export function HeroSection() {
             d="M0,50 L40,50 L45,45 L50,50 L60,50 L65,20 L70,80 L75,50 L85,50 L90,42 L100,50 L140,50 L180,50 L185,45 L190,50 L200,50 L205,20 L210,80 L215,50 L225,50 L230,42 L240,50 L280,50 L320,50 L325,45 L330,50 L340,50 L345,20 L350,80 L355,50 L365,50 L370,42 L380,50 L420,50 L460,50 L465,45 L470,50 L480,50 L485,20 L490,80 L495,50 L505,50 L510,42 L520,50 L560,50 L600,50 L605,45 L610,50 L620,50 L625,20 L630,80 L635,50 L645,50 L650,42 L660,50 L700,50 L740,50 L745,45 L750,50 L760,50 L765,20 L770,80 L775,50 L785,50 L790,42 L800,50 L840,50 L880,50 L885,45 L890,50 L900,50 L905,20 L910,80 L915,50 L925,50 L930,42 L940,50 L980,50 L1020,50 L1025,45 L1030,50 L1040,50 L1045,20 L1050,80 L1055,50 L1065,50 L1070,42 L1080,50 L1120,50 L1160,50 L1165,45 L1170,50 L1180,50 L1185,20 L1190,80 L1195,50 L1205,50 L1210,42 L1220,50 L1260,50 L1300,50 L1305,45 L1310,50 L1320,50 L1325,20 L1330,80 L1335,50 L1345,50 L1350,42 L1360,50 L1400,50"
             stroke="hsl(var(--healthcare-pulse))"
             strokeWidth="1.5"
-            className="animate-ecg-draw"
-            style={{ strokeDasharray: 3000, strokeDashoffset: 3000, animationDelay: "1.5s" }}
+            style={{ strokeDasharray: 3000, strokeDashoffset: 3000, animation: `ecg-draw ${ecgSpeed * 1.2}s linear infinite`, animationDelay: "1.5s" }}
           />
         </svg>
       </div>
