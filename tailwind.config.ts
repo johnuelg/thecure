@@ -108,9 +108,9 @@ export default {
           "100%": { transform: "translateX(100%)" },
         },
         "ecg-draw": {
-          "0%": { strokeDashoffset: "3000" },
+          "0%": { strokeDashoffset: "2400" },
           "50%": { strokeDashoffset: "0" },
-          "100%": { strokeDashoffset: "-3000" },
+          "100%": { strokeDashoffset: "-2400" },
         },
       },
       animation: {
