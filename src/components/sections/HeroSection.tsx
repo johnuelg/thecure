@@ -88,15 +88,43 @@ export function HeroSection() {
             className="pointer-events-none overflow-hidden my-4"
             aria-hidden="true"
           >
-            <svg className="w-full h-16 opacity-[0.18]" viewBox="0 0 900 100" preserveAspectRatio="xMidYMid meet" fill="none">
+            <svg className="w-full h-16" viewBox="0 0 900 100" preserveAspectRatio="xMidYMid meet" fill="none">
+              <defs>
+                <filter id="ecg-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur1" />
+                  <feGaussianBlur stdDeviation="6" result="blur2" />
+                  <feMerge>
+                    <feMergeNode in="blur2" />
+                    <feMergeNode in="blur1" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <linearGradient id="ecg-trail" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="hsl(var(--healthcare-teal))" stopOpacity="0" />
+                  <stop offset="60%" stopColor="hsl(var(--healthcare-teal))" stopOpacity="0.3" />
+                  <stop offset="85%" stopColor="hsl(var(--healthcare-teal))" stopOpacity="0.7" />
+                  <stop offset="100%" stopColor="hsl(var(--healthcare-teal))" stopOpacity="1" />
+                </linearGradient>
+              </defs>
+              {/* Dim base trace */}
               <path
-                d="M0,55 L60,55 L68,55 C70,55 72,50 74,48 C76,46 78,52 80,55 L100,55 L108,55 L112,54 L114,56 L116,10 L120,90 L124,40 L128,55 L140,55 C142,55 144,50 148,44 C152,38 156,48 160,55 L220,55 L280,55 L288,55 C290,55 292,50 294,48 C296,46 298,52 300,55 L320,55 L328,55 L332,54 L334,56 L336,10 L340,90 L344,40 L348,55 L360,55 C362,55 364,50 368,44 C372,38 376,48 380,55 L440,55 L500,55 L508,55 C510,55 512,50 514,48 C516,46 518,52 520,55 L540,55 L548,55 L552,54 L554,56 L556,10 L560,90 L564,40 L568,55 L580,55 C582,55 584,50 588,44 C592,38 596,48 600,55 L660,55 L720,55 L728,55 C730,55 732,50 734,48 C736,46 738,52 740,55 L760,55 L768,55 L772,54 L774,56 L776,10 L780,90 L784,40 L788,55 L800,55 C802,55 804,50 808,44 C812,38 816,48 820,55 L900,55"
+                d="M0,55 L60,55 C62,55 64,53 66,51 C68,49 70,53 72,55 L90,55 L98,55 L102,54 L104,56 L106,10 L110,90 L114,40 L118,55 L130,55 C132,55 134,50 138,44 C142,38 146,48 150,55 L220,55 L280,55 C282,55 284,53 286,51 C288,49 290,53 292,55 L310,55 L318,55 L322,54 L324,56 L326,10 L330,90 L334,40 L338,55 L350,55 C352,55 354,50 358,44 C362,38 366,48 370,55 L440,55 L500,55 C502,55 504,53 506,51 C508,49 510,53 512,55 L530,55 L538,55 L542,54 L544,56 L546,10 L550,90 L554,40 L558,55 L570,55 C572,55 574,50 578,44 C582,38 586,48 590,55 L660,55 L720,55 C722,55 724,53 726,51 C728,49 730,53 732,55 L750,55 L758,55 L762,54 L764,56 L766,10 L770,90 L774,40 L778,55 L790,55 C792,55 794,50 798,44 C802,38 806,48 810,55 L900,55"
                 stroke="hsl(var(--healthcare-teal))"
-                strokeWidth="2"
+                strokeWidth="1"
+                strokeOpacity="0.08"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+              />
+              {/* Animated glowing trace */}
+              <path
+                d="M0,55 L60,55 C62,55 64,53 66,51 C68,49 70,53 72,55 L90,55 L98,55 L102,54 L104,56 L106,10 L110,90 L114,40 L118,55 L130,55 C132,55 134,50 138,44 C142,38 146,48 150,55 L220,55 L280,55 C282,55 284,53 286,51 C288,49 290,53 292,55 L310,55 L318,55 L322,54 L324,56 L326,10 L330,90 L334,40 L338,55 L350,55 C352,55 354,50 358,44 C362,38 366,48 370,55 L440,55 L500,55 C502,55 504,53 506,51 C508,49 510,53 512,55 L530,55 L538,55 L542,54 L544,56 L546,10 L550,90 L554,40 L558,55 L570,55 C572,55 574,50 578,44 C582,38 586,48 590,55 L660,55 L720,55 C722,55 724,53 726,51 C728,49 730,53 732,55 L750,55 L758,55 L762,54 L764,56 L766,10 L770,90 L774,40 L778,55 L790,55 C792,55 794,50 798,44 C802,38 806,48 810,55 L900,55"
+                stroke="hsl(var(--healthcare-teal))"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                filter="url(#ecg-glow)"
                 className="animate-ecg-draw"
-                style={{ strokeDasharray: 2400, strokeDashoffset: 2400 }}
+                style={{ strokeDasharray: '300 2100', strokeDashoffset: 2400 }}
               />
             </svg>
           </motion.div>

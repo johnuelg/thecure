@@ -109,8 +109,7 @@ export default {
         },
         "ecg-draw": {
           "0%": { strokeDashoffset: "2400" },
-          "50%": { strokeDashoffset: "0" },
-          "100%": { strokeDashoffset: "-2400" },
+          "100%": { strokeDashoffset: "0" },
         },
       },
       animation: {
