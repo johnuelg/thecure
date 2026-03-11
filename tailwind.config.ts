@@ -111,6 +111,12 @@ export default {
           "0%": { strokeDashoffset: "2100" },
           "100%": { strokeDashoffset: "-2100" },
         },
+        "qrs-pulse": {
+          "0%, 70%, 100%": { opacity: "0", r: "3" },
+          "15%": { opacity: "0.9", r: "8" },
+          "30%": { opacity: "0.4", r: "12" },
+          "50%": { opacity: "0", r: "6" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -122,6 +128,7 @@ export default {
         "scale-in": "scale-in 0.4s ease-out",
         "pulse-line": "pulse-line 2s ease-in-out infinite",
         "ecg-sweep": "ecg-sweep 5s linear infinite",
+        "qrs-pulse": "qrs-pulse 5s ease-in-out infinite",
       },
     },
   },
