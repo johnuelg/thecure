@@ -3,10 +3,6 @@ import { ArrowDown, Activity, Brain, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ECGLine } from "@/components/animations/ECGLine";
-import { FloatingIcons } from "@/components/animations/FloatingIcons";
-import { ParallaxLayer } from "@/components/animations/ParallaxLayer";
-import { CounterAnimation } from "@/components/animations/CounterAnimation";
 
 const defaultStats = [
   { icon: Brain, value: "10+", label: "Years Experience" },
@@ -42,6 +38,7 @@ export function HeroSection() {
     }
   };
 
+  // Extract headline parts from tagline or use defaults
   const headlineParts = profile?.tagline?.split("|").map(s => s.trim()) || [
     "Transforming Healthcare",
     "Through Intelligent Solutions"
@@ -52,19 +49,9 @@ export function HeroSection() {
       id="about"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Parallax Background Layer (moves slower) */}
-      <ParallaxLayer speed={-0.2} className="absolute inset-0 -z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-healthcare-light-blue/50 to-background" />
-        <div className="absolute inset-0 dna-pattern opacity-30" />
-      </ParallaxLayer>
-
-      {/* Floating medical icons */}
-      <FloatingIcons />
-
-      {/* ECG heartbeat line */}
-      <div className="absolute top-1/4 left-0 right-0 z-0">
-        <ECGLine />
-      </div>
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-healthcare-light-blue/50 to-background" />
+      <div className="absolute inset-0 dna-pattern opacity-30" />
       
       {/* Animated pulse lines */}
       <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-healthcare-pulse/30 to-transparent overflow-hidden">
@@ -110,7 +97,7 @@ export function HeroSection() {
             {profile?.bio || "I help healthcare organizations leverage artificial intelligence to improve patient outcomes, streamline operations, and unlock insights from complex medical data."}
           </motion.p>
 
-          {/* CTAs with glow */}
+          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -120,7 +107,7 @@ export function HeroSection() {
             <Button
               size="lg"
               onClick={() => scrollToSection("#projects")}
-              className="healthcare-gradient border-0 px-8 btn-glow"
+              className="healthcare-gradient border-0 px-8"
             >
               View My Work
             </Button>
@@ -128,13 +115,12 @@ export function HeroSection() {
               size="lg"
               variant="outline"
               onClick={() => scrollToSection("#contact")}
-              className="btn-glow-outline"
             >
               Get in Touch
             </Button>
           </motion.div>
 
-          {/* Stats with counter animation */}
+          {/* Stats */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -151,7 +137,7 @@ export function HeroSection() {
               >
                 <stat.icon className="w-8 h-8 text-primary mx-auto mb-3" />
                 <div className="text-3xl font-bold text-foreground mb-1">
-                  <CounterAnimation value={stat.value} />
+                  {stat.value}
                 </div>
                 <div className="text-sm text-muted-foreground">{stat.label}</div>
               </motion.div>
