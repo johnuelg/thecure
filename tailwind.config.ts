@@ -121,7 +121,7 @@ export default {
         "slide-in-right": "slide-in-right 0.5s ease-out",
         "scale-in": "scale-in 0.4s ease-out",
         "pulse-line": "pulse-line 2s ease-in-out infinite",
-        "ecg-sweep": "ecg-sweep 2.5s linear infinite",
+        "ecg-sweep": "ecg-sweep 5s linear infinite",
       },
     },
   },
