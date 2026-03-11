@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Activity, Brain, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
