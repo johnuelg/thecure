@@ -108,8 +108,10 @@ export default {
           "100%": { transform: "translateX(100%)" },
         },
         "ecg-draw": {
-          "0%": { strokeDashoffset: "2400" },
-          "100%": { strokeDashoffset: "0" },
+          "0%": { strokeDashoffset: "1200" },
+          "40%": { strokeDashoffset: "0" },
+          "60%": { strokeDashoffset: "0" },
+          "100%": { strokeDashoffset: "-1200" },
         },
       },
       animation: {
@@ -121,7 +123,7 @@ export default {
         "slide-in-right": "slide-in-right 0.5s ease-out",
         "scale-in": "scale-in 0.4s ease-out",
         "pulse-line": "pulse-line 2s ease-in-out infinite",
-        "ecg-draw": "ecg-draw 4s linear infinite",
+        "ecg-draw": "ecg-draw 3s ease-in-out infinite",
       },
     },
   },
