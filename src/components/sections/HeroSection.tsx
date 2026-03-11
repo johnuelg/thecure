@@ -53,33 +53,6 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-healthcare-light-blue/50 to-background" />
       <div className="absolute inset-0 dna-pattern opacity-30" />
       
-      {/* ECG heartbeat SVG background */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        {/* Top ECG waveform — realistic PQRST with 3 beats */}
-        <svg className="absolute top-[18%] left-0 w-full h-28 opacity-[0.12]" viewBox="0 0 900 100" preserveAspectRatio="xMidYMid meet" fill="none">
-          <path
-            d="M0,55 L60,55 L68,55 C70,55 72,50 74,48 C76,46 78,52 80,55 L100,55 L108,55 L112,54 L114,56 L116,10 L120,90 L124,40 L128,55 L140,55 C142,55 144,50 148,44 C152,38 156,48 160,55 L220,55 L280,55 L288,55 C290,55 292,50 294,48 C296,46 298,52 300,55 L320,55 L328,55 L332,54 L334,56 L336,10 L340,90 L344,40 L348,55 L360,55 C362,55 364,50 368,44 C372,38 376,48 380,55 L440,55 L500,55 L508,55 C510,55 512,50 514,48 C516,46 518,52 520,55 L540,55 L548,55 L552,54 L554,56 L556,10 L560,90 L564,40 L568,55 L580,55 C582,55 584,50 588,44 C592,38 596,48 600,55 L660,55 L720,55 L728,55 C730,55 732,50 734,48 C736,46 738,52 740,55 L760,55 L768,55 L772,54 L774,56 L776,10 L780,90 L784,40 L788,55 L800,55 C802,55 804,50 808,44 C812,38 816,48 820,55 L900,55"
-            stroke="hsl(var(--healthcare-teal))"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="animate-ecg-draw"
-            style={{ strokeDasharray: 2400, strokeDashoffset: 2400 }}
-          />
-        </svg>
-        {/* Bottom ECG waveform — offset timing */}
-        <svg className="absolute top-[78%] left-0 w-full h-20 opacity-[0.07]" viewBox="0 0 900 100" preserveAspectRatio="xMidYMid meet" fill="none">
-          <path
-            d="M0,55 L80,55 L88,55 C90,55 92,50 94,48 C96,46 98,52 100,55 L120,55 L128,55 L132,54 L134,56 L136,12 L140,88 L144,42 L148,55 L160,55 C162,55 164,50 168,45 C172,40 176,49 180,55 L260,55 L340,55 L348,55 C350,55 352,50 354,48 C356,46 358,52 360,55 L380,55 L388,55 L392,54 L394,56 L396,12 L400,88 L404,42 L408,55 L420,55 C422,55 424,50 428,45 C432,40 436,49 440,55 L520,55 L600,55 L608,55 C610,55 612,50 614,48 C616,46 618,52 620,55 L640,55 L648,55 L652,54 L654,56 L656,12 L660,88 L664,42 L668,55 L680,55 C682,55 684,50 688,45 C692,40 696,49 700,55 L780,55 L900,55"
-            stroke="hsl(var(--healthcare-pulse))"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="animate-ecg-draw"
-            style={{ strokeDasharray: 2400, strokeDashoffset: 2400, animationDelay: "2s" }}
-          />
-        </svg>
-      </div>
 
       <div className="container-wide relative z-10 pt-20">
         <div className="max-w-4xl mx-auto text-center">
@@ -106,6 +79,27 @@ export function HeroSection() {
               <span className="block healthcare-gradient-text">{headlineParts[1]}</span>
             )}
           </motion.h1>
+
+          {/* ECG heartbeat animation between headline and description */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+            className="pointer-events-none overflow-hidden my-4"
+            aria-hidden="true"
+          >
+            <svg className="w-full h-16 opacity-[0.18]" viewBox="0 0 900 100" preserveAspectRatio="xMidYMid meet" fill="none">
+              <path
+                d="M0,55 L60,55 L68,55 C70,55 72,50 74,48 C76,46 78,52 80,55 L100,55 L108,55 L112,54 L114,56 L116,10 L120,90 L124,40 L128,55 L140,55 C142,55 144,50 148,44 C152,38 156,48 160,55 L220,55 L280,55 L288,55 C290,55 292,50 294,48 C296,46 298,52 300,55 L320,55 L328,55 L332,54 L334,56 L336,10 L340,90 L344,40 L348,55 L360,55 C362,55 364,50 368,44 C372,38 376,48 380,55 L440,55 L500,55 L508,55 C510,55 512,50 514,48 C516,46 518,52 520,55 L540,55 L548,55 L552,54 L554,56 L556,10 L560,90 L564,40 L568,55 L580,55 C582,55 584,50 588,44 C592,38 596,48 600,55 L660,55 L720,55 L728,55 C730,55 732,50 734,48 C736,46 738,52 740,55 L760,55 L768,55 L772,54 L774,56 L776,10 L780,90 L784,40 L788,55 L800,55 C802,55 804,50 808,44 C812,38 816,48 820,55 L900,55"
+                stroke="hsl(var(--healthcare-teal))"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="animate-ecg-draw"
+                style={{ strokeDasharray: 2400, strokeDashoffset: 2400 }}
+              />
+            </svg>
+          </motion.div>
 
           {/* Description */}
           <motion.p
