@@ -13,6 +13,25 @@ const emailSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email address" }).max(255),
 });
 
+const getPasswordResetRedirectUrl = () => {
+  const configuredAppUrl = import.meta.env.VITE_PUBLIC_APP_URL?.trim();
+  const normalizedConfiguredUrl = configuredAppUrl?.replace(/\/$/, '');
+
+  if (normalizedConfiguredUrl) {
+    return `${normalizedConfiguredUrl}/admin/reset-password`;
+  }
+
+  const normalizedOrigin = window.location.origin.replace(/\/$/, '');
+  const isLocalOrPreview =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    (window.location.hostname.includes('--') && window.location.hostname.endsWith('.lovable.app'));
+
+  const appOrigin = isLocalOrPreview ? 'https://thecure.lovable.app' : normalizedOrigin;
+
+  return `${appOrigin}/admin/reset-password`;
+};
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,8 +52,8 @@ const ForgotPassword = () => {
 
     setIsLoading(true);
 
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/admin/reset-password`,
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(result.data.email, {
+      redirectTo: getPasswordResetRedirectUrl(),
     });
 
     setIsLoading(false);
