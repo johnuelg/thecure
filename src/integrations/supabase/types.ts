@@ -352,6 +352,42 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_stats: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number
+          icon: string
+          id: string
+          is_active: boolean
+          label: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          icon?: string
+          id?: string
+          is_active?: boolean
+          label: string
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          icon?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       knowledge_documents: {
         Row: {
           content: string
