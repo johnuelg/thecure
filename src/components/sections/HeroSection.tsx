@@ -180,7 +180,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
           >
             <Button
               size="lg"
@@ -203,7 +203,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto pb-20"
           >
             {statsToShow.map((stat, index) => {
               const IconComponent = getIcon(stat.icon);
