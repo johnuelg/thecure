@@ -134,11 +134,11 @@ export function ServicesSection() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+          <span className="section-badge">
             Services
           </span>
-          <h2 className="mb-4">How I Can Help</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+          <h2 className="section-title">How I Can Help</h2>
+          <p className="section-description">
             {sectionDescription}
           </p>
         </motion.div>

@@ -43,11 +43,11 @@ export function AboutSection() {
     <section id="about" className="section-padding bg-secondary/30">
       <div className="container-wide">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+          <div className="section-badge">
             <User className="w-4 h-4" />
             About Me
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="section-title">
             Who I Am
           </h2>
         </div>

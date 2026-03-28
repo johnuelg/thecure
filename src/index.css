@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 /* AI Healthcare Portfolio - Clinical Design System */
-/* All colors MUST be HSL */
+/* Typography: Plus Jakarta Sans (display) + DM Sans (body) */
+/* All colors MUST be HSL — WCAG 2.1 AA compliant */
 
 @layer base {
   :root {
@@ -27,7 +28,7 @@
 
     /* Muted - Light backgrounds */
     --muted: 210 15% 96%;
-    --muted-foreground: 215 15% 45%;
+    --muted-foreground: 215 15% 40%;
 
     /* Accent - Teal for highlights */
     --accent: 175 60% 40%;
@@ -69,22 +70,22 @@
 
   .dark {
     --background: 215 30% 8%;
-    --foreground: 210 20% 95%;
+    --foreground: 210 20% 92%;
 
     --card: 215 25% 12%;
-    --card-foreground: 210 20% 95%;
+    --card-foreground: 210 20% 92%;
 
     --popover: 215 25% 12%;
-    --popover-foreground: 210 20% 95%;
+    --popover-foreground: 210 20% 92%;
 
     --primary: 210 65% 55%;
     --primary-foreground: 215 30% 8%;
 
     --secondary: 215 20% 18%;
-    --secondary-foreground: 210 20% 90%;
+    --secondary-foreground: 210 20% 88%;
 
     --muted: 215 20% 16%;
-    --muted-foreground: 210 15% 60%;
+    --muted-foreground: 210 15% 55%;
 
     --accent: 175 55% 45%;
     --accent-foreground: 215 30% 8%;
@@ -102,11 +103,11 @@
     --healthcare-pulse: 175 65% 55%;
 
     --sidebar-background: 215 30% 10%;
-    --sidebar-foreground: 210 20% 90%;
+    --sidebar-foreground: 210 20% 88%;
     --sidebar-primary: 210 65% 55%;
     --sidebar-primary-foreground: 215 30% 8%;
     --sidebar-accent: 215 20% 18%;
-    --sidebar-accent-foreground: 210 20% 90%;
+    --sidebar-accent-foreground: 210 20% 88%;
     --sidebar-border: 215 20% 20%;
     --sidebar-ring: 210 65% 55%;
   }
@@ -118,25 +119,46 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased font-sans;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Typography system */
+  /* Typography system — WCAG 2.1 AA compliant scale */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight text-foreground;
+    @apply font-display font-semibold tracking-tight text-foreground;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold leading-tight;
   }
 
   h2 {
-    @apply text-3xl md:text-4xl;
+    @apply text-3xl md:text-4xl font-bold;
   }
 
   h3 {
-    @apply text-xl md:text-2xl;
+    @apply text-xl md:text-2xl font-semibold;
+  }
+
+  h4 {
+    @apply text-lg font-semibold;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  /* Focus visible for WCAG AA keyboard navigation */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring rounded-sm;
+  }
+
+  /* Skip to content link for accessibility */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:font-medium;
   }
 }
 
@@ -159,12 +181,8 @@
   }
 
   @keyframes pulse-subtle {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.7;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
   }
 
   /* DNA helix decorative pattern */
@@ -193,6 +211,27 @@
 
   .container-wide {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section header typography pattern */
+  .section-badge {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium font-display mb-4;
+  }
+
+  .section-title {
+    @apply font-display font-bold mb-4;
+  }
+
+  .section-description {
+    @apply text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed;
+  }
+
+  /* Prose for readable body text */
+  .prose-clinical {
+    @apply text-base leading-relaxed text-foreground;
+  }
+  .prose-clinical p {
+    @apply mb-4 last:mb-0;
   }
 }
 

@@ -72,9 +72,9 @@ export function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">AI</span>
+                <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
               </div>
-              <span className="font-semibold text-lg">
+              <span className="font-display font-semibold text-lg">
                 Healthcare<span className="text-primary">AI</span>
               </span>
             </div>
