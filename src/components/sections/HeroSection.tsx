@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowDown, Activity, Brain, TrendingUp } from "lucide-react";
+import { ArrowDown, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
