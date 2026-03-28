@@ -78,7 +78,8 @@ export function AboutSection() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative py-24 lg:py-32 overflow-hidden bg-secondary/30"
+      className="relative py-24 lg:py-32 overflow-hidden"
+      style={{ background: "#0A1628" }}
     >
       {/* Dot grid overlay */}
       <div
