@@ -4,10 +4,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Heart, Shield } from 'lucide-react';
+import { Loader2, Heart, Shield, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { z } from 'zod';
+import { motion } from 'framer-motion';
 
 const loginSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email address" }).max(255),
@@ -17,6 +17,7 @@ const loginSchema = z.object({
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   
@@ -31,7 +32,6 @@ const Login = () => {
     e.preventDefault();
     setErrors({});
 
-    // Validate input
     const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
       const fieldErrors: { email?: string; password?: string } = {};
@@ -66,92 +66,130 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/5 to-background p-4">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+    <div className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden p-4">
+      {/* Ambient background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-primary/[0.06] rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-accent/[0.06] rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/[0.03] rounded-full blur-3xl" />
       </div>
 
-      <Card className="w-full max-w-md relative z-10 border-border/50 shadow-xl">
-        <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-            <Shield className="h-8 w-8 text-primary" />
-          </div>
-          <div>
-            <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-            <CardDescription className="mt-2">
-              Sign in to manage your portfolio content
-            </CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isLoading}
-                className={errors.email ? 'border-destructive' : ''}
-              />
-              {errors.email && (
-                <p className="text-sm text-destructive">{errors.email}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={isLoading}
-                className={errors.password ? 'border-destructive' : ''}
-              />
-              {errors.password && (
-                <p className="text-sm text-destructive">{errors.password}</p>
-              )}
-            </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                'Sign In'
-              )}
-            </Button>
-          </form>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="w-full max-w-[420px] relative z-10"
+      >
+        {/* Card */}
+        <div className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-xl shadow-[var(--shadow-elevated)] overflow-hidden">
+          {/* Top accent strip */}
+          <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-primary" />
 
-          <div className="mt-4 text-center">
-            <Link 
-              to="/admin/forgot-password" 
-              className="text-sm text-primary hover:underline transition-colors"
+          {/* Header */}
+          <div className="pt-8 pb-2 px-8 text-center">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.15, duration: 0.4 }}
+              className="mx-auto w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-5 shadow-lg shadow-primary/20"
             >
-              Forgot your password?
-            </Link>
+              <Shield className="h-7 w-7 text-primary-foreground" />
+            </motion.div>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Welcome Back</h1>
+            <p className="text-sm text-muted-foreground mt-1.5">Sign in to your admin dashboard</p>
           </div>
 
-          <div className="mt-4 text-center">
-            <a href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              ← Back to website
-            </a>
-          </div>
-        </CardContent>
-      </Card>
+          {/* Form */}
+          <div className="px-8 pb-8 pt-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
+                  className={`h-11 bg-muted/50 border-border/60 focus:bg-card transition-colors ${errors.email ? 'border-destructive focus:ring-destructive' : ''}`}
+                />
+                {errors.email && (
+                  <p className="text-xs text-destructive mt-1">{errors.email}</p>
+                )}
+              </div>
 
-      {/* Footer */}
-      <div className="absolute bottom-4 left-0 right-0 text-center">
-        <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
-          Made with <Heart className="h-4 w-4 text-destructive" /> for healthcare
+              <div className="space-y-1.5">
+                <Label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Password
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={isLoading}
+                    className={`h-11 bg-muted/50 border-border/60 focus:bg-card transition-colors pr-10 ${errors.password ? 'border-destructive focus:ring-destructive' : ''}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-xs text-destructive mt-1">{errors.password}</p>
+                )}
+              </div>
+
+              <div className="flex justify-end">
+                <Link
+                  to="/admin/forgot-password"
+                  className="text-xs font-medium text-primary hover:text-accent transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full h-11 bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground font-semibold shadow-md shadow-primary/20 transition-all"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  'Sign In'
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-6 pt-5 border-t border-border/50 text-center">
+              <a
+                href="/"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1.5"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                Back to website
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <p className="text-xs text-muted-foreground text-center mt-6 flex items-center justify-center gap-1">
+          Made with <Heart className="h-3 w-3 text-destructive fill-destructive" /> for healthcare
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -4,10 +4,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Mail, ArrowLeft, CheckCircle } from 'lucide-react';
+import { Loader2, Mail, ArrowLeft, CheckCircle, Heart } from 'lucide-react';
 import { z } from 'zod';
+import { motion } from 'framer-motion';
 
 const emailSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email address" }).max(255),
@@ -43,7 +43,6 @@ const ForgotPassword = () => {
     e.preventDefault();
     setError(null);
 
-    // Validate input
     const result = emailSchema.safeParse({ email });
     if (!result.success) {
       setError(result.error.errors[0].message);
@@ -70,102 +69,157 @@ const ForgotPassword = () => {
     setIsSuccess(true);
   };
 
+  // Success state
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/5 to-background p-4">
-        <Card className="w-full max-w-md border-border/50 shadow-xl">
-          <CardHeader className="text-center space-y-4">
-            <div className="mx-auto w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center">
-              <CheckCircle className="h-8 w-8 text-green-500" />
-            </div>
-            <div>
-              <CardTitle className="text-2xl font-bold">Check Your Email</CardTitle>
-              <CardDescription className="mt-2">
-                We've sent a password reset link to <strong>{email}</strong>
-              </CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground text-center">
-              Click the link in the email to reset your password. If you don't see it, check your spam folder.
-            </p>
-            <div className="flex flex-col gap-2">
-              <Button variant="outline" onClick={() => setIsSuccess(false)} className="w-full">
-                Try a different email
-              </Button>
-              <Link to="/admin/login" className="w-full">
-                <Button variant="ghost" className="w-full">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to login
+      <div className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden p-4">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-primary/[0.06] rounded-full blur-3xl" />
+          <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-accent/[0.06] rounded-full blur-3xl" />
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="w-full max-w-[420px] relative z-10"
+        >
+          <div className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-xl shadow-[var(--shadow-elevated)] overflow-hidden">
+            <div className="h-1 w-full bg-gradient-to-r from-green-500 via-accent to-green-500" />
+
+            <div className="px-8 py-10 text-center">
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                className="mx-auto w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mb-5"
+              >
+                <CheckCircle className="h-8 w-8 text-green-500" />
+              </motion.div>
+
+              <h1 className="text-2xl font-bold text-foreground tracking-tight">Check Your Email</h1>
+              <p className="text-sm text-muted-foreground mt-2 max-w-[280px] mx-auto">
+                We've sent a password reset link to <span className="font-medium text-foreground">{email}</span>
+              </p>
+
+              <div className="mt-6 p-3 rounded-lg bg-muted/60 border border-border/40">
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Click the link in the email to reset your password. If you don't see it, check your spam folder.
+                </p>
+              </div>
+
+              <div className="mt-6 space-y-2.5">
+                <Button
+                  variant="outline"
+                  onClick={() => { setIsSuccess(false); setEmail(''); }}
+                  className="w-full h-10 border-border/60"
+                >
+                  Try a different email
                 </Button>
-              </Link>
+                <Link to="/admin/login" className="block">
+                  <Button variant="ghost" className="w-full h-10 text-muted-foreground">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to login
+                  </Button>
+                </Link>
+              </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+
+          <p className="text-xs text-muted-foreground text-center mt-6 flex items-center justify-center gap-1">
+            Made with <Heart className="h-3 w-3 text-destructive fill-destructive" /> for healthcare
+          </p>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/5 to-background p-4">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+    <div className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden p-4">
+      {/* Ambient background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-primary/[0.06] rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-accent/[0.06] rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/[0.03] rounded-full blur-3xl" />
       </div>
 
-      <Card className="w-full max-w-md relative z-10 border-border/50 shadow-xl">
-        <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-            <Mail className="h-8 w-8 text-primary" />
-          </div>
-          <div>
-            <CardTitle className="text-2xl font-bold">Forgot Password</CardTitle>
-            <CardDescription className="mt-2">
-              Enter your email and we'll send you a reset link
-            </CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isLoading}
-                className={error ? 'border-destructive' : ''}
-              />
-              {error && (
-                <p className="text-sm text-destructive">{error}</p>
-              )}
-            </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Sending...
-                </>
-              ) : (
-                'Send Reset Link'
-              )}
-            </Button>
-          </form>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="w-full max-w-[420px] relative z-10"
+      >
+        <div className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-xl shadow-[var(--shadow-elevated)] overflow-hidden">
+          {/* Top accent strip */}
+          <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-primary" />
 
-          <div className="mt-6 text-center">
-            <Link 
-              to="/admin/login" 
-              className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
+          {/* Header */}
+          <div className="pt-8 pb-2 px-8 text-center">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.15, duration: 0.4 }}
+              className="mx-auto w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-5 shadow-lg shadow-primary/20"
             >
-              <ArrowLeft className="h-4 w-4" />
-              Back to login
-            </Link>
+              <Mail className="h-7 w-7 text-primary-foreground" />
+            </motion.div>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Forgot Password</h1>
+            <p className="text-sm text-muted-foreground mt-1.5">Enter your email and we'll send you a reset link</p>
           </div>
-        </CardContent>
-      </Card>
+
+          {/* Form */}
+          <div className="px-8 pb-8 pt-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Email Address
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
+                  className={`h-11 bg-muted/50 border-border/60 focus:bg-card transition-colors ${error ? 'border-destructive focus:ring-destructive' : ''}`}
+                />
+                {error && (
+                  <p className="text-xs text-destructive mt-1">{error}</p>
+                )}
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full h-11 bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground font-semibold shadow-md shadow-primary/20 transition-all"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  'Send Reset Link'
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-6 pt-5 border-t border-border/50 text-center">
+              <Link
+                to="/admin/login"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1.5"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                Back to login
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-xs text-muted-foreground text-center mt-6 flex items-center justify-center gap-1">
+          Made with <Heart className="h-3 w-3 text-destructive fill-destructive" /> for healthcare
+        </p>
+      </motion.div>
     </div>
   );
 };
