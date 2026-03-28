@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navLinks = [
   { href: "#about", label: "About" },
@@ -43,6 +44,11 @@ export function Header() {
           : "bg-transparent"
       }`}
     >
+      {/* Skip to content for accessibility */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
       <div className="container-wide">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -55,15 +61,15 @@ export function Header() {
             className="flex items-center gap-2 group"
           >
             <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">AI</span>
+              <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
             </div>
-            <span className="font-semibold text-lg hidden sm:block">
+            <span className="font-display font-semibold text-lg hidden sm:block">
               Healthcare<span className="text-primary">AI</span>
             </span>
           </a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
             {navLinks.map((link) => (
               <button
                 key={link.href}
@@ -75,8 +81,9 @@ export function Header() {
             ))}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
+          {/* Right side actions */}
+          <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle />
             <Button
               onClick={() => scrollToSection("#contact")}
               className="healthcare-gradient border-0"
@@ -85,18 +92,22 @@ export function Header() {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
+          {/* Mobile: theme toggle + menu button */}
+          <div className="md:hidden flex items-center gap-1">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-lg hover:bg-secondary transition-colors"
+              aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -108,7 +119,7 @@ export function Header() {
           exit={{ opacity: 0, y: -10 }}
           className="md:hidden bg-background border-b border-border"
         >
-          <nav className="container-wide py-4 flex flex-col gap-1">
+          <nav className="container-wide py-4 flex flex-col gap-1" aria-label="Mobile navigation">
             {navLinks.map((link) => (
               <button
                 key={link.href}
