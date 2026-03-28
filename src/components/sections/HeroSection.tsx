@@ -4,10 +4,17 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
+import { icons } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+const getIcon = (iconName: string): LucideIcon => {
+  return (icons as Record<string, LucideIcon>)[iconName] || icons.Award;
+};
+
 const defaultStats = [
-  { icon: Brain, value: "10+", label: "Years Experience" },
-  { icon: Activity, value: "50+", label: "Healthcare Projects" },
-  { icon: TrendingUp, value: "95%", label: "Client Satisfaction" },
+  { icon: "Brain", value: "3+", label: "Years Healthcare Experience" },
+  { icon: "Activity", value: "5+", label: "Healthcare Dashboard" },
+  { icon: "TrendingUp", value: "3+", label: "AI Tools Built" },
 ];
 
 interface Profile {
@@ -30,6 +37,23 @@ export function HeroSection() {
       return data as Profile | null;
     },
   });
+
+  const { data: heroStats } = useQuery({
+    queryKey: ["public-hero-stats"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("hero_stats")
+        .select("*")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const statsToShow = (heroStats && heroStats.length > 0)
+    ? heroStats.map(s => ({ icon: s.icon, value: s.value, label: s.label }))
+    : defaultStats;
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
@@ -181,21 +205,24 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto"
           >
-            {defaultStats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                className="card-medical p-6 text-center"
-              >
-                <stat.icon className="w-8 h-8 text-primary mx-auto mb-3" />
-                <div className="text-3xl font-display font-bold text-foreground mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </motion.div>
-            ))}
+            {statsToShow.map((stat, index) => {
+              const IconComponent = getIcon(stat.icon);
+              return (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                  className="card-medical p-6 text-center"
+                >
+                  <IconComponent className="w-8 h-8 text-primary mx-auto mb-3" />
+                  <div className="text-3xl font-display font-bold text-foreground mb-1">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
 
