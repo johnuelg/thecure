@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, GripVertical } from "lucide-react";
 import { icons } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { IconPicker } from "@/components/admin/IconPicker";
 
 const getIcon = (iconName: string): LucideIcon => {
   return (icons as Record<string, LucideIcon>)[iconName] || icons.Award;
@@ -134,12 +135,10 @@ const HeroStatsManager = () => {
 
                   <div className="flex-1 grid sm:grid-cols-3 gap-4">
                     <div className="space-y-1.5">
-                      <Label htmlFor={`icon-${stat.id}`}>Icon Name</Label>
-                      <Input
-                        id={`icon-${stat.id}`}
-                        defaultValue={stat.icon}
-                        placeholder="e.g. Brain, Activity, TrendingUp"
-                        onBlur={(e) => handleFieldBlur(stat.id, "icon", e.target.value)}
+                      <Label>Icon</Label>
+                      <IconPicker
+                        value={stat.icon}
+                        onChange={(name) => handleFieldBlur(stat.id, "icon", name)}
                       />
                     </div>
 
