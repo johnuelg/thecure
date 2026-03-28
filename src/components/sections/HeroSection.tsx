@@ -61,7 +61,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium font-display mb-8"
           >
             <Activity className="w-4 h-4" />
             {profile?.professional_title || "AI Healthcare Consultant & Developer"}
@@ -190,7 +190,7 @@ export function HeroSection() {
                 className="card-medical p-6 text-center"
               >
                 <stat.icon className="w-8 h-8 text-primary mx-auto mb-3" />
-                <div className="text-3xl font-bold text-foreground mb-1">
+                <div className="text-3xl font-display font-bold text-foreground mb-1">
                   {stat.value}
                 </div>
                 <div className="text-sm text-muted-foreground">{stat.label}</div>
