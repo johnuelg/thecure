@@ -126,19 +126,22 @@ const ProfileManager = () => {
       if (profile) {
         const { error } = await supabase
           .from('profile')
-          .update(profileData)
+          .update(profileData as any)
           .eq('id', profile.id);
 
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('profile')
-          .insert(profileData);
+          .insert(profileData as any);
 
         if (error) throw error;
       }
 
       toast({ title: 'Profile saved successfully' });
+      // Invalidate all profile-related queries so header/footer pick up new logo
+      queryClient.invalidateQueries({ queryKey: ['public-profile'] });
+      queryClient.invalidateQueries({ queryKey: ['profile-branding'] });
       fetchProfile();
     } catch (error: any) {
       toast({
