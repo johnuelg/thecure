@@ -78,6 +78,8 @@ const ProfileManager = () => {
         setResumeUrl(data.resume_url || '');
         setLogoUrl((data as any).logo_url || '');
         setFaviconUrl((data as any).favicon_url || '');
+        setSiteTitle((data as any).site_title || '');
+        setSiteDescription((data as any).site_description || '');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
