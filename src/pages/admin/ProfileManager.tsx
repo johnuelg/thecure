@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -34,6 +35,7 @@ const ProfileManager = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   // Form state
   const [fullName, setFullName] = useState('');
@@ -124,19 +126,22 @@ const ProfileManager = () => {
       if (profile) {
         const { error } = await supabase
           .from('profile')
-          .update(profileData)
+          .update(profileData as any)
           .eq('id', profile.id);
 
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('profile')
-          .insert(profileData);
+          .insert(profileData as any);
 
         if (error) throw error;
       }
 
       toast({ title: 'Profile saved successfully' });
+      // Invalidate all profile-related queries so header/footer pick up new logo
+      queryClient.invalidateQueries({ queryKey: ['public-profile'] });
+      queryClient.invalidateQueries({ queryKey: ['profile-branding'] });
       fetchProfile();
     } catch (error: any) {
       toast({
