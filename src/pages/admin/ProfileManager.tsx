@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Save, User, Briefcase, Mail, Phone, MapPin, Linkedin, Github, Twitter } from 'lucide-react';
+import { Loader2, Save, User, Briefcase, Mail, Phone, MapPin, Linkedin, Github, Twitter, Palette } from 'lucide-react';
 import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface Profile {
@@ -23,6 +23,8 @@ interface Profile {
   twitter_url: string | null;
   profile_image_url: string | null;
   resume_url: string | null;
+  logo_url: string | null;
+  favicon_url: string | null;
 }
 
 const ProfileManager = () => {
@@ -44,6 +46,8 @@ const ProfileManager = () => {
   const [twitterUrl, setTwitterUrl] = useState('');
   const [profileImageUrl, setProfileImageUrl] = useState('');
   const [resumeUrl, setResumeUrl] = useState('');
+  const [logoUrl, setLogoUrl] = useState('');
+  const [faviconUrl, setFaviconUrl] = useState('');
 
   const fetchProfile = async () => {
     try {
@@ -68,6 +72,8 @@ const ProfileManager = () => {
         setTwitterUrl(data.twitter_url || '');
         setProfileImageUrl(data.profile_image_url || '');
         setResumeUrl(data.resume_url || '');
+        setLogoUrl((data as any).logo_url || '');
+        setFaviconUrl((data as any).favicon_url || '');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -102,6 +108,8 @@ const ProfileManager = () => {
       twitter_url: twitterUrl || null,
       profile_image_url: profileImageUrl || null,
       resume_url: resumeUrl || null,
+      logo_url: logoUrl || null,
+      favicon_url: faviconUrl || null,
     };
 
     try {
@@ -304,6 +312,35 @@ const ProfileManager = () => {
                 />
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Branding */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Palette className="h-5 w-5" />
+              Branding
+            </CardTitle>
+            <CardDescription>Site logo and favicon displayed in the header and browser tab</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <ImageUpload
+              label="Site Logo"
+              value={logoUrl}
+              onChange={setLogoUrl}
+              bucket="portfolio-images"
+              accept="image/*"
+              placeholder="Upload logo or enter URL"
+            />
+            <ImageUpload
+              label="Favicon"
+              value={faviconUrl}
+              onChange={setFaviconUrl}
+              bucket="portfolio-images"
+              accept="image/png,image/x-icon,image/svg+xml,.ico"
+              placeholder="Upload favicon (.png, .ico, .svg)"
+            />
           </CardContent>
         </Card>
 

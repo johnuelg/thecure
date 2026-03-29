@@ -1,0 +1,2 @@
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS logo_url text DEFAULT NULL;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS favicon_url text DEFAULT NULL;
