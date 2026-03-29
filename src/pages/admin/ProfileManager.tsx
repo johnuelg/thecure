@@ -359,12 +359,12 @@ const ProfileManager = () => {
               </div>
             </div>
             <ImageUpload
-              label="Site Logo"
+              label="Site Logo (SVG or PNG)"
               value={logoUrl}
               onChange={setLogoUrl}
               bucket="portfolio-images"
-              accept="image/*"
-              placeholder="Upload logo or enter URL"
+              accept="image/svg+xml,image/png,.svg,.png"
+              placeholder="Upload logo (.svg or .png)"
             />
             <ImageUpload
               label="Favicon"
