@@ -35,6 +35,7 @@ const ProfileManager = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   // Form state
   const [fullName, setFullName] = useState('');
