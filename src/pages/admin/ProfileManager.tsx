@@ -25,6 +25,8 @@ interface Profile {
   resume_url: string | null;
   logo_url: string | null;
   favicon_url: string | null;
+  site_title: string | null;
+  site_description: string | null;
 }
 
 const ProfileManager = () => {
@@ -48,6 +50,8 @@ const ProfileManager = () => {
   const [resumeUrl, setResumeUrl] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
   const [faviconUrl, setFaviconUrl] = useState('');
+  const [siteTitle, setSiteTitle] = useState('');
+  const [siteDescription, setSiteDescription] = useState('');
 
   const fetchProfile = async () => {
     try {
@@ -110,6 +114,8 @@ const ProfileManager = () => {
       resume_url: resumeUrl || null,
       logo_url: logoUrl || null,
       favicon_url: faviconUrl || null,
+      site_title: siteTitle || null,
+      site_description: siteDescription || null,
     };
 
     try {
@@ -315,16 +321,41 @@ const ProfileManager = () => {
           </CardContent>
         </Card>
 
-        {/* Branding */}
+        {/* Branding & SEO */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Palette className="h-5 w-5" />
-              Branding
+              Branding & SEO
             </CardTitle>
-            <CardDescription>Site logo and favicon displayed in the header and browser tab</CardDescription>
+            <CardDescription>Site logo, favicon, title, and meta description</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="siteTitle">Site Title</Label>
+                <Input
+                  id="siteTitle"
+                  value={siteTitle}
+                  onChange={(e) => setSiteTitle(e.target.value)}
+                  placeholder="My Portfolio — AI Healthcare Consultant"
+                  maxLength={60}
+                />
+                <p className="text-xs text-muted-foreground">{siteTitle.length}/60 characters (recommended max)</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="siteDescription">Meta Description</Label>
+                <Textarea
+                  id="siteDescription"
+                  value={siteDescription}
+                  onChange={(e) => setSiteDescription(e.target.value)}
+                  placeholder="A brief description of your site for search engines..."
+                  rows={2}
+                  maxLength={160}
+                />
+                <p className="text-xs text-muted-foreground">{siteDescription.length}/160 characters (recommended max)</p>
+              </div>
+            </div>
             <ImageUpload
               label="Site Logo"
               value={logoUrl}
