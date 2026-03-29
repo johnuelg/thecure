@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navLinks = [
   { href: "#about", label: "About" },
@@ -16,6 +19,18 @@ const navLinks = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { data: branding } = useQuery({
+    queryKey: ['profile-branding'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('profile')
+        .select('logo_url, full_name')
+        .maybeSingle();
+      return data as { logo_url: string | null; full_name: string } | null;
+    },
+    staleTime: 1000 * 60 * 10,
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,9 +75,13 @@ export function Header() {
             }}
             className="flex items-center gap-2 group"
           >
-            <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
-              <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
-            </div>
+            {(branding as any)?.logo_url ? (
+              <img src={(branding as any).logo_url} alt="Logo" className="w-10 h-10 rounded-lg object-contain" />
+            ) : (
+              <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
+                <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
+              </div>
+            )}
             <span className="font-display font-semibold text-lg hidden sm:block">
               Healthcare<span className="text-primary">AI</span>
             </span>
