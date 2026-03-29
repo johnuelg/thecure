@@ -430,12 +430,14 @@ export type Database = {
           copyright_text: string | null
           created_at: string
           email: string | null
+          favicon_url: string | null
           footer_description: string | null
           full_name: string
           github_url: string | null
           id: string
           linkedin_url: string | null
           location: string | null
+          logo_url: string | null
           phone: string | null
           professional_title: string
           profile_image_url: string | null
@@ -455,12 +457,14 @@ export type Database = {
           copyright_text?: string | null
           created_at?: string
           email?: string | null
+          favicon_url?: string | null
           footer_description?: string | null
           full_name?: string
           github_url?: string | null
           id?: string
           linkedin_url?: string | null
           location?: string | null
+          logo_url?: string | null
           phone?: string | null
           professional_title?: string
           profile_image_url?: string | null
@@ -480,12 +484,14 @@ export type Database = {
           copyright_text?: string | null
           created_at?: string
           email?: string | null
+          favicon_url?: string | null
           footer_description?: string | null
           full_name?: string
           github_url?: string | null
           id?: string
           linkedin_url?: string | null
           location?: string | null
+          logo_url?: string | null
           phone?: string | null
           professional_title?: string
           profile_image_url?: string | null
