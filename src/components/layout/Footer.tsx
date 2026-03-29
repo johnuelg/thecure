@@ -10,7 +10,7 @@ export function Footer() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('full_name, linkedin_url, github_url, twitter_url, email, footer_description, copyright_text')
+        .select('full_name, linkedin_url, github_url, twitter_url, email, footer_description, copyright_text, logo_url')
         .maybeSingle();
       
       if (error) throw error;
@@ -71,9 +71,13 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
-                <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
-              </div>
+              {(profile as any)?.logo_url ? (
+                <img src={(profile as any).logo_url} alt="Logo" className="w-10 h-10 rounded-lg object-contain" />
+              ) : (
+                <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
+                  <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
+                </div>
+              )}
               <span className="font-display font-semibold text-lg">
                 Healthcare<span className="text-primary">AI</span>
               </span>
