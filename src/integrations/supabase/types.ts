@@ -445,6 +445,8 @@ export type Database = {
           resume_description: string | null
           resume_url: string | null
           services_description: string | null
+          site_description: string | null
+          site_title: string | null
           tagline: string | null
           twitter_url: string | null
           updated_at: string
@@ -472,6 +474,8 @@ export type Database = {
           resume_description?: string | null
           resume_url?: string | null
           services_description?: string | null
+          site_description?: string | null
+          site_title?: string | null
           tagline?: string | null
           twitter_url?: string | null
           updated_at?: string
@@ -499,6 +503,8 @@ export type Database = {
           resume_description?: string | null
           resume_url?: string | null
           services_description?: string | null
+          site_description?: string | null
+          site_title?: string | null
           tagline?: string | null
           twitter_url?: string | null
           updated_at?: string
