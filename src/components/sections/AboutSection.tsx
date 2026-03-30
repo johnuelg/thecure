@@ -37,6 +37,19 @@ export function AboutSection() {
     },
   });
 
+  const { data: skills } = useQuery({
+    queryKey: ['public-skills'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('skills')
+        .select('*')
+        .order('display_order', { ascending: true });
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const aboutDescription = profile?.about_description || 
     "I am a passionate Healthcare AI Consultant dedicated to bridging the gap between cutting-edge artificial intelligence and the healthcare industry. With over a decade of experience, I help organizations leverage AI to improve patient outcomes, streamline operations, and drive innovation in medical care.";
 
