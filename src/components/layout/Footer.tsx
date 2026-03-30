@@ -10,7 +10,7 @@ export function Footer() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('full_name, linkedin_url, github_url, twitter_url, email, footer_description, copyright_text, logo_url')
+        .select('full_name, linkedin_url, github_url, twitter_url, email, footer_description, copyright_text, logo_url, brand_name')
         .maybeSingle();
       
       if (error) throw error;
