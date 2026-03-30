@@ -57,6 +57,7 @@ export function AboutSection() {
 
   const aboutDescription = profile?.about_description || 
     "I am a passionate Healthcare AI Consultant dedicated to bridging the gap between cutting-edge artificial intelligence and the healthcare industry. With over a decade of experience, I help organizations leverage AI to improve patient outcomes, streamline operations, and drive innovation in medical care.";
+  const resumeUrl = profile?.resume_url?.trim() || null;
 
   return (
     <section id="about" className="section-padding bg-secondary/30 relative overflow-hidden">
