@@ -118,17 +118,8 @@ export function AboutSection() {
                 <span className="text-sm font-medium text-foreground">Available for Consulting</span>
               </motion.div>
 
-              {/* Floating badge - Experience */}
-              <motion.div 
-                className="absolute -left-3 bottom-8 bg-card border border-border rounded-xl px-4 py-2.5 shadow-lg flex items-center gap-2"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.8 }}
-              >
-                <Sparkles className="w-4 h-4 text-accent" />
-                <span className="text-sm font-medium text-foreground">10+ Years Experience</span>
-              </motion.div>
+
+              {/* Decorative corner accents */}
 
               {/* Decorative corner accents */}
               <div className="absolute -bottom-3 -right-3 w-20 h-20 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 -z-10" />
