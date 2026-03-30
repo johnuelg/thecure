@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { User, CheckCircle2, Sparkles } from "lucide-react";
+import { User, CheckCircle2 } from "lucide-react";
 import { icons } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
