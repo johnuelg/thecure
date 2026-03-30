@@ -80,8 +80,8 @@ export function Header() {
             {branding?.logo_url ? (
               <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-14 object-contain" />
             ) : (
-              <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
-                <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
+              <div className="w-14 h-14 rounded-lg healthcare-gradient flex items-center justify-center">
+                <span className="text-primary-foreground font-display font-bold text-xl">AI</span>
               </div>
             )}
             {brandNameImageUrl ? (
