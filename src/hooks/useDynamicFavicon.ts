@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,7 +13,32 @@ const createIconLink = (rel: string, href: string, type: string) => {
   return link;
 };
 
+const getIconTypeFromUrl = (url: string) => {
+  const normalizedUrl = url.toLowerCase();
+  if (normalizedUrl.endsWith('.svg')) return 'image/svg+xml';
+  if (normalizedUrl.endsWith('.ico')) return 'image/x-icon';
+  if (normalizedUrl.endsWith('.png')) return 'image/png';
+  return 'image/png';
+};
+
+const blobToDataUrl = (blob: Blob) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result);
+        return;
+      }
+
+      reject(new Error('Failed to convert favicon to data URL'));
+    };
+    reader.onerror = () => reject(new Error('Failed to read favicon blob'));
+    reader.readAsDataURL(blob);
+  });
+
 export function useDynamicFavicon() {
+  const activeIconHrefRef = useRef<string | null>(null);
+
   const { data: profile } = useQuery({
     queryKey: ['profile-branding'],
     queryFn: async () => {
@@ -32,16 +57,15 @@ export function useDynamicFavicon() {
   });
 
   useEffect(() => {
-    let objectUrl: string | null = null;
+    let isCancelled = false;
 
     const applyFavicon = async () => {
       const p = profile as any;
-      if (!p) return;
 
       let iconHref = FALLBACK_FAVICON;
       let iconType = 'image/svg+xml';
 
-      if (p.favicon_url) {
+      if (p?.favicon_url) {
         try {
           const response = await fetch(p.favicon_url, { cache: 'no-store' });
 
@@ -55,14 +79,15 @@ export function useDynamicFavicon() {
             throw new Error('Favicon response is not an image');
           }
 
-          objectUrl = URL.createObjectURL(blob);
-          iconHref = objectUrl;
+          iconHref = await blobToDataUrl(blob);
           iconType = blob.type || 'image/png';
         } catch {
           iconHref = `${p.favicon_url}${p.favicon_url.includes('?') ? '&' : '?'}v=${Date.now()}`;
-          iconType = p.favicon_url.endsWith('.svg') ? 'image/svg+xml' : p.favicon_url.endsWith('.ico') ? 'image/x-icon' : 'image/png';
+          iconType = getIconTypeFromUrl(p.favicon_url);
         }
       }
+
+      if (isCancelled) return;
 
       const existingLinks = document.querySelectorAll(FAVICON_SELECTOR);
       existingLinks.forEach((el) => el.remove());
@@ -70,14 +95,15 @@ export function useDynamicFavicon() {
       document.head.appendChild(createIconLink('icon', iconHref, iconType));
       document.head.appendChild(createIconLink('shortcut icon', iconHref, iconType));
       document.head.appendChild(createIconLink('apple-touch-icon', iconHref, iconType));
+      activeIconHrefRef.current = iconHref;
 
       // Site title
-      if (p.site_title) {
+      if (p?.site_title) {
         document.title = p.site_title;
       }
 
       // Meta description
-      if (p.site_description) {
+      if (p?.site_description) {
         let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
         if (!meta) {
           meta = document.createElement('meta');
@@ -94,7 +120,7 @@ export function useDynamicFavicon() {
       }
 
       // OG title
-      if (p.site_title) {
+      if (p?.site_title) {
         let ogTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement | null;
         if (ogTitle) ogTitle.content = p.site_title;
         let twTitle = document.querySelector('meta[name="twitter:title"]') as HTMLMetaElement | null;
@@ -105,9 +131,7 @@ export function useDynamicFavicon() {
     void applyFavicon();
 
     return () => {
-      if (objectUrl) {
-        URL.revokeObjectURL(objectUrl);
-      }
+      isCancelled = true;
     };
   }, [profile]);
 }
