@@ -133,5 +133,5 @@ export function useDynamicFavicon() {
     return () => {
       isCancelled = true;
     };
-  }, [profile]);
+  }, [profile]); // stabilized
 }
