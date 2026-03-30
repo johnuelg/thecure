@@ -125,6 +125,7 @@ const ProfileManager = () => {
       favicon_url: faviconUrl || null,
       site_title: siteTitle || null,
       site_description: siteDescription || null,
+      brand_name: brandName || 'HealthcareAI',
     };
 
     try {
