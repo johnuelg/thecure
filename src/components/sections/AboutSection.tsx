@@ -230,6 +230,35 @@ export function AboutSection() {
                 </div>
               </div>
             )}
+
+            {/* CTA Buttons */}
+            <motion.div
+              className="flex flex-wrap gap-3 pt-2"
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.6 }}
+            >
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors shadow-md hover:shadow-lg"
+              >
+                Let&apos;s Work Together
+                <ArrowRight className="w-4 h-4" />
+              </a>
+              {profile?.resume_url && (
+                <a
+                  href={profile.resume_url}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-card border border-border text-foreground font-semibold text-sm hover:border-primary/40 hover:bg-secondary transition-colors"
+                >
+                  <Download className="w-4 h-4" />
+                  Download CV
+                </a>
+              )}
+            </motion.div>
           </motion.div>
         </div>
       </div>
