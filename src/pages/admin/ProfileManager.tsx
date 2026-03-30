@@ -371,6 +371,16 @@ const ProfileManager = () => {
                 <p className="text-xs text-muted-foreground">{siteDescription.length}/160 characters (recommended max)</p>
               </div>
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="brandName">Brand Name</Label>
+              <Input
+                id="brandName"
+                value={brandName}
+                onChange={(e) => setBrandName(e.target.value)}
+                placeholder="HealthcareAI"
+              />
+              <p className="text-xs text-muted-foreground">Displayed next to the logo in header & footer</p>
+            </div>
             <ImageUpload
               label="Site Logo (SVG or PNG)"
               value={logoUrl}

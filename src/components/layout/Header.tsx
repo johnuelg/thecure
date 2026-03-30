@@ -84,7 +84,7 @@ export function Header() {
               </div>
             )}
             <span className="font-display font-semibold text-base sm:text-lg">
-              Healthcare<span className="text-primary">AI</span>
+              {brandName}
             </span>
           </a>
 

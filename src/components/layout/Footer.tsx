@@ -79,7 +79,7 @@ export function Footer() {
                 </div>
               )}
               <span className="font-display font-semibold text-base sm:text-lg">
-                Healthcare<span className="text-primary">AI</span>
+                {(profile as any)?.brand_name || 'HealthcareAI'}
               </span>
             </div>
             <p className="text-muted-foreground max-w-md mb-6">
