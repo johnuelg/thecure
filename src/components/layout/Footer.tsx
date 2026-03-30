@@ -71,16 +71,18 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              {(profile as any)?.logo_url ? (
-                <img src={(profile as any).logo_url} alt="Logo" className="w-10 h-10 rounded-lg object-contain" />
+              {profile?.logo_url ? (
+                <img src={profile.logo_url} alt={profile.full_name || 'Logo'} className="h-10 object-contain" />
               ) : (
-                <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
-                  <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
-                </div>
+                <>
+                  <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
+                    <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
+                  </div>
+                  <span className="font-display font-semibold text-lg">
+                    Healthcare<span className="text-primary">AI</span>
+                  </span>
+                </>
               )}
-              <span className="font-display font-semibold text-lg">
-                Healthcare<span className="text-primary">AI</span>
-              </span>
             </div>
             <p className="text-muted-foreground max-w-md mb-6">
               {footerDescription}
