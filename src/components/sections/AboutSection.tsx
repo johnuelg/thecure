@@ -57,6 +57,7 @@ export function AboutSection() {
 
   const aboutDescription = profile?.about_description || 
     "I am a passionate Healthcare AI Consultant dedicated to bridging the gap between cutting-edge artificial intelligence and the healthcare industry. With over a decade of experience, I help organizations leverage AI to improve patient outcomes, streamline operations, and drive innovation in medical care.";
+  const resumeUrl = profile?.resume_url?.trim() || null;
 
   return (
     <section id="about" className="section-padding bg-secondary/30 relative overflow-hidden">
@@ -247,11 +248,16 @@ export function AboutSection() {
                 <ArrowRight className="w-4 h-4" />
               </a>
               <a
-                href={profile?.resume_url || "#contact"}
-                download={!!profile?.resume_url}
-                target={profile?.resume_url ? "_blank" : undefined}
-                rel={profile?.resume_url ? "noopener noreferrer" : undefined}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-card border border-border text-foreground font-semibold text-sm hover:border-primary/40 hover:bg-secondary transition-colors"
+                href={resumeUrl ?? undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-disabled={!resumeUrl}
+                onClick={(event) => {
+                  if (!resumeUrl) {
+                    event.preventDefault();
+                  }
+                }}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-card border border-border text-foreground font-semibold text-sm hover:border-primary/40 hover:bg-secondary transition-colors disabled:pointer-events-none"
               >
                 <Download className="w-4 h-4" />
                 Download CV
