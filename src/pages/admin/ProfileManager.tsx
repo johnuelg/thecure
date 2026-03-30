@@ -141,6 +141,7 @@ const ProfileManager = () => {
       toast({ title: 'Profile saved successfully' });
       // Invalidate all profile-related queries so header/footer pick up new logo
       queryClient.invalidateQueries({ queryKey: ['public-profile'] });
+      queryClient.invalidateQueries({ queryKey: ['public-profile-footer'] });
       queryClient.invalidateQueries({ queryKey: ['profile-branding'] });
       fetchProfile();
     } catch (error: any) {
