@@ -107,7 +107,7 @@ export function TestimonialsSection() {
                 className="flex flex-col items-center text-center w-full"
               >
                 <Quote className="h-8 w-8 text-primary/20 mb-6" />
-                <p className="text-lg md:text-xl text-foreground/90 italic leading-relaxed mb-8 max-w-2xl">
+                <p className="text-base sm:text-lg md:text-xl text-foreground/90 italic leading-relaxed mb-6 sm:mb-8 max-w-2xl">
                   &ldquo;{item.quote}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
