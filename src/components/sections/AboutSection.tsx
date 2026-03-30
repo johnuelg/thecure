@@ -173,21 +173,21 @@ export function AboutSection() {
               </div>
             )}
 
-            {/* Skills Tags */}
-            {skills && skills.length > 0 && (
+            {/* Expertise Tags */}
+            {expertiseTags && expertiseTags.length > 0 && (
               <div className="pt-2">
                 <h4 className="text-sm font-semibold text-foreground mb-3">Core Expertise</h4>
                 <div className="flex flex-wrap gap-2">
-                  {skills.map((skill, index) => (
+                  {expertiseTags.map((tag, index) => (
                     <motion.span
-                      key={skill.id}
+                      key={tag.id}
                       className="px-3 py-1.5 text-xs font-medium rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
                       initial={{ opacity: 0, scale: 0.8 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.3, delay: 0.5 + index * 0.05 }}
                     >
-                      {skill.name}
+                      {tag.name}
                     </motion.span>
                   ))}
                 </div>
