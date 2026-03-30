@@ -99,8 +99,8 @@ export function AboutSection() {
                 transition={{ duration: 0.4, delay: 0.6 }}
               >
                 <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent" />
                 </span>
                 <span className="text-sm font-medium text-foreground">Available for Consulting</span>
               </motion.div>
