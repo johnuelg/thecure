@@ -8,10 +8,8 @@ import { ProjectsSection } from "@/components/sections/ProjectsSection";
 import { ResumeSection } from "@/components/sections/ResumeSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import ChatWidget from "@/components/chat/ChatWidget";
-import { useDynamicFavicon } from "@/hooks/useDynamicFavicon";
 
 const Index = () => {
-  useDynamicFavicon();
   return (
     <div className="min-h-screen bg-background">
       <Header />
