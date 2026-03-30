@@ -15,6 +15,8 @@ interface ImageUploadProps {
   accept?: string;
   placeholder?: string;
   className?: string;
+  requireSquare?: boolean;
+  sizeHint?: string;
 }
 
 export function ImageUpload({
@@ -25,6 +27,8 @@ export function ImageUpload({
   accept = 'image/*',
   placeholder = 'Upload an image or enter URL',
   className,
+  requireSquare = false,
+  sizeHint,
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [showUrlInput, setShowUrlInput] = useState(false);
@@ -46,6 +50,32 @@ export function ImageUpload({
         variant: 'destructive',
       });
       return;
+    }
+
+    // Square dimension validation for image files
+    if (requireSquare && file.type.startsWith('image/') && file.type !== 'image/x-icon') {
+      const isSquare = await new Promise<boolean>((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          URL.revokeObjectURL(img.src);
+          resolve(img.width === img.height);
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(img.src);
+          resolve(true); // skip check on error (e.g. SVG without dimensions)
+        };
+        img.src = URL.createObjectURL(file);
+      });
+
+      if (!isSquare) {
+        toast({
+          title: 'Image must be square',
+          description: 'Favicon images must have equal width and height (e.g. 32×32, 64×64, 512×512).',
+          variant: 'destructive',
+        });
+        if (fileInputRef.current) fileInputRef.current.value = '';
+        return;
+      }
     }
 
     setIsUploading(true);
@@ -192,6 +222,10 @@ export function ImageUpload({
             placeholder={placeholder}
             className="text-sm"
           />
+        )}
+
+        {sizeHint && (
+          <p className="text-xs text-muted-foreground">{sizeHint}</p>
         )}
       </div>
     </div>
