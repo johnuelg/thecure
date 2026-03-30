@@ -12,7 +12,7 @@ const getIcon = (iconName: string): LucideIcon => {
 
 export function AboutSection() {
   const { data: profile } = useQuery({
-    queryKey: ['public-profile'],
+    queryKey: ['public-profile-about'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
