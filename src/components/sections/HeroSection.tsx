@@ -109,10 +109,10 @@ export function HeroSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className="pointer-events-none overflow-hidden my-6"
+            className="pointer-events-none overflow-hidden my-4 sm:my-6 hidden sm:block"
             aria-hidden="true"
           >
-            <svg className="w-full h-20" viewBox="0 0 1000 100" preserveAspectRatio="xMidYMid meet" fill="none">
+            <svg className="w-full h-16 sm:h-20" viewBox="0 0 1000 100" preserveAspectRatio="xMidYMid meet" fill="none">
               <defs>
                 <filter id="ecg-glow-outer" x="-10%" y="-50%" width="120%" height="200%">
                   <feGaussianBlur stdDeviation="6" result="blur" />
