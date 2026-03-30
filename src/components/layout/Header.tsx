@@ -86,11 +86,11 @@ export function Header() {
             )}
             {brandNameImageUrl ? (
               <img src={brandNameImageUrl} alt={brandName} className="h-6 sm:h-7 object-contain" />
-            ) : (
+            ) : brandName ? (
               <span className="font-display font-semibold text-base sm:text-lg">
                 {brandName}
               </span>
-            )}
+            ) : null}
           </a>
 
           {/* Desktop Navigation */}
