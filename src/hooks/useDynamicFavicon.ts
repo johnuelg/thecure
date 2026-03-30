@@ -24,15 +24,23 @@ export function useDynamicFavicon() {
     const p = profile as any;
     if (!p) return;
 
-    // Favicon
+    // Favicon - remove all existing and set fresh
     if (p.favicon_url) {
-      let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement | null;
-      if (!link) {
-        link = document.createElement('link');
-        link.rel = 'icon';
-        document.head.appendChild(link);
-      }
-      link.href = p.favicon_url;
+      // Remove all existing favicon links
+      const existingLinks = document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon'], link[rel='apple-touch-icon']");
+      existingLinks.forEach(el => el.remove());
+
+      // Create new favicon link
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      link.href = p.favicon_url + '?v=' + Date.now();
+      document.head.appendChild(link);
+
+      // Also add shortcut icon for broader browser support
+      const shortcut = document.createElement('link');
+      shortcut.rel = 'shortcut icon';
+      shortcut.href = p.favicon_url + '?v=' + Date.now();
+      document.head.appendChild(shortcut);
     }
 
     // Site title
