@@ -56,6 +56,7 @@ const ProfileManager = () => {
   const [siteTitle, setSiteTitle] = useState('');
   const [siteDescription, setSiteDescription] = useState('');
   const [brandName, setBrandName] = useState('');
+  const [brandNameImageUrl, setBrandNameImageUrl] = useState('');
 
   const fetchProfile = async () => {
     try {
@@ -86,6 +87,7 @@ const ProfileManager = () => {
         setSiteTitle((data as any).site_title || '');
         setSiteDescription((data as any).site_description || '');
         setBrandName((data as any).brand_name || '');
+        setBrandNameImageUrl((data as any).brand_name_image_url || '');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -126,6 +128,7 @@ const ProfileManager = () => {
       site_title: siteTitle || null,
       site_description: siteDescription || null,
       brand_name: brandName || 'HealthcareAI',
+      brand_name_image_url: brandNameImageUrl || null,
     };
 
     try {
@@ -372,15 +375,23 @@ const ProfileManager = () => {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="brandName">Brand Name</Label>
+              <Label htmlFor="brandName">Brand Name (Text)</Label>
               <Input
                 id="brandName"
                 value={brandName}
                 onChange={(e) => setBrandName(e.target.value)}
                 placeholder="HealthcareAI"
               />
-              <p className="text-xs text-muted-foreground">Displayed next to the logo in header & footer</p>
+              <p className="text-xs text-muted-foreground">Text displayed next to the logo. Used when no brand name image is uploaded.</p>
             </div>
+            <ImageUpload
+              label="Brand Name (Image) — overrides text if uploaded"
+              value={brandNameImageUrl}
+              onChange={setBrandNameImageUrl}
+              bucket="portfolio-images"
+              accept="image/svg+xml,image/png,.svg,.png"
+              placeholder="Upload brand name image (.svg or .png)"
+            />
             <ImageUpload
               label="Site Logo (SVG or PNG)"
               value={logoUrl}

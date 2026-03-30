@@ -24,14 +24,15 @@ export function Header() {
     queryFn: async () => {
       const { data } = await supabase
         .from('profile')
-        .select('logo_url, full_name, brand_name')
+        .select('logo_url, full_name, brand_name, brand_name_image_url')
         .maybeSingle();
-      return data as { logo_url: string | null; full_name: string; brand_name: string | null } | null;
+      return data as { logo_url: string | null; full_name: string; brand_name: string | null; brand_name_image_url: string | null } | null;
     },
     staleTime: 1000 * 60 * 10,
   });
 
   const brandName = branding?.brand_name || 'HealthcareAI';
+  const brandNameImageUrl = (branding as any)?.brand_name_image_url || null;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,9 +84,13 @@ export function Header() {
                 <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
               </div>
             )}
-            <span className="font-display font-semibold text-base sm:text-lg">
-              {brandName}
-            </span>
+            {brandNameImageUrl ? (
+              <img src={brandNameImageUrl} alt={brandName} className="h-6 sm:h-7 object-contain" />
+            ) : (
+              <span className="font-display font-semibold text-base sm:text-lg">
+                {brandName}
+              </span>
+            )}
           </a>
 
           {/* Desktop Navigation */}
