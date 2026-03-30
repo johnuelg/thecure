@@ -27,6 +27,7 @@ import VisualizationsManager from "./pages/admin/VisualizationsManager";
 import ResumeManager from "./pages/admin/ResumeManager";
 import KnowledgeBaseManager from "./pages/admin/KnowledgeBaseManager";
 import HeroStatsManager from "./pages/admin/HeroStatsManager";
+import ExpertiseManager from "./pages/admin/ExpertiseManager";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const AppContent = () => {
             <Route path="profile" element={<ProfileManager />} />
             <Route path="sections" element={<SectionDescriptionsManager />} />
             <Route path="about-highlights" element={<AboutHighlightsManager />} />
+            <Route path="expertise" element={<ExpertiseManager />} />
             <Route path="footer-links" element={<FooterLinksManager />} />
             <Route path="services" element={<ServicesManager />} />
             <Route path="projects" element={<ProjectsManager />} />
