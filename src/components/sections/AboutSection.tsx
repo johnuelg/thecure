@@ -246,18 +246,16 @@ export function AboutSection() {
                 Let&apos;s Work Together
                 <ArrowRight className="w-4 h-4" />
               </a>
-              {profile?.resume_url && (
-                <a
-                  href={profile.resume_url}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-card border border-border text-foreground font-semibold text-sm hover:border-primary/40 hover:bg-secondary transition-colors"
-                >
-                  <Download className="w-4 h-4" />
-                  Download CV
-                </a>
-              )}
+              <a
+                href={profile?.resume_url || "#contact"}
+                download={!!profile?.resume_url}
+                target={profile?.resume_url ? "_blank" : undefined}
+                rel={profile?.resume_url ? "noopener noreferrer" : undefined}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-card border border-border text-foreground font-semibold text-sm hover:border-primary/40 hover:bg-secondary transition-colors"
+              >
+                <Download className="w-4 h-4" />
+                Download CV
+              </a>
             </motion.div>
           </motion.div>
         </div>
