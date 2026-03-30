@@ -78,9 +78,13 @@ export function Footer() {
                   <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
                 </div>
               )}
-              <span className="font-display font-semibold text-base sm:text-lg">
-                {(profile as any)?.brand_name || 'HealthcareAI'}
-              </span>
+              {(profile as any)?.brand_name_image_url ? (
+                <img src={(profile as any).brand_name_image_url} alt={(profile as any)?.brand_name || 'HealthcareAI'} className="h-6 sm:h-7 object-contain" />
+              ) : (
+                <span className="font-display font-semibold text-base sm:text-lg">
+                  {(profile as any)?.brand_name || 'HealthcareAI'}
+                </span>
+              )}
             </div>
             <p className="text-muted-foreground max-w-md mb-6">
               {footerDescription}

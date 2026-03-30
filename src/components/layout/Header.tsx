@@ -84,9 +84,13 @@ export function Header() {
                 <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
               </div>
             )}
-            <span className="font-display font-semibold text-base sm:text-lg">
-              {brandName}
-            </span>
+            {brandNameImageUrl ? (
+              <img src={brandNameImageUrl} alt={brandName} className="h-6 sm:h-7 object-contain" />
+            ) : (
+              <span className="font-display font-semibold text-base sm:text-lg">
+                {brandName}
+              </span>
+            )}
           </a>
 
           {/* Desktop Navigation */}
