@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { useDynamicFavicon } from "@/hooks/useDynamicFavicon";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/admin/Login";
@@ -29,53 +30,61 @@ import HeroStatsManager from "./pages/admin/HeroStatsManager";
 
 const queryClient = new QueryClient();
 
+const AppContent = () => {
+  useDynamicFavicon();
+
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<Index />} />
+
+          {/* Admin auth routes */}
+          <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+          <Route path="/admin/reset-password" element={<ResetPassword />} />
+
+          {/* Protected admin routes with layout */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requireAdmin>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="profile" element={<ProfileManager />} />
+            <Route path="sections" element={<SectionDescriptionsManager />} />
+            <Route path="about-highlights" element={<AboutHighlightsManager />} />
+            <Route path="footer-links" element={<FooterLinksManager />} />
+            <Route path="services" element={<ServicesManager />} />
+            <Route path="projects" element={<ProjectsManager />} />
+            <Route path="visualizations" element={<VisualizationsManager />} />
+            <Route path="resume" element={<ResumeManager />} />
+            <Route path="knowledge-base" element={<KnowledgeBaseManager />} />
+            <Route path="hero-stats" element={<HeroStatsManager />} />
+            <Route path="blog" element={<BlogManager />} />
+            <Route path="testimonials" element={<TestimonialsManager />} />
+            <Route path="messages" element={<MessagesManager />} />
+          </Route>
+
+          {/* Catch-all */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+};
+
 const App = () => (
   <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <Routes>
-              {/* Public routes */}
-              <Route path="/" element={<Index />} />
-              
-              {/* Admin auth routes */}
-              <Route path="/admin/login" element={<Login />} />
-              <Route path="/admin/forgot-password" element={<ForgotPassword />} />
-              <Route path="/admin/reset-password" element={<ResetPassword />} />
-              
-              {/* Protected admin routes with layout */}
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute requireAdmin>
-                    <AdminLayout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route index element={<AdminDashboard />} />
-                <Route path="profile" element={<ProfileManager />} />
-                <Route path="sections" element={<SectionDescriptionsManager />} />
-                <Route path="about-highlights" element={<AboutHighlightsManager />} />
-                <Route path="footer-links" element={<FooterLinksManager />} />
-                <Route path="services" element={<ServicesManager />} />
-                <Route path="projects" element={<ProjectsManager />} />
-                <Route path="visualizations" element={<VisualizationsManager />} />
-                <Route path="resume" element={<ResumeManager />} />
-                <Route path="knowledge-base" element={<KnowledgeBaseManager />} />
-                <Route path="hero-stats" element={<HeroStatsManager />} />
-                <Route path="blog" element={<BlogManager />} />
-                <Route path="testimonials" element={<TestimonialsManager />} />
-                <Route path="messages" element={<MessagesManager />} />
-              </Route>
-              
-              {/* Catch-all */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AuthProvider>
-        </BrowserRouter>
+        <AppContent />
       </TooltipProvider>
     </QueryClientProvider>
   </ThemeProvider>
