@@ -77,15 +77,13 @@ export function Header() {
             {branding?.logo_url ? (
               <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-10 object-contain" />
             ) : (
-              <>
-                <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
-                  <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
-                </div>
-                <span className="font-display font-semibold text-lg hidden sm:block">
-                  Healthcare<span className="text-primary">AI</span>
-                </span>
-              </>
+              <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
+                <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
+              </div>
             )}
+            <span className="font-display font-semibold text-lg hidden sm:block">
+              Healthcare<span className="text-primary">AI</span>
+            </span>
           </a>
 
           {/* Desktop Navigation */}
