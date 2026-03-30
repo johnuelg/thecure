@@ -1,66 +1,39 @@
 
 
-# Email Notifications for Contact Form Submissions
+# Fix Published Site Favicon (White Square)
 
-## Overview
-Add email notifications so you receive an immediate alert whenever someone submits a message through the contact form on your landing page.
+## Root Cause
 
-## How It Will Work
-1. When a visitor submits the contact form, the message gets saved to the database (already working)
-2. After saving, the frontend will call a new edge function to send you an email notification
-3. You'll receive an email with the sender's name, email, subject, and message content
+The published site at `thecure.lovable.app` shows a white square favicon because:
 
-## What You'll Need to Provide
-**Resend API Key** - We'll use Resend.com for reliable email delivery. You'll need to:
-1. Sign up at https://resend.com (free tier includes 100 emails/day)
-2. Add and verify your email domain at https://resend.com/domains
-3. Create an API key at https://resend.com/api-keys
+1. **`index.html` points to `/placeholder.svg`** — Lovable's default 1200x1200 gray placeholder image with a camera icon. This is what browsers initially render as the tab icon.
+2. **`/favicon.ico` still exists on the published site** — it returns a PNG blob (the old Lovable default). Browsers automatically request `/favicon.ico` even before processing `<link>` tags, and this file takes priority.
+3. **The dynamic hook runs too late** — by the time `useDynamicFavicon` fetches the real favicon URL from Supabase and injects it via JavaScript, Chrome has already cached the placeholder/default icon. Chrome stores favicons in a separate SQLite database and is extremely reluctant to re-check them.
 
-## Implementation Steps
+## Plan
 
-### Step 1: Create the Email Notification Edge Function
-Create a new `supabase/functions/send-contact-notification/index.ts` that:
-- Receives contact form data (name, email, subject, message)
-- Fetches your profile email from the database as the recipient
-- Sends a formatted HTML email using Resend
-- Includes proper CORS handling and error responses
+### Step 1: Remove the placeholder SVG and replace with a transparent 1x1 fallback
 
-### Step 2: Update Supabase Configuration
-Add the new function to `supabase/config.toml` with `verify_jwt = false` so it can be called from the public contact form.
+- Delete `public/placeholder.svg` (the 1200x1200 Lovable default image that shows as a gray/white square)
+- Create a tiny inline SVG data URI in `index.html` as the initial favicon — a transparent 1x1 pixel so nothing ugly shows during the brief moment before the dynamic hook runs:
+  ```html
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'/>" type="image/svg+xml" />
+  ```
+- Remove the duplicate `<link rel="shortcut icon">` tag
 
-### Step 3: Update the Contact Form
-Modify `src/components/sections/ContactSection.tsx` to:
-- Call the new edge function after successfully saving the message to the database
-- Handle the notification in the background (non-blocking)
-- Not affect the user experience if the email fails to send
+### Step 2: Update the fallback in `useDynamicFavicon.ts`
 
----
+- Change `FALLBACK_FAVICON` from `'/placeholder.svg'` to the same transparent SVG data URI, so even if the Supabase fetch fails, users never see the Lovable placeholder
+- Add a `crossOrigin` attribute when fetching the favicon to handle CORS properly with Supabase storage
+
+### Step 3: Fix image references elsewhere
+
+- Search for any other references to `/placeholder.svg` in the codebase (e.g., the `onError` handler in `ImageUpload.tsx`) and replace with an appropriate fallback
 
 ## Technical Details
 
-### Edge Function Structure
-```text
-supabase/functions/send-contact-notification/
-  └── index.ts
-```
-
-### Email Template
-The notification email will include:
-- Subject: "New Contact Form Message: [Subject]" or "New Contact Form Message from [Name]"
-- Sender details (name and email with reply link)
-- Message content
-- Timestamp
-- Direct link to reply via email
-
-### Security Considerations
-- The edge function only sends to your profile email (not user-provided)
-- No sensitive data is exposed
-- Rate limiting is handled by Resend's API
-
-### Files to Create/Modify
-| File | Action |
-|------|--------|
-| `supabase/functions/send-contact-notification/index.ts` | Create |
-| `supabase/config.toml` | Add function config |
-| `src/components/sections/ContactSection.tsx` | Add edge function call |
+- **Files modified**: `index.html`, `src/hooks/useDynamicFavicon.ts`, `src/components/admin/ImageUpload.tsx`
+- **File deleted**: `public/placeholder.svg`
+- No database changes needed
+- The dynamic hook will continue to work as before — fetching the admin-configured favicon from Supabase and injecting it as a data URL. The only difference is the initial/fallback icon will be invisible instead of showing a white square.
 
