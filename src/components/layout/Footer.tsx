@@ -80,11 +80,11 @@ export function Footer() {
               )}
               {(profile as any)?.brand_name_image_url ? (
                 <img src={(profile as any).brand_name_image_url} alt={(profile as any)?.brand_name || 'HealthcareAI'} className="h-6 sm:h-7 object-contain" />
-              ) : (
+              ) : (profile as any)?.brand_name ? (
                 <span className="font-display font-semibold text-base sm:text-lg">
-                  {(profile as any)?.brand_name || 'HealthcareAI'}
+                  {(profile as any).brand_name}
                 </span>
-              )}
+              ) : null}
             </div>
             <p className="text-muted-foreground max-w-md mb-6">
               {footerDescription}
