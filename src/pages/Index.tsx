@@ -7,6 +7,7 @@ import { ServicesSection } from "@/components/sections/ServicesSection";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
 import { ResumeSection } from "@/components/sections/ResumeSection";
 import { ContactSection } from "@/components/sections/ContactSection";
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import ChatWidget from "@/components/chat/ChatWidget";
 
 const Index = () => {
@@ -20,6 +21,7 @@ const Index = () => {
         <ServicesSection />
         <ProjectsSection />
         <ResumeSection />
+        <TestimonialsSection />
         <ContactSection />
       </main>
       <Footer />
