@@ -375,15 +375,23 @@ const ProfileManager = () => {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="brandName">Brand Name</Label>
+              <Label htmlFor="brandName">Brand Name (Text)</Label>
               <Input
                 id="brandName"
                 value={brandName}
                 onChange={(e) => setBrandName(e.target.value)}
                 placeholder="HealthcareAI"
               />
-              <p className="text-xs text-muted-foreground">Displayed next to the logo in header & footer</p>
+              <p className="text-xs text-muted-foreground">Text displayed next to the logo. Used when no brand name image is uploaded.</p>
             </div>
+            <ImageUpload
+              label="Brand Name (Image) — overrides text if uploaded"
+              value={brandNameImageUrl}
+              onChange={setBrandNameImageUrl}
+              bucket="portfolio-images"
+              accept="image/svg+xml,image/png,.svg,.png"
+              placeholder="Upload brand name image (.svg or .png)"
+            />
             <ImageUpload
               label="Site Logo (SVG or PNG)"
               value={logoUrl}
