@@ -248,11 +248,16 @@ export function AboutSection() {
                 <ArrowRight className="w-4 h-4" />
               </a>
               <a
-                href={profile?.resume_url || "#contact"}
-                download={!!profile?.resume_url}
-                target={profile?.resume_url ? "_blank" : undefined}
-                rel={profile?.resume_url ? "noopener noreferrer" : undefined}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-card border border-border text-foreground font-semibold text-sm hover:border-primary/40 hover:bg-secondary transition-colors"
+                href={resumeUrl ?? undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-disabled={!resumeUrl}
+                onClick={(event) => {
+                  if (!resumeUrl) {
+                    event.preventDefault();
+                  }
+                }}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-card border border-border text-foreground font-semibold text-sm hover:border-primary/40 hover:bg-secondary transition-colors disabled:pointer-events-none"
               >
                 <Download className="w-4 h-4" />
                 Download CV
