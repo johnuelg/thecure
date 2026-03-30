@@ -378,6 +378,8 @@ const ProfileManager = () => {
               bucket="portfolio-images"
               accept="image/png,image/x-icon,image/svg+xml,.ico"
               placeholder="Upload favicon (.png, .ico, .svg)"
+              requireSquare
+              sizeHint="Recommended: square PNG, 32×32 or 512×512 px"
             />
           </CardContent>
         </Card>
