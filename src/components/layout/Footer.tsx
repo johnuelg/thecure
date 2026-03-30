@@ -6,7 +6,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   const { data: profile } = useQuery({
-    queryKey: ['public-profile'],
+    queryKey: ['public-profile-footer'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
