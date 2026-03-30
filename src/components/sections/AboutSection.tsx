@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { User, CheckCircle2, Sparkles } from "lucide-react";
+import { User, CheckCircle2 } from "lucide-react";
 import { icons } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
@@ -30,6 +30,19 @@ export function AboutSection() {
         .from('about_highlights')
         .select('*')
         .eq('is_active', true)
+        .order('display_order', { ascending: true });
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: skills } = useQuery({
+    queryKey: ['public-skills'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('skills')
+        .select('*')
         .order('display_order', { ascending: true });
       
       if (error) throw error;
@@ -105,17 +118,8 @@ export function AboutSection() {
                 <span className="text-sm font-medium text-foreground">Available for Consulting</span>
               </motion.div>
 
-              {/* Floating badge - Experience */}
-              <motion.div 
-                className="absolute -left-3 bottom-8 bg-card border border-border rounded-xl px-4 py-2.5 shadow-lg flex items-center gap-2"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.8 }}
-              >
-                <Sparkles className="w-4 h-4 text-accent" />
-                <span className="text-sm font-medium text-foreground">10+ Years Experience</span>
-              </motion.div>
+
+              {/* Decorative corner accents */}
 
               {/* Decorative corner accents */}
               <div className="absolute -bottom-3 -right-3 w-20 h-20 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 -z-10" />
@@ -165,6 +169,27 @@ export function AboutSection() {
                     </motion.div>
                   );
                 })}
+              </div>
+            )}
+
+            {/* Skills Tags */}
+            {skills && skills.length > 0 && (
+              <div className="pt-2">
+                <h4 className="text-sm font-semibold text-foreground mb-3">Core Expertise</h4>
+                <div className="flex flex-wrap gap-2">
+                  {skills.map((skill, index) => (
+                    <motion.span
+                      key={skill.id}
+                      className="px-3 py-1.5 text-xs font-medium rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: 0.5 + index * 0.05 }}
+                    >
+                      {skill.name}
+                    </motion.span>
+                  ))}
+                </div>
               </div>
             )}
           </motion.div>
