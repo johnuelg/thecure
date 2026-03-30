@@ -205,7 +205,7 @@ function ChartRenderer({ viz, index }: { viz: DataVisualization; index: number }
               outerRadius={100}
               paddingAngle={4}
               dataKey="value"
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
               labelLine={false}
             >
               {chartData.map((entry, i) => (

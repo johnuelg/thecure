@@ -94,7 +94,7 @@ export function TestimonialsSection() {
 
         <div className="relative">
           {/* Carousel card */}
-          <div className="overflow-hidden rounded-2xl bg-card border border-border shadow-lg min-h-[260px] flex items-center justify-center px-6 py-10 md:px-16">
+          <div className="overflow-hidden rounded-2xl bg-card border border-border shadow-lg min-h-[220px] sm:min-h-[260px] flex items-center justify-center px-4 sm:px-6 py-8 sm:py-10 md:px-16">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={item.id}
@@ -107,7 +107,7 @@ export function TestimonialsSection() {
                 className="flex flex-col items-center text-center w-full"
               >
                 <Quote className="h-8 w-8 text-primary/20 mb-6" />
-                <p className="text-lg md:text-xl text-foreground/90 italic leading-relaxed mb-8 max-w-2xl">
+                <p className="text-base sm:text-lg md:text-xl text-foreground/90 italic leading-relaxed mb-6 sm:mb-8 max-w-2xl">
                   &ldquo;{item.quote}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
@@ -142,14 +142,14 @@ export function TestimonialsSection() {
             <>
               <button
                 onClick={prev}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 w-10 rounded-full bg-card border border-border shadow-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:shadow-lg transition-all"
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/3 sm:-translate-x-1/2 h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-card border border-border shadow-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:shadow-lg transition-all"
                 aria-label="Previous testimonial"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
               <button
                 onClick={next}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 h-10 w-10 rounded-full bg-card border border-border shadow-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:shadow-lg transition-all"
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/3 sm:translate-x-1/2 h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-card border border-border shadow-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:shadow-lg transition-all"
                 aria-label="Next testimonial"
               >
                 <ChevronRight className="h-5 w-5" />
