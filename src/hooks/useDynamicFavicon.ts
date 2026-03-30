@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
 const FAVICON_SELECTOR = "link[rel='icon'], link[rel='shortcut icon'], link[rel='apple-touch-icon']";
-const FALLBACK_FAVICON = '/placeholder.svg';
+const FALLBACK_FAVICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'/>";
 
 const createIconLink = (rel: string, href: string, type: string) => {
   const link = document.createElement('link');
