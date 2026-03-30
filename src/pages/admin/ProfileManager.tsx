@@ -49,6 +49,7 @@ const ProfileManager = () => {
   const [githubUrl, setGithubUrl] = useState('');
   const [twitterUrl, setTwitterUrl] = useState('');
   const [profileImageUrl, setProfileImageUrl] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
   const [resumeUrl, setResumeUrl] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
   const [faviconUrl, setFaviconUrl] = useState('');
@@ -77,6 +78,7 @@ const ProfileManager = () => {
         setGithubUrl(data.github_url || '');
         setTwitterUrl(data.twitter_url || '');
         setProfileImageUrl(data.profile_image_url || '');
+        setVideoUrl((data as any).video_url || '');
         setResumeUrl(data.resume_url || '');
         setLogoUrl((data as any).logo_url || '');
         setFaviconUrl((data as any).favicon_url || '');
@@ -115,6 +117,7 @@ const ProfileManager = () => {
       github_url: githubUrl || null,
       twitter_url: twitterUrl || null,
       profile_image_url: profileImageUrl || null,
+      video_url: videoUrl || null,
       resume_url: resumeUrl || null,
       logo_url: logoUrl || null,
       favicon_url: faviconUrl || null,
@@ -223,11 +226,12 @@ const ProfileManager = () => {
               />
             </div>
             <ImageUpload
-              label="Profile Photo"
-              value={profileImageUrl}
-              onChange={setProfileImageUrl}
+              label="About Section Video (MP4)"
+              value={videoUrl}
+              onChange={setVideoUrl}
               bucket="portfolio-images"
-              accept="image/*"
+              accept="video/mp4,video/webm,.mp4,.webm"
+              placeholder="Upload a video for the About section"
             />
           </CardContent>
         </Card>

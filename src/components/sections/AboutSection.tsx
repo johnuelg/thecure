@@ -1,6 +1,7 @@
+import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { User, CheckCircle2 } from "lucide-react";
+import { User, CheckCircle2, Play } from "lucide-react";
 import { icons } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
@@ -15,13 +16,16 @@ export function AboutSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('full_name, professional_title, bio, about_description, profile_image_url')
+        .select('full_name, professional_title, bio, about_description, profile_image_url, video_url')
         .maybeSingle();
       
       if (error) throw error;
       return data;
     },
   });
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const { data: highlights } = useQuery({
     queryKey: ['public-about-highlights'],
@@ -89,9 +93,45 @@ export function AboutSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="relative">
-              {/* Main image frame */}
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-accent/10 border border-border shadow-lg">
-                {profile?.profile_image_url ? (
+              {/* Main video/image frame */}
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-accent/10 border border-border shadow-lg relative group">
+                {(profile as any)?.video_url ? (
+                  <>
+                    <video
+                      ref={videoRef}
+                      src={(profile as any).video_url}
+                      className="w-full h-full object-cover"
+                      playsInline
+                      onClick={() => {
+                        if (videoRef.current) {
+                          if (isPlaying) {
+                            videoRef.current.pause();
+                          } else {
+                            videoRef.current.play();
+                          }
+                          setIsPlaying(!isPlaying);
+                        }
+                      }}
+                      onEnded={() => setIsPlaying(false)}
+                    />
+                    {/* Play button overlay */}
+                    {!isPlaying && (
+                      <button
+                        onClick={() => {
+                          if (videoRef.current) {
+                            videoRef.current.play();
+                            setIsPlaying(true);
+                          }
+                        }}
+                        className="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity group-hover:bg-black/40 cursor-pointer"
+                      >
+                        <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg backdrop-blur-sm">
+                          <Play className="w-7 h-7 text-primary-foreground ml-1" fill="currentColor" />
+                        </div>
+                      </button>
+                    )}
+                  </>
+                ) : profile?.profile_image_url ? (
                   <img
                     src={profile.profile_image_url}
                     alt={profile.full_name || "Profile"}
@@ -118,9 +158,6 @@ export function AboutSection() {
                 </span>
                 <span className="text-sm font-medium text-foreground">Available for Consulting</span>
               </motion.div>
-
-
-              {/* Decorative corner accents */}
 
               {/* Decorative corner accents */}
               <div className="absolute -bottom-3 -right-3 w-20 h-20 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 -z-10" />
