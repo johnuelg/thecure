@@ -85,6 +85,7 @@ const ProfileManager = () => {
         setFaviconUrl((data as any).favicon_url || '');
         setSiteTitle((data as any).site_title || '');
         setSiteDescription((data as any).site_description || '');
+        setBrandName((data as any).brand_name || '');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
