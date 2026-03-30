@@ -74,8 +74,8 @@ export function Footer() {
               {profile?.logo_url ? (
                 <img src={profile.logo_url} alt={profile.full_name || 'Logo'} className="h-16 md:h-18 object-contain" />
               ) : (
-                <div className="w-14 h-14 rounded-lg healthcare-gradient flex items-center justify-center">
-                  <span className="text-primary-foreground font-display font-bold text-xl">AI</span>
+                <div className="w-16 h-16 md:w-18 md:h-18 rounded-lg healthcare-gradient flex items-center justify-center">
+                  <span className="text-primary-foreground font-display font-bold text-2xl">AI</span>
                 </div>
               )}
               {(profile as any)?.brand_name_image_url ? (
