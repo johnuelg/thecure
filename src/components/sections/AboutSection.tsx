@@ -95,7 +95,7 @@ export function AboutSection() {
           >
             <div className="relative">
               {/* Main video/image frame */}
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-accent/10 border border-border shadow-lg relative group">
+              <div className="aspect-[4/5] sm:aspect-[4/5] aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-accent/10 border border-border shadow-lg relative group">
                 {(profile as any)?.video_url ? (
                   <>
                     <video
