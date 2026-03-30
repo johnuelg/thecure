@@ -24,12 +24,14 @@ export function Header() {
     queryFn: async () => {
       const { data } = await supabase
         .from('profile')
-        .select('logo_url, full_name')
+        .select('logo_url, full_name, brand_name')
         .maybeSingle();
-      return data as { logo_url: string | null; full_name: string } | null;
+      return data as { logo_url: string | null; full_name: string; brand_name: string | null } | null;
     },
     staleTime: 1000 * 60 * 10,
   });
+
+  const brandName = branding?.brand_name || 'HealthcareAI';
 
   useEffect(() => {
     const handleScroll = () => {
