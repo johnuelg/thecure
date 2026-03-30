@@ -4,6 +4,7 @@ import { ExternalLink, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 interface Project {
   id: string;
@@ -190,19 +191,12 @@ export function ProjectsSection() {
                     </div>
                   )}
 
-                  {project.demo_url ? (
-                    <a href={project.demo_url} target="_blank" rel="noopener noreferrer">
-                      <Button variant="ghost" size="sm" className="group/btn p-0 h-auto">
-                        View Case Study
-                        <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                      </Button>
-                    </a>
-                  ) : (
+                  <Link to={`/projects/${project.id}`}>
                     <Button variant="ghost" size="sm" className="group/btn p-0 h-auto">
                       View Case Study
                       <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                     </Button>
-                  )}
+                  </Link>
                 </div>
               </motion.article>
             ))}

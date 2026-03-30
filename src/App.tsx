@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { useDynamicFavicon } from "@/hooks/useDynamicFavicon";
 import Index from "./pages/Index";
+import ProjectDetail from "./pages/ProjectDetail";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/admin/Login";
 import ForgotPassword from "./pages/admin/ForgotPassword";
@@ -40,6 +41,7 @@ const AppContent = () => {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Index />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
 
           {/* Admin auth routes */}
           <Route path="/admin/login" element={<Login />} />
