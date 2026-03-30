@@ -67,7 +67,7 @@ export function Header() {
       </a>
 
       <div className="container-wide">
-        <div className="flex items-center justify-between h-20 md:h-24">
+        <div className="flex items-center justify-between h-24 md:h-28">
           {/* Logo */}
           <a
             href="#"
@@ -75,19 +75,19 @@ export function Header() {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="flex items-center gap-2 group transition-transform duration-300 hover:scale-105"
+            className="flex items-center gap-3 group transition-transform duration-300 hover:scale-105"
           >
             {branding?.logo_url ? (
-              <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-16 md:h-18 object-contain" />
+              <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-20 md:h-22 object-contain" />
             ) : (
-              <div className="w-16 h-16 md:w-18 md:h-18 rounded-lg healthcare-gradient flex items-center justify-center">
-                <span className="text-primary-foreground font-display font-bold text-2xl">AI</span>
+              <div className="w-20 h-20 md:w-22 md:h-22 rounded-lg healthcare-gradient flex items-center justify-center">
+                <span className="text-primary-foreground font-display font-bold text-3xl">AI</span>
               </div>
             )}
             {brandNameImageUrl ? (
-              <img src={brandNameImageUrl} alt={brandName} className="h-8 sm:h-10 object-contain" />
+              <img src={brandNameImageUrl} alt={brandName} className="h-10 sm:h-14 object-contain" />
             ) : brandName ? (
-              <span className="font-display font-semibold text-lg sm:text-xl">
+              <span className="font-display font-semibold text-xl sm:text-2xl">
                 {brandName}
               </span>
             ) : null}
