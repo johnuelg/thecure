@@ -20,7 +20,8 @@ import {
   AlignLeft,
   Sparkles,
   Link2,
-  Gauge
+  Gauge,
+  Tags
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
