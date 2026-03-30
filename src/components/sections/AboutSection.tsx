@@ -37,12 +37,13 @@ export function AboutSection() {
     },
   });
 
-  const { data: skills } = useQuery({
-    queryKey: ['public-skills'],
+  const { data: expertiseTags } = useQuery({
+    queryKey: ['public-expertise-tags'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('skills')
+        .from('expertise_tags')
         .select('*')
+        .eq('is_active', true)
         .order('display_order', { ascending: true });
       
       if (error) throw error;
