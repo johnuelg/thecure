@@ -78,7 +78,7 @@ export function Footer() {
                   <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
                 </div>
               )}
-              <span className="font-display font-semibold text-lg hidden sm:block">
+              <span className="font-display font-semibold text-base sm:text-lg">
                 Healthcare<span className="text-primary">AI</span>
               </span>
             </div>
