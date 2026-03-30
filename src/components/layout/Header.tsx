@@ -67,7 +67,7 @@ export function Header() {
       </a>
 
       <div className="container-wide">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
           <a
             href="#"
@@ -78,10 +78,10 @@ export function Header() {
             className="flex items-center gap-2 group"
           >
             {branding?.logo_url ? (
-              <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-14 object-contain" />
+              <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-16 md:h-18 object-contain" />
             ) : (
-              <div className="w-14 h-14 rounded-lg healthcare-gradient flex items-center justify-center">
-                <span className="text-primary-foreground font-display font-bold text-xl">AI</span>
+              <div className="w-16 h-16 md:w-18 md:h-18 rounded-lg healthcare-gradient flex items-center justify-center">
+                <span className="text-primary-foreground font-display font-bold text-2xl">AI</span>
               </div>
             )}
             {brandNameImageUrl ? (
