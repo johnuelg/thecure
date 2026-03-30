@@ -147,7 +147,7 @@ export function AboutSection() {
 
               {/* Floating badge - Available */}
               <motion.div 
-                className="absolute -right-3 top-6 bg-card border border-border rounded-xl px-4 py-2.5 shadow-lg flex items-center gap-2"
+                className="absolute right-2 sm:-right-3 top-4 sm:top-6 bg-card border border-border rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 shadow-lg flex items-center gap-2"
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
