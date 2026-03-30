@@ -32,6 +32,7 @@ const navItems = [
   { title: 'Section Descriptions', href: '/admin/sections', icon: AlignLeft },
   { title: 'Hero Stats', href: '/admin/hero-stats', icon: Gauge },
   { title: 'About Highlights', href: '/admin/about-highlights', icon: Sparkles },
+  { title: 'Expertise Tags', href: '/admin/expertise', icon: Tags },
   { title: 'Footer Links', href: '/admin/footer-links', icon: Link2 },
   { title: 'Resume', href: '/admin/resume', icon: ScrollText },
   { title: 'Services', href: '/admin/services', icon: Briefcase },
