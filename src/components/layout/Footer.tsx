@@ -79,9 +79,9 @@ export function Footer() {
                 </div>
               )}
               {(profile as any)?.brand_name_image_url ? (
-                <img src={(profile as any).brand_name_image_url} alt={(profile as any)?.brand_name || 'HealthcareAI'} className="h-6 sm:h-7 object-contain" />
+                <img src={(profile as any).brand_name_image_url} alt={(profile as any)?.brand_name || 'HealthcareAI'} className="h-8 sm:h-10 object-contain" />
               ) : (profile as any)?.brand_name ? (
-                <span className="font-display font-semibold text-base sm:text-lg">
+                <span className="font-display font-semibold text-lg sm:text-xl">
                   {(profile as any).brand_name}
                 </span>
               ) : null}
