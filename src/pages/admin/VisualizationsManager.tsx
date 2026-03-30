@@ -366,7 +366,7 @@ export default function VisualizationsManager() {
             alt="Preview" 
             className="max-h-full max-w-full object-contain"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = '/placeholder.svg';
+              (e.target as HTMLImageElement).style.display = 'none';
             }}
           />
         </div>
@@ -629,7 +629,7 @@ export default function VisualizationsManager() {
                       alt={viz.title}
                       className="max-h-full max-w-full object-contain"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/placeholder.svg';
+                        (e.target as HTMLImageElement).style.display = 'none';
                       }}
                     />
                   ) : (
