@@ -67,7 +67,7 @@ export function Header() {
       </a>
 
       <div className="container-wide">
-        <div className="flex items-center justify-between h-32 sm:h-48 md:h-[320px]">
+        <div className="flex items-center justify-between h-20 md:h-[84px]">
           {/* Logo */}
           <a
             href="#"
@@ -78,10 +78,10 @@ export function Header() {
             className="flex items-center gap-3 group transition-transform duration-300 hover:scale-105"
           >
             {branding?.logo_url ? (
-              <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-24 w-24 sm:h-40 sm:w-40 md:h-[300px] md:w-[300px] object-contain" />
+              <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-14 w-14 md:h-[75px] md:w-[75px] object-contain" />
             ) : (
-              <div className="w-24 h-24 sm:w-40 sm:h-40 md:w-[300px] md:h-[300px] rounded-lg healthcare-gradient flex items-center justify-center">
-                <span className="text-primary-foreground font-display font-bold text-3xl sm:text-5xl md:text-7xl">AI</span>
+              <div className="w-14 h-14 md:w-[75px] md:h-[75px] rounded-lg healthcare-gradient flex items-center justify-center">
+                <span className="text-primary-foreground font-display font-bold text-2xl md:text-3xl">AI</span>
               </div>
             )}
             {brandNameImageUrl ? (
