@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
+import { useQuery } from "@tanstack/react-query";
 
 interface Message {
   id: string;
@@ -30,6 +31,20 @@ const ChatWidget = () => {
   
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { data: brandingProfile } = useQuery({
+    queryKey: ['profile-branding'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('profile')
+        .select('logo_url, full_name')
+        .maybeSingle();
+      return data;
+    },
+    staleTime: 1000 * 60 * 10,
+  });
+
+  const logoUrl = brandingProfile?.logo_url;
 
   // Load existing conversation on mount
   useEffect(() => {
@@ -183,8 +198,12 @@ const ChatWidget = () => {
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b bg-muted/30">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <MessageCircle className="w-5 h-5 text-primary" />
+                <div className="w-10 h-10 rounded-lg overflow-hidden bg-primary/10 flex items-center justify-center">
+                  {logoUrl ? (
+                    <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
+                  ) : (
+                    <MessageCircle className="w-5 h-5 text-primary" />
+                  )}
                 </div>
                 <div>
                   <h3 className="font-semibold text-sm">AI Assistant</h3>
@@ -218,8 +237,12 @@ const ChatWidget = () => {
             <ScrollArea className="flex-1 p-4" ref={scrollRef}>
               {messages.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center p-4">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <MessageCircle className="w-8 h-8 text-primary" />
+                  <div className="w-16 h-16 rounded-xl overflow-hidden bg-primary/10 flex items-center justify-center mb-4">
+                    {logoUrl ? (
+                      <img src={logoUrl} alt="Logo" className="w-full h-full object-contain" />
+                    ) : (
+                      <MessageCircle className="w-8 h-8 text-primary" />
+                    )}
                   </div>
                   <h4 className="font-medium mb-2">Welcome!</h4>
                   <p className="text-sm text-muted-foreground">
