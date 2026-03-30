@@ -75,7 +75,7 @@ export function Header() {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="flex items-center gap-2 group"
+            className="flex items-center gap-2 group transition-transform duration-300 hover:scale-105"
           >
             {branding?.logo_url ? (
               <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-16 md:h-18 object-contain" />
