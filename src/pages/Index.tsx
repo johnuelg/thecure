@@ -9,6 +9,7 @@ import { ResumeSection } from "@/components/sections/ResumeSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import ChatWidget from "@/components/chat/ChatWidget";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const Index = () => {
   return (
@@ -26,6 +27,7 @@ const Index = () => {
       </main>
       <Footer />
       <ChatWidget />
+      <ScrollToTop />
     </div>
   );
 };
