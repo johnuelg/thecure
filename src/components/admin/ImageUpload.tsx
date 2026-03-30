@@ -139,7 +139,7 @@ export function ImageUpload({
                   alt="Preview"
                   className="w-full h-full object-contain"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/placeholder.svg';
+                    (e.target as HTMLImageElement).style.display = 'none';
                   }}
                 />
                 <Button
