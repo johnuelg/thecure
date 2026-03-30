@@ -1,6 +1,7 @@
+import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { User, CheckCircle2 } from "lucide-react";
+import { User, CheckCircle2, Play } from "lucide-react";
 import { icons } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
@@ -15,13 +16,16 @@ export function AboutSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('full_name, professional_title, bio, about_description, profile_image_url')
+        .select('full_name, professional_title, bio, about_description, profile_image_url, video_url')
         .maybeSingle();
       
       if (error) throw error;
       return data;
     },
   });
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const { data: highlights } = useQuery({
     queryKey: ['public-about-highlights'],
