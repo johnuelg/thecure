@@ -197,7 +197,7 @@ export function ResumeSection() {
             disabled={!profile?.resume_url}
           >
             <Download className="mr-2 w-4 h-4" />
-            Download Full Resume
+            Download CV
           </Button>
         </motion.div>
 
