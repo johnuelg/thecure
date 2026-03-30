@@ -94,7 +94,7 @@ export function TestimonialsSection() {
 
         <div className="relative">
           {/* Carousel card */}
-          <div className="overflow-hidden rounded-2xl bg-card border border-border shadow-lg min-h-[260px] flex items-center justify-center px-6 py-10 md:px-16">
+          <div className="overflow-hidden rounded-2xl bg-card border border-border shadow-lg min-h-[220px] sm:min-h-[260px] flex items-center justify-center px-4 sm:px-6 py-8 sm:py-10 md:px-16">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={item.id}
