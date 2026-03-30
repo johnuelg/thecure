@@ -55,6 +55,7 @@ const ProfileManager = () => {
   const [faviconUrl, setFaviconUrl] = useState('');
   const [siteTitle, setSiteTitle] = useState('');
   const [siteDescription, setSiteDescription] = useState('');
+  const [brandName, setBrandName] = useState('');
 
   const fetchProfile = async () => {
     try {
