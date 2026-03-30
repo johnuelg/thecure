@@ -67,7 +67,7 @@ export function Header() {
       </a>
 
       <div className="container-wide">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
           <a
             href="#"
