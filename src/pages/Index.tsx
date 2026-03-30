@@ -27,6 +27,7 @@ const Index = () => {
       </main>
       <Footer />
       <ChatWidget />
+      <ScrollToTop />
     </div>
   );
 };
