@@ -72,7 +72,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               {profile?.logo_url ? (
-                <img src={profile.logo_url} alt={profile.full_name || 'Logo'} className="h-10 object-contain" />
+                <img src={profile.logo_url} alt={profile.full_name || 'Logo'} className="h-14 object-contain" />
               ) : (
                 <div className="w-10 h-10 rounded-lg healthcare-gradient flex items-center justify-center">
                   <span className="text-primary-foreground font-display font-bold text-lg">AI</span>
