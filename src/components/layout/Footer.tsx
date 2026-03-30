@@ -10,7 +10,7 @@ export function Footer() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('full_name, linkedin_url, github_url, twitter_url, email, footer_description, copyright_text, logo_url')
+        .select('full_name, linkedin_url, github_url, twitter_url, email, footer_description, copyright_text, logo_url, brand_name')
         .maybeSingle();
       
       if (error) throw error;
@@ -79,7 +79,7 @@ export function Footer() {
                 </div>
               )}
               <span className="font-display font-semibold text-base sm:text-lg">
-                Healthcare<span className="text-primary">AI</span>
+                {(profile as any)?.brand_name || 'HealthcareAI'}
               </span>
             </div>
             <p className="text-muted-foreground max-w-md mb-6">

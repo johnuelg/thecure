@@ -55,6 +55,7 @@ const ProfileManager = () => {
   const [faviconUrl, setFaviconUrl] = useState('');
   const [siteTitle, setSiteTitle] = useState('');
   const [siteDescription, setSiteDescription] = useState('');
+  const [brandName, setBrandName] = useState('');
 
   const fetchProfile = async () => {
     try {
@@ -84,6 +85,7 @@ const ProfileManager = () => {
         setFaviconUrl((data as any).favicon_url || '');
         setSiteTitle((data as any).site_title || '');
         setSiteDescription((data as any).site_description || '');
+        setBrandName((data as any).brand_name || '');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -123,6 +125,7 @@ const ProfileManager = () => {
       favicon_url: faviconUrl || null,
       site_title: siteTitle || null,
       site_description: siteDescription || null,
+      brand_name: brandName || 'HealthcareAI',
     };
 
     try {
@@ -367,6 +370,16 @@ const ProfileManager = () => {
                 />
                 <p className="text-xs text-muted-foreground">{siteDescription.length}/160 characters (recommended max)</p>
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="brandName">Brand Name</Label>
+              <Input
+                id="brandName"
+                value={brandName}
+                onChange={(e) => setBrandName(e.target.value)}
+                placeholder="HealthcareAI"
+              />
+              <p className="text-xs text-muted-foreground">Displayed next to the logo in header & footer</p>
             </div>
             <ImageUpload
               label="Site Logo (SVG or PNG)"

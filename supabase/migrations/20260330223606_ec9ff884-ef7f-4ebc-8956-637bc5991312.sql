@@ -1,0 +1,1 @@
+ALTER TABLE public.profile ADD COLUMN brand_name text DEFAULT 'HealthcareAI';
