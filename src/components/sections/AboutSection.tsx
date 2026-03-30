@@ -16,7 +16,7 @@ export function AboutSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('full_name, professional_title, bio, about_description, profile_image_url, video_url')
+        .select('full_name, professional_title, bio, about_description, profile_image_url, video_url, resume_url')
         .maybeSingle();
       
       if (error) throw error;
