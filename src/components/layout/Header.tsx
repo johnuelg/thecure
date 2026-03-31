@@ -142,7 +142,7 @@ export function Header() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="md:hidden bg-background border-b border-border"
+          className="lg:hidden bg-background border-b border-border"
         >
           <nav className="container-wide py-4 flex flex-col gap-1" aria-label="Mobile navigation">
             {navLinks.map((link) => (
