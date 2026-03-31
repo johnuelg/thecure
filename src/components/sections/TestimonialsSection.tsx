@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { Quote, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -92,7 +92,7 @@ export function TestimonialsSection() {
           </p>
         </motion.div>
 
-        <div className="relative pt-14">
+        <div className="relative pt-16">
           {/* Floating avatar above card */}
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
@@ -103,22 +103,28 @@ export function TestimonialsSection() {
               animate="center"
               exit="exit"
               transition={{ duration: 0.45, ease: "easeInOut" }}
-              className="absolute -top-1 left-1/2 -translate-x-1/2 z-10"
+              className="absolute -top-2 left-1/2 -translate-x-1/2 z-10"
             >
-              <Avatar className="h-24 w-24 ring-4 ring-primary/20 shadow-xl">
-                <AvatarImage src={item.author_image_url || undefined} className="object-cover" />
-                <AvatarFallback className="bg-primary/10 text-primary text-xl font-semibold">
-                  {item.author_name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </AvatarFallback>
-              </Avatar>
+              <div className="rounded-full p-1 bg-gradient-to-br from-primary to-primary/60 shadow-xl">
+                <Avatar className="h-28 w-28 ring-4 ring-background">
+                  <AvatarImage src={item.author_image_url || undefined} className="object-cover" />
+                  <AvatarFallback className="bg-primary/10 text-primary text-2xl font-semibold">
+                    {item.author_name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
             </motion.div>
           </AnimatePresence>
 
           {/* Carousel card */}
-          <div className="overflow-hidden rounded-2xl bg-card border border-border shadow-lg min-h-[240px] sm:min-h-[280px] flex items-center justify-center px-4 sm:px-6 pt-16 pb-8 sm:pt-20 sm:pb-10 md:px-16">
+          <div className="relative overflow-hidden rounded-2xl bg-card border-2 border-border shadow-xl min-h-[280px] sm:min-h-[320px] flex items-center justify-center px-6 sm:px-8 pt-20 pb-8 sm:pt-24 sm:pb-10 md:px-20">
+            {/* Decorative quote icons */}
+            <Quote className="absolute top-6 left-6 h-10 w-10 text-muted-foreground/15 rotate-180" />
+            <Quote className="absolute bottom-6 right-6 h-10 w-10 text-muted-foreground/15" />
+
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={item.id}
@@ -130,21 +136,27 @@ export function TestimonialsSection() {
                 transition={{ duration: 0.45, ease: "easeInOut" }}
                 className="flex flex-col items-center text-center w-full"
               >
-                <Quote className="h-8 w-8 text-primary/20 mb-6" />
-                <p className="text-base sm:text-lg md:text-xl text-foreground/90 italic leading-relaxed mb-6 sm:mb-8 max-w-2xl">
+                <p className="text-base sm:text-lg md:text-xl text-foreground/85 italic leading-relaxed mb-8 sm:mb-10 max-w-2xl">
                   &ldquo;{item.quote}&rdquo;
                 </p>
-                <div className="text-center">
-                  <p className="font-semibold text-sm text-foreground">
-                    {item.author_name}
-                  </p>
-                  {(item.author_title || item.author_company) && (
-                    <p className="text-xs text-muted-foreground">
-                      {[item.author_title, item.author_company]
-                        .filter(Boolean)
-                        .join(" at ")}
+                <div className="flex items-center justify-between w-full max-w-md">
+                  <div className="text-left">
+                    <p className="font-bold text-sm uppercase tracking-wide text-foreground">
+                      {item.author_name}
                     </p>
-                  )}
+                    {(item.author_title || item.author_company) && (
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {[item.author_title, item.author_company]
+                          .filter(Boolean)
+                          .join(", ")}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             </AnimatePresence>
