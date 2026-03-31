@@ -20,6 +20,7 @@ const ChatWidget = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [sessionId] = useState(() => {
     const stored = localStorage.getItem("chat_session_id");
@@ -86,6 +87,19 @@ const ChatWidget = () => {
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
+    }
+  }, [isOpen]);
+
+  // Show tooltip on first visit
+  useEffect(() => {
+    const hasSeenTooltip = localStorage.getItem("chat_tooltip_shown");
+    if (!hasSeenTooltip && !isOpen) {
+      const showTimer = setTimeout(() => setShowTooltip(true), 1500);
+      const hideTimer = setTimeout(() => {
+        setShowTooltip(false);
+        localStorage.setItem("chat_tooltip_shown", "true");
+      }, 6000);
+      return () => { clearTimeout(showTimer); clearTimeout(hideTimer); };
     }
   }, [isOpen]);
 
@@ -183,6 +197,22 @@ const ChatWidget = () => {
               </motion.span>
             )}
           </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* First-visit tooltip */}
+      <AnimatePresence>
+        {showTooltip && !isOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={{ duration: 0.3 }}
+            className="fixed bottom-7 right-20 sm:bottom-9 sm:right-22 z-50 bg-card border border-border rounded-lg px-3 py-2 shadow-lg text-sm text-foreground whitespace-nowrap"
+          >
+            Chat with me 💬
+            <div className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-3 h-3 bg-card border-r border-b border-border rotate-[-45deg]" />
+          </motion.div>
         )}
       </AnimatePresence>
 
