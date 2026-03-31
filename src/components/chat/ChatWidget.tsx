@@ -186,7 +186,7 @@ const ChatWidget = () => {
             className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground shadow-lg shadow-primary/25 dark:shadow-primary/40 flex items-center justify-center hover:shadow-xl hover:shadow-primary/30 transition-all animate-chat-pulse dark:animate-chat-pulse-dark"
             aria-label="Open chat"
           >
-            <MessageCircle className="w-6 h-6 text-primary-foreground dark:text-primary dark:drop-shadow-[0_0_10px_hsl(var(--primary)/0.8)]" />
+            <MessageCircle className="w-6 h-6 text-primary-foreground dark:text-[#41c0c2] dark:drop-shadow-[0_0_10px_rgba(65,192,194,0.8)]" />
           </motion.button>
         )}
       </AnimatePresence>
