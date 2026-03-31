@@ -121,7 +121,8 @@ export function TestimonialsSection() {
           </AnimatePresence>
 
           {/* Carousel card */}
-          <div className="testimonial-glow-card relative overflow-hidden rounded-2xl bg-card shadow-xl min-h-[260px] sm:min-h-[300px] md:min-h-[360px] flex items-center justify-center px-4 sm:px-8 pt-20 sm:pt-24 md:pt-32 pb-6 sm:pb-10 md:px-20">
+          <div className="testimonial-glow-card relative rounded-2xl shadow-xl min-h-[260px] sm:min-h-[300px] md:min-h-[360px] flex items-center justify-center px-4 sm:px-8 pt-20 sm:pt-24 md:pt-32 pb-6 sm:pb-10 md:px-20">
+            <div className="glow-inner" />
             {/* Decorative quote icons */}
             <Quote className="absolute top-6 left-6 h-10 w-10 text-muted-foreground/15 rotate-180" />
             <Quote className="absolute bottom-6 right-6 h-10 w-10 text-muted-foreground/15" />
