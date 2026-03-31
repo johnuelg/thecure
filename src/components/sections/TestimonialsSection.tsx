@@ -92,7 +92,7 @@ export function TestimonialsSection() {
           </p>
         </motion.div>
 
-        <div className="relative pt-10">
+        <div className="relative pt-14">
           {/* Floating avatar above card */}
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
@@ -103,11 +103,11 @@ export function TestimonialsSection() {
               animate="center"
               exit="exit"
               transition={{ duration: 0.45, ease: "easeInOut" }}
-              className="absolute top-0 left-1/2 -translate-x-1/2 z-10"
+              className="absolute -top-1 left-1/2 -translate-x-1/2 z-10"
             >
-              <Avatar className="h-20 w-20 ring-4 ring-background shadow-lg">
-                <AvatarImage src={item.author_image_url || undefined} />
-                <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
+              <Avatar className="h-24 w-24 ring-4 ring-primary/20 shadow-xl">
+                <AvatarImage src={item.author_image_url || undefined} className="object-cover" />
+                <AvatarFallback className="bg-primary/10 text-primary text-xl font-semibold">
                   {item.author_name
                     .split(" ")
                     .map((n) => n[0])
@@ -118,7 +118,7 @@ export function TestimonialsSection() {
           </AnimatePresence>
 
           {/* Carousel card */}
-          <div className="overflow-hidden rounded-2xl bg-card border border-border shadow-lg min-h-[220px] sm:min-h-[260px] flex items-center justify-center px-4 sm:px-6 pt-14 pb-8 sm:pt-16 sm:pb-10 md:px-16">
+          <div className="overflow-hidden rounded-2xl bg-card border border-border shadow-lg min-h-[240px] sm:min-h-[280px] flex items-center justify-center px-4 sm:px-6 pt-16 pb-8 sm:pt-20 sm:pb-10 md:px-16">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={item.id}
