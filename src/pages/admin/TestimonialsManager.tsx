@@ -27,6 +27,7 @@ interface Testimonial {
   author_company: string | null;
   author_image_url: string | null;
   is_featured: boolean;
+  rating: number;
   display_order: number;
   created_at: string;
 }
@@ -46,6 +47,7 @@ const TestimonialsManager = () => {
   const [authorCompany, setAuthorCompany] = useState('');
   const [authorImageUrl, setAuthorImageUrl] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
+  const [rating, setRating] = useState(5);
 
   const fetchTestimonials = async () => {
     try {
@@ -79,6 +81,7 @@ const TestimonialsManager = () => {
     setAuthorCompany('');
     setAuthorImageUrl('');
     setIsFeatured(false);
+    setRating(5);
     setEditingTestimonial(null);
   };
 
@@ -95,6 +98,7 @@ const TestimonialsManager = () => {
     setAuthorCompany(testimonial.author_company || '');
     setAuthorImageUrl(testimonial.author_image_url || '');
     setIsFeatured(testimonial.is_featured);
+    setRating(testimonial.rating);
     setIsDialogOpen(true);
   };
 
@@ -113,6 +117,7 @@ const TestimonialsManager = () => {
             author_company: authorCompany || null,
             author_image_url: authorImageUrl || null,
             is_featured: isFeatured,
+            rating,
           })
           .eq('id', editingTestimonial.id);
 
@@ -128,6 +133,7 @@ const TestimonialsManager = () => {
             author_company: authorCompany || null,
             author_image_url: authorImageUrl || null,
             is_featured: isFeatured,
+            rating,
             display_order: testimonials.length,
           });
 
@@ -314,6 +320,27 @@ const TestimonialsManager = () => {
                 bucket="portfolio-images"
                 accept="image/*"
               />
+              <div className="space-y-2">
+                <Label>Rating</Label>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setRating(star)}
+                      className="p-0.5"
+                    >
+                      <Star
+                        className={`h-6 w-6 transition-colors ${
+                          star <= rating
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-muted-foreground/30'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
               <div className="flex items-center gap-2">
                 <Switch
                   id="isFeatured"

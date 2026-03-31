@@ -1,0 +1,1 @@
+ALTER TABLE public.testimonials ADD COLUMN rating integer NOT NULL DEFAULT 5;
