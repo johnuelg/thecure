@@ -187,15 +187,6 @@ const ChatWidget = () => {
             aria-label="Open chat"
           >
             <MessageCircle className="w-6 h-6" />
-            {messages.length === 0 && (
-              <motion.span
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute -top-1 -right-1 w-4 h-4 bg-destructive rounded-full flex items-center justify-center"
-              >
-                <span className="w-2 h-2 bg-destructive-foreground rounded-full animate-pulse" />
-              </motion.span>
-            )}
           </motion.button>
         )}
       </AnimatePresence>
