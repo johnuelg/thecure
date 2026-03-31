@@ -105,7 +105,7 @@ export function TestimonialsSection() {
               transition={{ duration: 0.45, ease: "easeInOut" }}
               className="absolute top-0 left-0 right-0 flex justify-center z-10"
             >
-              <div className="rounded-full p-1.5 bg-gradient-to-br from-primary to-primary/60 shadow-xl">
+              <div className="rounded-full p-1.5 bg-gradient-to-br from-primary to-primary/60 shadow-[0_8px_30px_-4px_hsl(var(--primary)/0.45)]">
                 <Avatar className="h-[200px] w-[200px] ring-4 ring-background">
                   <AvatarImage src={item.author_image_url || undefined} className="object-cover" />
                   <AvatarFallback className="bg-primary/10 text-primary text-4xl font-semibold">
