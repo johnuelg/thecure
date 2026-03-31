@@ -47,6 +47,7 @@ const TestimonialsManager = () => {
   const [authorCompany, setAuthorCompany] = useState('');
   const [authorImageUrl, setAuthorImageUrl] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
+  const [rating, setRating] = useState(5);
 
   const fetchTestimonials = async () => {
     try {
