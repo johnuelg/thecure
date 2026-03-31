@@ -666,6 +666,7 @@ export type Database = {
           id: string
           is_featured: boolean | null
           quote: string
+          rating: number
         }
         Insert: {
           author_company?: string | null
@@ -677,6 +678,7 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           quote: string
+          rating?: number
         }
         Update: {
           author_company?: string | null
@@ -688,6 +690,7 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           quote?: string
+          rating?: number
         }
         Relationships: []
       }
