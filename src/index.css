@@ -355,3 +355,30 @@
   );
   filter: blur(16px);
 }
+
+/* Running glow text effect for dark mode brand name */
+@keyframes running-glow {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.dark .brand-name-glow {
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    #41c0c2 0%,
+    #41c0c2 30%,
+    #7df3f5 50%,
+    #41c0c2 70%,
+    #41c0c2 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: running-glow 3s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(65, 192, 194, 0.5)) drop-shadow(0 0 20px rgba(65, 192, 194, 0.3));
+}
