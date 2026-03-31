@@ -15,6 +15,7 @@ const getIcon = (iconName: string): LucideIcon => {
 const medicalIcons = [
   Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse,
   Microscope, Dna, Thermometer, Cross, Clipboard, TestTube, Activity,
+  Scan, Radiation, Ear, Eye, Hand, Bone, Baby, Droplets, Salad, BriefcaseMedical,
 ];
 
 interface FloatingIcon {
