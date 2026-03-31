@@ -215,7 +215,6 @@ const ChatWidget = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      </AnimatePresence>
 
       {/* Chat Window */}
       <AnimatePresence>
