@@ -256,3 +256,83 @@
     border-radius: 3px;
   }
 }
+
+/* Animated circling glow border for testimonial card */
+@keyframes glow-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.testimonial-glow-card {
+  position: relative;
+  border: none;
+  z-index: 0;
+}
+
+.testimonial-glow-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    hsl(var(--primary) / 0.4),
+    hsl(var(--accent) / 0.3),
+    hsl(var(--primary) / 0.1),
+    hsl(var(--accent) / 0.3),
+    hsl(var(--primary) / 0.4)
+  );
+  animation: glow-rotate 4s linear infinite;
+}
+
+.testimonial-glow-card::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  z-index: -2;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    hsl(var(--primary) / 0.15),
+    hsl(var(--accent) / 0.1),
+    transparent,
+    hsl(var(--accent) / 0.1),
+    hsl(var(--primary) / 0.15)
+  );
+  animation: glow-rotate 4s linear infinite;
+  filter: blur(8px);
+}
+
+.dark .testimonial-glow-card::before {
+  background: conic-gradient(
+    from 0deg,
+    hsl(var(--primary) / 0.7),
+    hsl(var(--accent) / 0.5),
+    hsl(var(--primary) / 0.2),
+    hsl(var(--accent) / 0.5),
+    hsl(var(--primary) / 0.7)
+  );
+}
+
+.dark .testimonial-glow-card::after {
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  background: conic-gradient(
+    from 0deg,
+    hsl(var(--primary) / 0.4),
+    hsl(var(--accent) / 0.3),
+    transparent,
+    hsl(var(--accent) / 0.3),
+    hsl(var(--primary) / 0.4)
+  );
+  filter: blur(14px);
+}
