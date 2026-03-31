@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Activity } from "lucide-react";
+import { ArrowDown, Activity, Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse, Microscope, Dna, Thermometer, Cross, Clipboard, TestTube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +11,51 @@ import type { LucideIcon } from "lucide-react";
 const getIcon = (iconName: string): LucideIcon => {
   return (icons as Record<string, LucideIcon>)[iconName] || icons.Award;
 };
+
+const medicalIcons = [
+  Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse,
+  Microscope, Dna, Thermometer, Cross, Clipboard, TestTube, Activity,
+];
+
+interface FloatingIcon {
+  id: number;
+  Icon: LucideIcon;
+  x: number;
+  y: number;
+  size: number;
+  duration: number;
+  delay: number;
+  parallaxFactor: number;
+}
+
+function useParallax() {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const cx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const cy = (e.clientY / window.innerHeight - 0.5) * 2;
+      setOffset({ x: cx, y: cy });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+  return offset;
+}
+
+function generateIcons(count: number): FloatingIcon[] {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    Icon: medicalIcons[i % medicalIcons.length],
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: 18 + Math.random() * 22,
+    duration: 12 + Math.random() * 18,
+    delay: Math.random() * -20,
+    parallaxFactor: 0.3 + Math.random() * 0.7,
+  }));
+}
+
+const floatingIcons = generateIcons(18);
 
 const defaultStats = [
   { icon: "Brain", value: "3+", label: "Years Healthcare Experience" },
@@ -22,6 +68,38 @@ interface Profile {
   professional_title: string;
   tagline: string | null;
   bio: string | null;
+}
+function FloatingMedicalIcons() {
+  const { x, y } = useParallax();
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
+      {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor }) => (
+        <motion.div
+          key={id}
+          className="absolute text-primary/[0.07] dark:text-primary/[0.12]"
+          style={{
+            left: `${ix}%`,
+            top: `${iy}%`,
+            x: x * parallaxFactor * 30,
+            y: y * parallaxFactor * 30,
+          }}
+          animate={{
+            y: [0, -20, 0, 15, 0],
+            x: [0, 10, -8, 5, 0],
+            rotate: [0, 8, -6, 4, 0],
+          }}
+          transition={{
+            duration,
+            delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <Icon size={size} strokeWidth={1.5} />
+        </motion.div>
+      ))}
+    </div>
+  );
 }
 
 export function HeroSection() {
@@ -75,8 +153,9 @@ export function HeroSection() {
     >
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-b from-healthcare-light-blue/50 to-background" />
-      
-      
+
+      {/* Floating Medical Icons Parallax */}
+      <FloatingMedicalIcons />
 
       <div className="container-wide relative z-10 pt-20">
         <div className="max-w-4xl mx-auto text-center">
