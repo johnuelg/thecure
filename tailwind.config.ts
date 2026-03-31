@@ -127,6 +127,10 @@ export default {
           "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.4)" },
           "50%": { boxShadow: "0 0 20px 8px hsl(var(--primary) / 0.2)" },
         },
+        "chat-pulse-dark": {
+          "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.6)" },
+          "50%": { boxShadow: "0 0 30px 12px hsl(var(--primary) / 0.35)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
