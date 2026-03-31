@@ -13,6 +13,7 @@ interface Testimonial {
   author_company: string | null;
   author_image_url: string | null;
   is_featured: boolean;
+  rating: number;
   display_order: number | null;
 }
 
