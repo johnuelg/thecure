@@ -85,9 +85,9 @@ export function Header() {
               </div>
             )}
             {brandNameImageUrl ? (
-              <img src={brandNameImageUrl} alt={brandName} className="h-10 sm:h-14 object-contain" />
+              <img src={brandNameImageUrl} alt={brandName} className="h-8 sm:h-10 lg:h-14 object-contain" />
             ) : brandName ? (
-              <span className="font-display font-semibold text-xl sm:text-2xl">
+              <span className="font-display font-semibold text-base sm:text-lg lg:text-2xl">
                 {brandName}
               </span>
             ) : null}
