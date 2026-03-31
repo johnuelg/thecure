@@ -77,7 +77,7 @@ function FloatingMedicalIcons() {
       {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor }) => (
         <motion.div
           key={id}
-          className="absolute text-primary/[0.07] dark:text-primary/[0.12]"
+          className="absolute text-primary/[0.1] dark:text-primary/[0.18]"
           style={{
             left: `${ix}%`,
             top: `${iy}%`,
