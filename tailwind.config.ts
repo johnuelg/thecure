@@ -128,8 +128,8 @@ export default {
           "50%": { boxShadow: "0 0 20px 8px hsl(var(--primary) / 0.2)" },
         },
         "chat-pulse-dark": {
-          "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.6)" },
-          "50%": { boxShadow: "0 0 30px 12px hsl(var(--primary) / 0.35)" },
+          "0%, 100%": { boxShadow: "0 0 8px 4px hsl(var(--primary) / 0.5)" },
+          "50%": { boxShadow: "0 0 40px 18px hsl(var(--primary) / 0.45)" },
         },
       },
       animation: {
