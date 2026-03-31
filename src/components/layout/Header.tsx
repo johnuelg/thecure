@@ -118,7 +118,7 @@ export function Header() {
           </div>
 
           {/* Mobile: theme toggle + menu button */}
-          <div className="md:hidden flex items-center gap-1">
+          <div className="lg:hidden flex items-center gap-1">
             <ThemeToggle />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
