@@ -121,8 +121,9 @@ export function HeroSection() {
     >
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-b from-healthcare-light-blue/50 to-background" />
-      
-      
+
+      {/* Floating Medical Icons Parallax */}
+      <FloatingMedicalIcons />
 
       <div className="container-wide relative z-10 pt-20">
         <div className="max-w-4xl mx-auto text-center">
