@@ -123,6 +123,10 @@ export default {
           "0%": { strokeDashoffset: "2100" },
           "100%": { strokeDashoffset: "-2100" },
         },
+        "chat-pulse": {
+          "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.4)" },
+          "50%": { boxShadow: "0 0 20px 8px hsl(var(--primary) / 0.2)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -134,6 +138,7 @@ export default {
         "scale-in": "scale-in 0.4s ease-out",
         "pulse-line": "pulse-line 2s ease-in-out infinite",
         "ecg-sweep": "ecg-sweep 5s linear infinite",
+        "chat-pulse": "chat-pulse 2s ease-in-out infinite",
       },
     },
   },
