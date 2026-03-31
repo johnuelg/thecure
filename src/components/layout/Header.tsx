@@ -78,23 +78,23 @@ export function Header() {
             className="flex items-center gap-3 group transition-transform duration-300 hover:scale-105"
           >
             {branding?.logo_url ? (
-              <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-14 w-14 md:h-[75px] md:w-[75px] object-contain" />
+              <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-12 w-12 sm:h-14 sm:w-14 lg:h-[75px] lg:w-[75px] object-contain" />
             ) : (
-              <div className="w-14 h-14 md:w-[75px] md:h-[75px] rounded-lg healthcare-gradient flex items-center justify-center">
-                <span className="text-primary-foreground font-display font-bold text-2xl md:text-3xl">AI</span>
+              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[75px] lg:h-[75px] rounded-lg healthcare-gradient flex items-center justify-center">
+                <span className="text-primary-foreground font-display font-bold text-xl sm:text-2xl lg:text-3xl">AI</span>
               </div>
             )}
             {brandNameImageUrl ? (
-              <img src={brandNameImageUrl} alt={brandName} className="h-10 sm:h-14 object-contain" />
+              <img src={brandNameImageUrl} alt={brandName} className="h-8 sm:h-10 lg:h-14 object-contain" />
             ) : brandName ? (
-              <span className="font-display font-semibold text-xl sm:text-2xl">
+              <span className="font-display font-semibold text-base sm:text-lg lg:text-2xl">
                 {brandName}
               </span>
             ) : null}
           </a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
             {navLinks.map((link) => (
               <button
                 key={link.href}
@@ -107,7 +107,7 @@ export function Header() {
           </nav>
 
           {/* Right side actions */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-2">
             <ThemeToggle />
             <Button
               onClick={() => scrollToSection("#contact")}
@@ -118,7 +118,7 @@ export function Header() {
           </div>
 
           {/* Mobile: theme toggle + menu button */}
-          <div className="md:hidden flex items-center gap-1">
+          <div className="lg:hidden flex items-center gap-1">
             <ThemeToggle />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -142,7 +142,7 @@ export function Header() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="md:hidden bg-background border-b border-border"
+          className="lg:hidden bg-background border-b border-border"
         >
           <nav className="container-wide py-4 flex flex-col gap-1" aria-label="Mobile navigation">
             {navLinks.map((link) => (

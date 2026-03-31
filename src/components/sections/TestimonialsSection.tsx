@@ -93,7 +93,7 @@ export function TestimonialsSection() {
           </p>
         </motion.div>
 
-        <div className="relative pt-[100px]">
+        <div className="relative pt-16 sm:pt-20 md:pt-[100px]">
           {/* Floating avatar above card */}
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
@@ -106,10 +106,10 @@ export function TestimonialsSection() {
               transition={{ duration: 0.45, ease: "easeInOut" }}
               className="absolute top-0 left-0 right-0 flex justify-center z-10"
             >
-              <div className="rounded-full p-1.5 bg-gradient-to-br from-primary to-primary/60 shadow-[0_8px_30px_-4px_hsl(var(--primary)/0.45)]">
-                <Avatar className="h-[200px] w-[200px] ring-4 ring-background">
+              <div className="rounded-full p-1 sm:p-1.5 bg-gradient-to-br from-primary to-primary/60 shadow-[0_8px_30px_-4px_hsl(var(--primary)/0.45)]">
+                <Avatar className="h-28 w-28 sm:h-36 sm:w-36 md:h-[200px] md:w-[200px] ring-4 ring-background">
                   <AvatarImage src={item.author_image_url || undefined} className="object-cover" />
-                  <AvatarFallback className="bg-primary/10 text-primary text-4xl font-semibold">
+                  <AvatarFallback className="bg-primary/10 text-primary text-2xl sm:text-3xl md:text-4xl font-semibold">
                     {item.author_name
                       .split(" ")
                       .map((n) => n[0])
@@ -121,7 +121,7 @@ export function TestimonialsSection() {
           </AnimatePresence>
 
           {/* Carousel card */}
-          <div className="relative overflow-hidden rounded-2xl bg-card border-2 border-border shadow-xl min-h-[320px] sm:min-h-[360px] flex items-center justify-center px-6 sm:px-8 pt-28 pb-8 sm:pt-32 sm:pb-10 md:px-20">
+          <div className="relative overflow-hidden rounded-2xl bg-card border-2 border-border shadow-xl min-h-[260px] sm:min-h-[300px] md:min-h-[360px] flex items-center justify-center px-4 sm:px-8 pt-20 sm:pt-24 md:pt-32 pb-6 sm:pb-10 md:px-20">
             {/* Decorative quote icons */}
             <Quote className="absolute top-6 left-6 h-10 w-10 text-muted-foreground/15 rotate-180" />
             <Quote className="absolute bottom-6 right-6 h-10 w-10 text-muted-foreground/15" />
