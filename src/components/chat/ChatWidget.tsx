@@ -20,6 +20,7 @@ const ChatWidget = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [sessionId] = useState(() => {
     const stored = localStorage.getItem("chat_session_id");
