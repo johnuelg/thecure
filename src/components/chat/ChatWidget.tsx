@@ -90,6 +90,19 @@ const ChatWidget = () => {
     }
   }, [isOpen]);
 
+  // Show tooltip on first visit
+  useEffect(() => {
+    const hasSeenTooltip = localStorage.getItem("chat_tooltip_shown");
+    if (!hasSeenTooltip && !isOpen) {
+      const showTimer = setTimeout(() => setShowTooltip(true), 1500);
+      const hideTimer = setTimeout(() => {
+        setShowTooltip(false);
+        localStorage.setItem("chat_tooltip_shown", "true");
+      }, 6000);
+      return () => { clearTimeout(showTimer); clearTimeout(hideTimer); };
+    }
+  }, [isOpen]);
+
   const sendMessage = async (e?: React.FormEvent) => {
     e?.preventDefault();
     
