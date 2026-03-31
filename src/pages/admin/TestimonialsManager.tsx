@@ -133,6 +133,7 @@ const TestimonialsManager = () => {
             author_company: authorCompany || null,
             author_image_url: authorImageUrl || null,
             is_featured: isFeatured,
+            rating,
             display_order: testimonials.length,
           });
 
