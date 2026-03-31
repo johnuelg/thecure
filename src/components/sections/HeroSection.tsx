@@ -49,14 +49,14 @@ function generateIcons(count: number): FloatingIcon[] {
     Icon: medicalIcons[i % medicalIcons.length],
     x: Math.random() * 100,
     y: Math.random() * 100,
-    size: 18 + Math.random() * 22,
+    size: 20 + Math.random() * 28,
     duration: 12 + Math.random() * 18,
     delay: Math.random() * -20,
     parallaxFactor: 0.3 + Math.random() * 0.7,
   }));
 }
 
-const floatingIcons = generateIcons(18);
+const floatingIcons = generateIcons(28);
 
 const defaultStats = [
   { icon: "Brain", value: "3+", label: "Years Healthcare Experience" },
