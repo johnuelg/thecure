@@ -69,6 +69,38 @@ interface Profile {
   tagline: string | null;
   bio: string | null;
 }
+function FloatingMedicalIcons() {
+  const { x, y } = useParallax();
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
+      {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor }) => (
+        <motion.div
+          key={id}
+          className="absolute text-primary/[0.07] dark:text-primary/[0.12]"
+          style={{
+            left: `${ix}%`,
+            top: `${iy}%`,
+            x: x * parallaxFactor * 30,
+            y: y * parallaxFactor * 30,
+          }}
+          animate={{
+            y: [0, -20, 0, 15, 0],
+            x: [0, 10, -8, 5, 0],
+            rotate: [0, 8, -6, 4, 0],
+          }}
+          transition={{
+            duration,
+            delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <Icon size={size} strokeWidth={1.5} />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
 
 export function HeroSection() {
   const { data: profile } = useQuery({
