@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Activity, Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse, Microscope, Dna, Thermometer, Cross, Clipboard, TestTube } from "lucide-react";
+import { ArrowDown, Activity, Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse, Microscope, Dna, Thermometer, Cross, Clipboard, TestTube, Scan, Radiation, Ear, Eye, Hand, Bone, Baby, Droplets, Salad, BriefcaseMedical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,6 +15,7 @@ const getIcon = (iconName: string): LucideIcon => {
 const medicalIcons = [
   Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse,
   Microscope, Dna, Thermometer, Cross, Clipboard, TestTube, Activity,
+  Scan, Radiation, Ear, Eye, Hand, Bone, Baby, Droplets, Salad, BriefcaseMedical,
 ];
 
 interface FloatingIcon {
@@ -48,14 +49,14 @@ function generateIcons(count: number): FloatingIcon[] {
     Icon: medicalIcons[i % medicalIcons.length],
     x: Math.random() * 100,
     y: Math.random() * 100,
-    size: 18 + Math.random() * 22,
+    size: 20 + Math.random() * 28,
     duration: 12 + Math.random() * 18,
     delay: Math.random() * -20,
     parallaxFactor: 0.3 + Math.random() * 0.7,
   }));
 }
 
-const floatingIcons = generateIcons(18);
+const floatingIcons = generateIcons(28);
 
 const defaultStats = [
   { icon: "Brain", value: "3+", label: "Years Healthcare Experience" },
@@ -76,7 +77,7 @@ function FloatingMedicalIcons() {
       {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor }) => (
         <motion.div
           key={id}
-          className="absolute text-primary/[0.07] dark:text-primary/[0.12]"
+          className="absolute text-primary/[0.1] dark:text-primary/[0.18]"
           style={{
             left: `${ix}%`,
             top: `${iy}%`,
