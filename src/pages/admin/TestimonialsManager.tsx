@@ -81,6 +81,7 @@ const TestimonialsManager = () => {
     setAuthorCompany('');
     setAuthorImageUrl('');
     setIsFeatured(false);
+    setRating(5);
     setEditingTestimonial(null);
   };
 
