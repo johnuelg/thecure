@@ -320,6 +320,27 @@ const TestimonialsManager = () => {
                 bucket="portfolio-images"
                 accept="image/*"
               />
+              <div className="space-y-2">
+                <Label>Rating</Label>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setRating(star)}
+                      className="p-0.5"
+                    >
+                      <Star
+                        className={`h-6 w-6 transition-colors ${
+                          star <= rating
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-muted-foreground/30'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
               <div className="flex items-center gap-2">
                 <Switch
                   id="isFeatured"
