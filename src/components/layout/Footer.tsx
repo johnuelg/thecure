@@ -72,16 +72,16 @@ export function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               {profile?.logo_url ? (
-                <img src={profile.logo_url} alt={profile.full_name || 'Logo'} className="h-16 md:h-18 object-contain" />
+                <img src={profile.logo_url} alt={profile.full_name || 'Logo'} className="h-12 sm:h-16 md:h-18 object-contain" />
               ) : (
-                <div className="w-16 h-16 md:w-18 md:h-18 rounded-lg healthcare-gradient flex items-center justify-center">
-                  <span className="text-primary-foreground font-display font-bold text-2xl">AI</span>
+                <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-lg healthcare-gradient flex items-center justify-center">
+                  <span className="text-primary-foreground font-display font-bold text-xl sm:text-2xl">AI</span>
                 </div>
               )}
               {(profile as any)?.brand_name_image_url ? (
-                <img src={(profile as any).brand_name_image_url} alt={(profile as any)?.brand_name || 'HealthcareAI'} className="h-8 sm:h-10 object-contain" />
+                <img src={(profile as any).brand_name_image_url} alt={(profile as any)?.brand_name || 'HealthcareAI'} className="h-7 sm:h-8 md:h-10 object-contain" />
               ) : (profile as any)?.brand_name ? (
-                <span className="font-display font-semibold text-lg sm:text-xl">
+                <span className="font-display font-semibold text-base sm:text-lg md:text-xl">
                   {(profile as any).brand_name}
                 </span>
               ) : null}
