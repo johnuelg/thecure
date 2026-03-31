@@ -87,7 +87,7 @@ export function Header() {
             {brandNameImageUrl ? (
               <img src={brandNameImageUrl} alt={brandName} className="h-8 sm:h-10 lg:h-14 object-contain" />
             ) : brandName ? (
-              <span className="font-display font-semibold text-base sm:text-lg lg:text-2xl dark:text-[#41c0c2] dark:drop-shadow-[0_0_8px_rgba(65,192,194,0.6)] dark:[text-shadow:0_0_12px_rgba(65,192,194,0.5),0_0_24px_rgba(65,192,194,0.3),0_0_40px_rgba(65,192,194,0.15)]">
+              <span className="font-display font-semibold text-base sm:text-lg lg:text-2xl brand-name-glow">
                 {brandName}
               </span>
             ) : null}
