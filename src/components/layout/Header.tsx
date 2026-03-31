@@ -107,7 +107,7 @@ export function Header() {
           </nav>
 
           {/* Right side actions */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-2">
             <ThemeToggle />
             <Button
               onClick={() => scrollToSection("#contact")}
