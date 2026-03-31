@@ -92,7 +92,7 @@ export function TestimonialsSection() {
           </p>
         </motion.div>
 
-        <div className="relative pt-16">
+        <div className="relative pt-[100px]">
           {/* Floating avatar above card */}
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
@@ -103,12 +103,12 @@ export function TestimonialsSection() {
               animate="center"
               exit="exit"
               transition={{ duration: 0.45, ease: "easeInOut" }}
-              className="absolute -top-2 left-1/2 -translate-x-1/2 z-10"
+              className="absolute top-0 left-0 right-0 flex justify-center z-10"
             >
-              <div className="rounded-full p-1 bg-gradient-to-br from-primary to-primary/60 shadow-xl">
-                <Avatar className="h-28 w-28 ring-4 ring-background">
+              <div className="rounded-full p-1.5 bg-gradient-to-br from-primary to-primary/60 shadow-xl">
+                <Avatar className="h-[200px] w-[200px] ring-4 ring-background">
                   <AvatarImage src={item.author_image_url || undefined} className="object-cover" />
-                  <AvatarFallback className="bg-primary/10 text-primary text-2xl font-semibold">
+                  <AvatarFallback className="bg-primary/10 text-primary text-4xl font-semibold">
                     {item.author_name
                       .split(" ")
                       .map((n) => n[0])
@@ -120,7 +120,7 @@ export function TestimonialsSection() {
           </AnimatePresence>
 
           {/* Carousel card */}
-          <div className="relative overflow-hidden rounded-2xl bg-card border-2 border-border shadow-xl min-h-[280px] sm:min-h-[320px] flex items-center justify-center px-6 sm:px-8 pt-20 pb-8 sm:pt-24 sm:pb-10 md:px-20">
+          <div className="relative overflow-hidden rounded-2xl bg-card border-2 border-border shadow-xl min-h-[320px] sm:min-h-[360px] flex items-center justify-center px-6 sm:px-8 pt-28 pb-8 sm:pt-32 sm:pb-10 md:px-20">
             {/* Decorative quote icons */}
             <Quote className="absolute top-6 left-6 h-10 w-10 text-muted-foreground/15 rotate-180" />
             <Quote className="absolute bottom-6 right-6 h-10 w-10 text-muted-foreground/15" />
