@@ -143,6 +143,7 @@ export default {
         "pulse-line": "pulse-line 2s ease-in-out infinite",
         "ecg-sweep": "ecg-sweep 5s linear infinite",
         "chat-pulse": "chat-pulse 2s ease-in-out infinite",
+        "chat-pulse-dark": "chat-pulse-dark 2s ease-in-out infinite",
       },
     },
   },
