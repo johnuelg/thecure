@@ -98,6 +98,7 @@ const TestimonialsManager = () => {
     setAuthorCompany(testimonial.author_company || '');
     setAuthorImageUrl(testimonial.author_image_url || '');
     setIsFeatured(testimonial.is_featured);
+    setRating(testimonial.rating);
     setIsDialogOpen(true);
   };
 
