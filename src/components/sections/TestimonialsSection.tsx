@@ -92,9 +92,33 @@ export function TestimonialsSection() {
           </p>
         </motion.div>
 
-        <div className="relative">
+        <div className="relative pt-10">
+          {/* Floating avatar above card */}
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={`avatar-${item.id}`}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.45, ease: "easeInOut" }}
+              className="absolute top-0 left-1/2 -translate-x-1/2 z-10"
+            >
+              <Avatar className="h-20 w-20 ring-4 ring-background shadow-lg">
+                <AvatarImage src={item.author_image_url || undefined} />
+                <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
+                  {item.author_name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+            </motion.div>
+          </AnimatePresence>
+
           {/* Carousel card */}
-          <div className="overflow-hidden rounded-2xl bg-card border border-border shadow-lg min-h-[220px] sm:min-h-[260px] flex items-center justify-center px-4 sm:px-6 py-8 sm:py-10 md:px-16">
+          <div className="overflow-hidden rounded-2xl bg-card border border-border shadow-lg min-h-[220px] sm:min-h-[260px] flex items-center justify-center px-4 sm:px-6 pt-14 pb-8 sm:pt-16 sm:pb-10 md:px-16">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={item.id}
@@ -110,28 +134,17 @@ export function TestimonialsSection() {
                 <p className="text-base sm:text-lg md:text-xl text-foreground/90 italic leading-relaxed mb-6 sm:mb-8 max-w-2xl">
                   &ldquo;{item.quote}&rdquo;
                 </p>
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-11 w-11 ring-2 ring-primary/20">
-                    <AvatarImage src={item.author_image_url || undefined} />
-                    <AvatarFallback className="bg-primary/10 text-primary text-sm font-semibold">
-                      {item.author_name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="text-left">
-                    <p className="font-semibold text-sm text-foreground">
-                      {item.author_name}
+                <div className="text-center">
+                  <p className="font-semibold text-sm text-foreground">
+                    {item.author_name}
+                  </p>
+                  {(item.author_title || item.author_company) && (
+                    <p className="text-xs text-muted-foreground">
+                      {[item.author_title, item.author_company]
+                        .filter(Boolean)
+                        .join(" at ")}
                     </p>
-                    {(item.author_title || item.author_company) && (
-                      <p className="text-xs text-muted-foreground">
-                        {[item.author_title, item.author_company]
-                          .filter(Boolean)
-                          .join(" at ")}
-                      </p>
-                    )}
-                  </div>
+                  )}
                 </div>
               </motion.div>
             </AnimatePresence>
