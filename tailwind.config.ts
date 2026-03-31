@@ -127,6 +127,10 @@ export default {
           "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.4)" },
           "50%": { boxShadow: "0 0 20px 8px hsl(var(--primary) / 0.2)" },
         },
+        "chat-pulse-dark": {
+          "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.6)" },
+          "50%": { boxShadow: "0 0 30px 12px hsl(var(--primary) / 0.35)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -139,6 +143,7 @@ export default {
         "pulse-line": "pulse-line 2s ease-in-out infinite",
         "ecg-sweep": "ecg-sweep 5s linear infinite",
         "chat-pulse": "chat-pulse 2s ease-in-out infinite",
+        "chat-pulse-dark": "chat-pulse-dark 2s ease-in-out infinite",
       },
     },
   },

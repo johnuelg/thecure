@@ -168,7 +168,7 @@ const ChatWidget = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground shadow-lg shadow-primary/25 flex items-center justify-center hover:shadow-xl hover:shadow-primary/30 transition-all animate-[chat-pulse_2s_ease-in-out_infinite]"
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground shadow-lg shadow-primary/25 dark:shadow-primary/40 flex items-center justify-center hover:shadow-xl hover:shadow-primary/30 transition-all animate-chat-pulse dark:animate-chat-pulse-dark"
             aria-label="Open chat"
           >
             <MessageCircle className="w-6 h-6" />
