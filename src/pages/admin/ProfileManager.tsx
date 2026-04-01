@@ -89,6 +89,7 @@ const ProfileManager = () => {
         setSiteDescription((data as any).site_description || '');
         setBrandName((data as any).brand_name || '');
         setBrandNameImageUrl((data as any).brand_name_image_url || '');
+        setBookingUrl((data as any).booking_url || '');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
