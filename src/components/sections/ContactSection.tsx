@@ -15,6 +15,7 @@ interface Profile {
   phone: string | null;
   location: string | null;
   contact_description: string | null;
+  booking_url: string | null;
 }
 
 export function ContactSection() {
