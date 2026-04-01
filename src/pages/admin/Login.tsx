@@ -8,6 +8,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Heart, Shield, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
 const loginSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email address" }).max(255),
