@@ -60,13 +60,21 @@ const glowColors: GlowColor[] = [
 ];
 
 function generateIcons(count: number): FloatingIcon[] {
+  const half = Math.ceil(count / 2);
   return Array.from({ length: count }, (_, i) => {
     const depth = Math.random();
+    const isLeft = i < half;
+    // Left side: 2-38%, Right side: 62-98% — avoids center content area
+    const x = isLeft
+      ? 2 + Math.random() * 36
+      : 62 + Math.random() * 36;
+    // Vertically distributed across the section, biased toward center
+    const y = 10 + Math.random() * 80;
     return {
       id: i,
       Icon: medicalIcons[i % medicalIcons.length],
-      x: Math.random() * 100,
-      y: Math.random() * 100,
+      x,
+      y,
       size: 14 + depth * 34,
       duration: 20 - depth * 10 + Math.random() * 8,
       delay: Math.random() * -20,
