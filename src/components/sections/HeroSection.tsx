@@ -61,7 +61,7 @@ function generateIcons(count: number): FloatingIcon[] {
   });
 }
 
-const floatingIcons = generateIcons(28);
+const floatingIcons = generateIcons(32);
 
 const defaultStats = [
   { icon: "Brain", value: "3+", label: "Years Healthcare Experience" },
