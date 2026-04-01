@@ -27,6 +27,7 @@ interface FloatingIcon {
   duration: number;
   delay: number;
   parallaxFactor: number;
+  depth: number; // 0 = far background, 1 = near foreground
 }
 
 function useParallax() {
@@ -44,16 +45,20 @@ function useParallax() {
 }
 
 function generateIcons(count: number): FloatingIcon[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i,
-    Icon: medicalIcons[i % medicalIcons.length],
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: 20 + Math.random() * 28,
-    duration: 12 + Math.random() * 18,
-    delay: Math.random() * -20,
-    parallaxFactor: 0.3 + Math.random() * 0.7,
-  }));
+  return Array.from({ length: count }, (_, i) => {
+    const depth = Math.random(); // 0-1, affects size, opacity, speed, parallax
+    return {
+      id: i,
+      Icon: medicalIcons[i % medicalIcons.length],
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: 14 + depth * 34, // far=small(14), near=large(48)
+      duration: 20 - depth * 10 + Math.random() * 8, // far=slower, near=faster
+      delay: Math.random() * -20,
+      parallaxFactor: 0.1 + depth * 0.9, // far=less parallax, near=more
+      depth,
+    };
+  });
 }
 
 const floatingIcons = generateIcons(28);
