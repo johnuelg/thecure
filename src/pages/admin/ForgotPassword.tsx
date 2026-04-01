@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Mail, ArrowLeft, CheckCircle, Heart } from 'lucide-react';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
+import { AuthBranding } from '@/components/auth/AuthBranding';
 
 const emailSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email address" }).max(255),

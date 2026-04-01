@@ -5,11 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Heart, Shield, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Loader2, Heart, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { AuthBranding } from '@/components/auth/AuthBranding';
 
 const loginSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email address" }).max(255),

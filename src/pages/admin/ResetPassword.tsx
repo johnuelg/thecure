@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, KeyRound, CheckCircle, XCircle, Eye, EyeOff, ArrowLeft, Heart, ShieldCheck } from 'lucide-react';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
+import { AuthBranding } from '@/components/auth/AuthBranding';
 
 const passwordSchema = z.object({
   password: z.string()
