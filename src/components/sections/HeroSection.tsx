@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Activity, Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse, Microscope, Dna, Thermometer, Cross, Clipboard, TestTube, Scan, Radiation, Ear, Eye, Hand, Bone, Baby, Droplets, Salad, BriefcaseMedical } from "lucide-react";
+import { ArrowDown, Activity, Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse, Microscope, Dna, Thermometer, Cross, Clipboard, TestTube, Scan, Radiation, Ear, Eye, Bone, Baby, BriefcaseMedical, Hospital, FileHeart, Tablets } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,7 +15,7 @@ const getIcon = (iconName: string): LucideIcon => {
 const medicalIcons = [
   Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse,
   Microscope, Dna, Thermometer, Cross, Clipboard, TestTube, Activity,
-  Scan, Radiation, Ear, Eye, Hand, Bone, Baby, Droplets, Salad, BriefcaseMedical,
+  Scan, Radiation, Ear, Eye, Bone, Baby, BriefcaseMedical, Hospital, FileHeart, Tablets,
 ];
 
 interface FloatingIcon {
