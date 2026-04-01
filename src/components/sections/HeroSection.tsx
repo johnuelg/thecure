@@ -130,28 +130,32 @@ function FloatingMedicalIcons() {
               ease: "easeInOut",
             }}
           >
-            <Icon
-              size={size}
-              strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+            {/* Light mode */}
+            <span className="dark:hidden">
+              <Icon
+                size={size}
+                strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+                style={{
+                  color: 'hsl(var(--primary))',
+                  opacity: baseOpacityLight,
+                }}
+              />
+            </span>
+            {/* Dark mode with colored glow */}
+            <span className="hidden dark:block"
               style={{
-                color: 'hsl(var(--primary))',
-                opacity: baseOpacityLight,
-              }}
-            />
-            {/* Dark mode colored overlay */}
-            <Icon
-              size={size}
-              strokeWidth={depth > 0.5 ? 1.5 : 1.2}
-              className="absolute inset-0 hidden dark:block"
-              style={{
-                color: glowColor.color,
-                opacity: 0.15 + depth * 0.2,
                 filter: `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`,
-                position: 'absolute',
-                top: 0,
-                left: 0,
               }}
-            />
+            >
+              <Icon
+                size={size}
+                strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+                style={{
+                  color: glowColor.color,
+                  opacity: 0.15 + depth * 0.2,
+                }}
+              />
+            </span>
           </motion.div>
         );
       })}
