@@ -79,33 +79,62 @@ function FloatingMedicalIcons() {
   const { x, y } = useParallax();
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
-      {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor }) => (
-        <motion.div
-          key={id}
-          className="absolute text-primary/[0.1] dark:text-[#41c0c2]/[0.22] dark:drop-shadow-[0_0_6px_rgba(65,192,194,0.3)]"
-          style={{
-            left: `${ix}%`,
-            top: `${iy}%`,
-            x: x * parallaxFactor * 30,
-            y: y * parallaxFactor * 30,
-          }}
-          animate={{
-            y: [0, -20, 0, 15, 0],
-            x: [0, 10, -8, 5, 0],
-            rotate: [0, 8, -6, 4, 0],
-            opacity: [0.7, 1, 0.7],
-          }}
-          transition={{
-            duration,
-            delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-            opacity: { duration: duration * 0.6, repeat: Infinity, ease: "easeInOut" },
-          }}
-        >
-          <Icon size={size} strokeWidth={1.5} />
-        </motion.div>
-      ))}
+      {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor, depth }) => {
+        // Depth-based opacity: far icons are dimmer
+        const baseOpacityLight = 0.04 + depth * 0.08;
+        const baseOpacityDark = 0.1 + depth * 0.18;
+        const blurAmount = Math.max(0, (1 - depth) * 2); // far icons slightly blurred
+        const glowSize = 4 + depth * 8;
+        // Movement amplitude scales with depth
+        const moveY = 10 + depth * 25;
+        const moveX = 5 + depth * 15;
+        const rotateAmt = 4 + depth * 10;
+
+        return (
+          <motion.div
+            key={id}
+            className="absolute"
+            style={{
+              left: `${ix}%`,
+              top: `${iy}%`,
+              x: x * parallaxFactor * 40,
+              y: y * parallaxFactor * 40,
+              filter: blurAmount > 0.5 ? `blur(${blurAmount}px)` : undefined,
+              zIndex: Math.round(depth * 10),
+            }}
+            animate={{
+              y: [0, -moveY, 0, moveY * 0.6, 0],
+              x: [0, moveX, -moveX * 0.8, moveX * 0.4, 0],
+              rotate: [0, rotateAmt, -rotateAmt * 0.7, rotateAmt * 0.5, 0],
+              scale: [1, 1 + depth * 0.08, 1, 1 - depth * 0.04, 1],
+            }}
+            transition={{
+              duration,
+              delay,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <motion.div
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: duration * 0.5, repeat: Infinity, ease: "easeInOut" }}
+              style={{
+                color: `rgba(var(--primary-rgb, 59,130,246), ${baseOpacityLight})`,
+              }}
+              className={`dark:text-[#41c0c2] dark:drop-shadow-[0_0_${glowSize}px_rgba(65,192,194,${(0.2 + depth * 0.25).toFixed(2)})]`}
+            >
+              <Icon
+                size={size}
+                strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+                className={`text-primary/${Math.round(baseOpacityLight * 100)} dark:text-[#41c0c2]/${Math.round(baseOpacityDark * 100)}`}
+                style={{
+                  opacity: undefined, // let class handle it
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
