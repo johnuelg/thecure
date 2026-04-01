@@ -83,7 +83,7 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+  <ThemeProvider attribute="class" defaultTheme="dark" storageKey="theme" enableSystem={false} disableTransitionOnChange>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
