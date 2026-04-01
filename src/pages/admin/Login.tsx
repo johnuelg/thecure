@@ -105,13 +105,19 @@ const Login = () => {
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.15, duration: 0.4 }}
-                className="mx-auto mb-5"
+                className="flex items-center justify-center gap-3 mb-5"
               >
                 <img
                   src={profile.logo_url}
                   alt={profile.brand_name || 'Logo'}
-                  className="h-16 w-auto mx-auto object-contain"
+                  className="object-contain"
+                  style={{ width: 150, height: 150 }}
                 />
+                {profile.brand_name && (
+                  <span className="text-2xl font-bold font-display text-foreground tracking-tight">
+                    {profile.brand_name}
+                  </span>
+                )}
               </motion.div>
             ) : (
               <motion.div
