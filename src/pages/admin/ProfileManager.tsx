@@ -131,6 +131,7 @@ const ProfileManager = () => {
       site_description: siteDescription || null,
       brand_name: brandName || 'HealthcareAI',
       brand_name_image_url: brandNameImageUrl || null,
+      booking_url: bookingUrl || null,
     };
 
     try {
