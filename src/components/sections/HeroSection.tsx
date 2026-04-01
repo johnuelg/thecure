@@ -77,7 +77,7 @@ function FloatingMedicalIcons() {
       {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor }) => (
         <motion.div
           key={id}
-          className="absolute text-primary/[0.1] dark:text-primary/[0.18]"
+          className="absolute text-primary/[0.1] dark:text-[#41c0c2]/[0.22] dark:drop-shadow-[0_0_6px_rgba(65,192,194,0.3)]"
           style={{
             left: `${ix}%`,
             top: `${iy}%`,
@@ -88,12 +88,14 @@ function FloatingMedicalIcons() {
             y: [0, -20, 0, 15, 0],
             x: [0, 10, -8, 5, 0],
             rotate: [0, 8, -6, 4, 0],
+            opacity: [0.7, 1, 0.7],
           }}
           transition={{
             duration,
             delay,
             repeat: Infinity,
             ease: "easeInOut",
+            opacity: { duration: duration * 0.6, repeat: Infinity, ease: "easeInOut" },
           }}
         >
           <Icon size={size} strokeWidth={1.5} />
