@@ -115,23 +115,15 @@ function FloatingMedicalIcons() {
               ease: "easeInOut",
             }}
           >
-            <motion.div
-              animate={{ opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: duration * 0.5, repeat: Infinity, ease: "easeInOut" }}
+            <Icon
+              size={size}
+              strokeWidth={depth > 0.5 ? 1.5 : 1.2}
               style={{
-                color: `rgba(var(--primary-rgb, 59,130,246), ${baseOpacityLight})`,
+                color: 'hsl(var(--primary))',
+                opacity: baseOpacityLight,
               }}
-              className={`dark:text-[#41c0c2] dark:drop-shadow-[0_0_${glowSize}px_rgba(65,192,194,${(0.2 + depth * 0.25).toFixed(2)})]`}
-            >
-              <Icon
-                size={size}
-                strokeWidth={depth > 0.5 ? 1.5 : 1.2}
-                className={`text-primary/${Math.round(baseOpacityLight * 100)} dark:text-[#41c0c2]/${Math.round(baseOpacityDark * 100)}`}
-                style={{
-                  opacity: undefined, // let class handle it
-                }}
-              />
-            </motion.div>
+              className="dark:!text-[#41c0c2]"
+            />
           </motion.div>
         );
       })}
