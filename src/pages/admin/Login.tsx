@@ -27,17 +27,6 @@ const Login = () => {
   const location = useLocation();
   const { toast } = useToast();
 
-  const { data: profile } = useQuery({
-    queryKey: ['login-profile-logo'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('profile')
-        .select('logo_url, brand_name, brand_name_image_url')
-        .maybeSingle();
-      return data;
-    },
-  });
-
   const from = location.state?.from?.pathname || '/admin';
 
   const handleSubmit = async (e: React.FormEvent) => {
