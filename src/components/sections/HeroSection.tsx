@@ -104,8 +104,10 @@ function FloatingMedicalIcons() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
       {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor, depth, glowColor }) => {
-        const baseOpacityLight = 0.04 + depth * 0.08;
-        const blurAmount = Math.max(0, (1 - depth) * 2);
+        // Light mode: much more visible with subtle shadow
+        const baseOpacityLight = 0.12 + depth * 0.18;
+        const lightGlowSize = 3 + depth * 5;
+        const blurAmount = Math.max(0, (1 - depth) * 1.5);
         const glowSize = 4 + depth * 8;
         const glowOpacity = (0.2 + depth * 0.3).toFixed(2);
         const moveY = 10 + depth * 25;
@@ -137,11 +139,15 @@ function FloatingMedicalIcons() {
               ease: "easeInOut",
             }}
           >
-            {/* Light mode */}
-            <span className="dark:hidden">
+            {/* Light mode - enhanced visibility with soft shadow */}
+            <span className="dark:hidden"
+              style={{
+                filter: `drop-shadow(0 0 ${lightGlowSize}px rgba(var(--primary-rgb, 14,165,233), 0.15))`,
+              }}
+            >
               <Icon
                 size={size}
-                strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+                strokeWidth={depth > 0.5 ? 1.8 : 1.4}
                 style={{
                   color: 'hsl(var(--primary))',
                   opacity: baseOpacityLight,
