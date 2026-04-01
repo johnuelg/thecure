@@ -38,11 +38,6 @@ const Login = () => {
       return data;
     },
   });
-        .select('logo_url, brand_name')
-        .maybeSingle();
-      return data;
-    },
-  });
 
   const from = location.state?.from?.pathname || '/admin';
 
