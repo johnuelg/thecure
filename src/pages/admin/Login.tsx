@@ -142,7 +142,6 @@ const Login = () => {
             )}
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Welcome Back</h1>
             <p className="text-sm text-muted-foreground mt-1.5">Sign in to your admin dashboard</p>
-            <p className="text-sm text-muted-foreground mt-1.5">Sign in to your admin dashboard</p>
           </div>
 
           {/* Form */}
