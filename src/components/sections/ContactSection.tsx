@@ -15,6 +15,7 @@ interface Profile {
   phone: string | null;
   location: string | null;
   contact_description: string | null;
+  booking_url: string | null;
 }
 
 export function ContactSection() {
@@ -34,7 +35,7 @@ export function ContactSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("email, phone, location, contact_description")
+        .select("email, phone, location, contact_description, booking_url")
         .maybeSingle();
       
       if (error) throw error;
@@ -187,7 +188,15 @@ export function ContactSection() {
                 Prefer to talk? Book a free 30-minute discovery call to discuss 
                 your project.
               </p>
-              <Button variant="secondary" className="w-full">
+              <Button
+                variant="secondary"
+                className="w-full"
+                onClick={() => {
+                  const url = (profile as any)?.booking_url;
+                  if (url) window.open(url, '_blank');
+                }}
+                disabled={!(profile as any)?.booking_url}
+              >
                 Book a Call
               </Button>
             </div>

@@ -57,6 +57,7 @@ const ProfileManager = () => {
   const [siteDescription, setSiteDescription] = useState('');
   const [brandName, setBrandName] = useState('');
   const [brandNameImageUrl, setBrandNameImageUrl] = useState('');
+  const [bookingUrl, setBookingUrl] = useState('');
 
   const fetchProfile = async () => {
     try {
@@ -88,6 +89,7 @@ const ProfileManager = () => {
         setSiteDescription((data as any).site_description || '');
         setBrandName((data as any).brand_name || '');
         setBrandNameImageUrl((data as any).brand_name_image_url || '');
+        setBookingUrl((data as any).booking_url || '');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -129,6 +131,7 @@ const ProfileManager = () => {
       site_description: siteDescription || null,
       brand_name: brandName || 'HealthcareAI',
       brand_name_image_url: brandNameImageUrl || null,
+      booking_url: bookingUrl || null,
     };
 
     try {
@@ -252,6 +255,16 @@ const ProfileManager = () => {
             <CardDescription>How visitors can reach you</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="bookingUrl">Book a Call URL</Label>
+              <Input
+                id="bookingUrl"
+                value={bookingUrl}
+                onChange={(e) => setBookingUrl(e.target.value)}
+                placeholder="https://calendly.com/your-name or any booking link"
+              />
+              <p className="text-xs text-muted-foreground">URL for the "Book a Call" button in the Contact section</p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="flex items-center gap-2">

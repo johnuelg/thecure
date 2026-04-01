@@ -450,6 +450,7 @@ export type Database = {
           about_description: string | null
           analytics_description: string | null
           bio: string | null
+          booking_url: string | null
           brand_name: string | null
           brand_name_image_url: string | null
           contact_description: string | null
@@ -482,6 +483,7 @@ export type Database = {
           about_description?: string | null
           analytics_description?: string | null
           bio?: string | null
+          booking_url?: string | null
           brand_name?: string | null
           brand_name_image_url?: string | null
           contact_description?: string | null
@@ -514,6 +516,7 @@ export type Database = {
           about_description?: string | null
           analytics_description?: string | null
           bio?: string | null
+          booking_url?: string | null
           brand_name?: string | null
           brand_name_image_url?: string | null
           contact_description?: string | null
