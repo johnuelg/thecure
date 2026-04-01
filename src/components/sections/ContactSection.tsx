@@ -188,7 +188,15 @@ export function ContactSection() {
                 Prefer to talk? Book a free 30-minute discovery call to discuss 
                 your project.
               </p>
-              <Button variant="secondary" className="w-full">
+              <Button
+                variant="secondary"
+                className="w-full"
+                onClick={() => {
+                  const url = (profile as any)?.booking_url;
+                  if (url) window.open(url, '_blank');
+                }}
+                disabled={!(profile as any)?.booking_url}
+              >
                 Book a Call
               </Button>
             </div>
