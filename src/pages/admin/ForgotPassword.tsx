@@ -154,16 +154,8 @@ const ForgotPassword = () => {
           {/* Top accent strip */}
           <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-primary" />
 
-          {/* Header */}
           <div className="pt-8 pb-2 px-8 text-center">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.15, duration: 0.4 }}
-              className="mx-auto w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-5 shadow-lg shadow-primary/20"
-            >
-              <Mail className="h-7 w-7 text-primary-foreground" />
-            </motion.div>
+            <AuthBranding />
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Forgot Password</h1>
             <p className="text-sm text-muted-foreground mt-1.5">Enter your email and we'll send you a reset link</p>
           </div>
