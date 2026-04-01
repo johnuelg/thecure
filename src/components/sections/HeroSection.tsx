@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Activity, Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse, Microscope, Dna, Thermometer, Cross, Clipboard, TestTube, Scan, Radiation, Ear, Eye, Bone, Baby, BriefcaseMedical, Hospital, FileHeart, Tablets } from "lucide-react";
+import { ArrowDown, Activity, Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse, Microscope, Dna, Thermometer, Cross, Clipboard, TestTube, Scan, Radiation, Baby, BriefcaseMedical, Hospital, Tablets, Ambulance, BadgePlus, CirclePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
