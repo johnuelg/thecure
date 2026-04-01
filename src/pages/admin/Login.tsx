@@ -5,11 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Heart, Shield, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Loader2, Heart, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { AuthBranding } from '@/components/auth/AuthBranding';
 
 const loginSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email address" }).max(255),
@@ -27,17 +26,6 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-
-  const { data: profile } = useQuery({
-    queryKey: ['login-profile-logo'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('profile')
-        .select('logo_url, brand_name, brand_name_image_url')
-        .maybeSingle();
-      return data;
-    },
-  });
 
   const from = location.state?.from?.pathname || '/admin';
 
@@ -100,42 +88,7 @@ const Login = () => {
 
           {/* Header */}
           <div className="pt-8 pb-2 px-8 text-center">
-             {profile?.logo_url ? (
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.15, duration: 0.4 }}
-                className="flex items-center justify-center gap-3 mb-5"
-              >
-                <img
-                  src={profile.logo_url}
-                  alt={profile.brand_name || 'Logo'}
-                  className="object-contain"
-                  style={{ width: 150, height: 150 }}
-                />
-                {profile.brand_name_image_url ? (
-                  <img
-                    src={profile.brand_name_image_url}
-                    alt={profile.brand_name || 'Brand'}
-                    style={{ width: 150, height: 150 }}
-                    className="object-contain"
-                  />
-                ) : profile.brand_name ? (
-                  <span className="text-2xl font-bold font-display text-foreground tracking-tight">
-                    {profile.brand_name}
-                  </span>
-                ) : null}
-              </motion.div>
-            ) : (
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.15, duration: 0.4 }}
-                className="mx-auto w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-5 shadow-lg shadow-primary/20"
-              >
-                <Shield className="h-7 w-7 text-primary-foreground" />
-              </motion.div>
-            )}
+            <AuthBranding />
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Welcome Back</h1>
             <p className="text-sm text-muted-foreground mt-1.5">Sign in to your admin dashboard</p>
           </div>
