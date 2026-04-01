@@ -57,6 +57,7 @@ const ProfileManager = () => {
   const [siteDescription, setSiteDescription] = useState('');
   const [brandName, setBrandName] = useState('');
   const [brandNameImageUrl, setBrandNameImageUrl] = useState('');
+  const [bookingUrl, setBookingUrl] = useState('');
 
   const fetchProfile = async () => {
     try {
