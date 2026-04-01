@@ -15,7 +15,7 @@ const getIcon = (iconName: string): LucideIcon => {
 const medicalIcons = [
   Heart, Stethoscope, Pill, Syringe, Brain, ShieldPlus, HeartPulse,
   Microscope, Dna, Thermometer, Cross, Clipboard, TestTube, Activity,
-  Scan, Radiation, Ear, Eye, Bone, Baby, BriefcaseMedical, Hospital, FileHeart, Tablets,
+  Scan, Radiation, Baby, BriefcaseMedical, Hospital, Tablets, Ambulance, BadgePlus, CirclePlus,
 ];
 
 interface GlowColor {
