@@ -8,6 +8,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Heart, Shield, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
 const loginSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email address" }).max(255),
@@ -25,6 +27,17 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+
+  const { data: profile } = useQuery({
+    queryKey: ['login-profile-logo'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('profile')
+        .select('logo_url, brand_name')
+        .maybeSingle();
+      return data;
+    },
+  });
 
   const from = location.state?.from?.pathname || '/admin';
 
@@ -87,15 +100,31 @@ const Login = () => {
 
           {/* Header */}
           <div className="pt-8 pb-2 px-8 text-center">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.15, duration: 0.4 }}
-              className="mx-auto w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-5 shadow-lg shadow-primary/20"
-            >
-              <Shield className="h-7 w-7 text-primary-foreground" />
-            </motion.div>
+             {profile?.logo_url ? (
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.15, duration: 0.4 }}
+                className="mx-auto mb-5"
+              >
+                <img
+                  src={profile.logo_url}
+                  alt={profile.brand_name || 'Logo'}
+                  className="h-16 w-auto mx-auto object-contain"
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.15, duration: 0.4 }}
+                className="mx-auto w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-5 shadow-lg shadow-primary/20"
+              >
+                <Shield className="h-7 w-7 text-primary-foreground" />
+              </motion.div>
+            )}
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Welcome Back</h1>
+            <p className="text-sm text-muted-foreground mt-1.5">Sign in to your admin dashboard</p>
             <p className="text-sm text-muted-foreground mt-1.5">Sign in to your admin dashboard</p>
           </div>
 
