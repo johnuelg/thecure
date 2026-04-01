@@ -79,13 +79,11 @@ function FloatingMedicalIcons() {
   const { x, y } = useParallax();
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
-      {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor, depth }) => {
-        // Depth-based opacity: far icons are dimmer
+      {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor, depth, glowColor }) => {
         const baseOpacityLight = 0.04 + depth * 0.08;
-        const baseOpacityDark = 0.1 + depth * 0.18;
-        const blurAmount = Math.max(0, (1 - depth) * 2); // far icons slightly blurred
+        const blurAmount = Math.max(0, (1 - depth) * 2);
         const glowSize = 4 + depth * 8;
-        // Movement amplitude scales with depth
+        const glowOpacity = (0.2 + depth * 0.3).toFixed(2);
         const moveY = 10 + depth * 25;
         const moveX = 5 + depth * 15;
         const rotateAmt = 4 + depth * 10;
@@ -118,12 +116,24 @@ function FloatingMedicalIcons() {
             <Icon
               size={size}
               strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+              className="text-primary dark:text-current"
               style={{
-                color: 'hsl(var(--primary))',
                 opacity: baseOpacityLight,
+                // @ts-ignore
+                '--tw-text-opacity': 1,
+                color: undefined,
+                filter: undefined,
               }}
-              className="dark:!text-[#41c0c2]"
+              // Use a wrapper to apply dark mode glow via CSS custom property
             />
+            <style>{`
+              .dark [data-icon-id="${id}"] {
+                color: ${glowColor.color} !important;
+                opacity: ${(0.15 + depth * 0.2).toFixed(2)} !important;
+                filter: drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}));
+              }
+            `}</style>
+            <span data-icon-id={id} className="absolute inset-0 pointer-events-none" style={{ display: 'none' }} />
           </motion.div>
         );
       })}
