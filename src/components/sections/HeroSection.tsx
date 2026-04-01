@@ -122,24 +122,25 @@ function FloatingMedicalIcons() {
             <Icon
               size={size}
               strokeWidth={depth > 0.5 ? 1.5 : 1.2}
-              className="text-primary dark:text-current"
               style={{
+                color: 'hsl(var(--primary))',
                 opacity: baseOpacityLight,
-                // @ts-ignore
-                '--tw-text-opacity': 1,
-                color: undefined,
-                filter: undefined,
               }}
-              // Use a wrapper to apply dark mode glow via CSS custom property
             />
-            <style>{`
-              .dark [data-icon-id="${id}"] {
-                color: ${glowColor.color} !important;
-                opacity: ${(0.15 + depth * 0.2).toFixed(2)} !important;
-                filter: drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}));
-              }
-            `}</style>
-            <span data-icon-id={id} className="absolute inset-0 pointer-events-none" style={{ display: 'none' }} />
+            {/* Dark mode colored overlay */}
+            <Icon
+              size={size}
+              strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+              className="absolute inset-0 hidden dark:block"
+              style={{
+                color: glowColor.color,
+                opacity: 0.15 + depth * 0.2,
+                filter: `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+              }}
+            />
           </motion.div>
         );
       })}
