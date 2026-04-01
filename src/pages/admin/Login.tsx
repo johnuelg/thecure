@@ -117,7 +117,8 @@ const Login = () => {
                   <img
                     src={profile.brand_name_image_url}
                     alt={profile.brand_name || 'Brand'}
-                    className="h-10 w-auto object-contain"
+                    style={{ width: 100, height: 100 }}
+                    className="object-contain"
                   />
                 ) : profile.brand_name ? (
                   <span className="text-2xl font-bold font-display text-foreground tracking-tight">
