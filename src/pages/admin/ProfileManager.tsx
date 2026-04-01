@@ -255,6 +255,16 @@ const ProfileManager = () => {
             <CardDescription>How visitors can reach you</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="bookingUrl">Book a Call URL</Label>
+              <Input
+                id="bookingUrl"
+                value={bookingUrl}
+                onChange={(e) => setBookingUrl(e.target.value)}
+                placeholder="https://calendly.com/your-name or any booking link"
+              />
+              <p className="text-xs text-muted-foreground">URL for the "Book a Call" button in the Contact section</p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="flex items-center gap-2">
