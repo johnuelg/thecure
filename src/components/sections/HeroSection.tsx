@@ -18,6 +18,11 @@ const medicalIcons = [
   Scan, Radiation, Ear, Eye, Bone, Baby, BriefcaseMedical, Hospital, FileHeart, Tablets,
 ];
 
+interface GlowColor {
+  color: string;
+  rgb: string;
+}
+
 interface FloatingIcon {
   id: number;
   Icon: LucideIcon;
@@ -27,7 +32,8 @@ interface FloatingIcon {
   duration: number;
   delay: number;
   parallaxFactor: number;
-  depth: number; // 0 = far background, 1 = near foreground
+  depth: number;
+  glowColor: GlowColor;
 }
 
 function useParallax() {
@@ -44,19 +50,30 @@ function useParallax() {
   return offset;
 }
 
+// Glow color palette for dark mode - healthcare-themed
+const glowColors: GlowColor[] = [
+  { color: '#41c0c2', rgb: '65,192,194' },   // teal
+  { color: '#36a5e0', rgb: '54,165,224' },   // medical blue
+  { color: '#5b8cf7', rgb: '91,140,247' },   // soft blue
+  { color: '#44d7b6', rgb: '68,215,182' },   // mint green
+  { color: '#7c6cf7', rgb: '124,108,247' },  // soft purple
+  { color: '#e06894', rgb: '224,104,148' },   // rose
+];
+
 function generateIcons(count: number): FloatingIcon[] {
   return Array.from({ length: count }, (_, i) => {
-    const depth = Math.random(); // 0-1, affects size, opacity, speed, parallax
+    const depth = Math.random();
     return {
       id: i,
       Icon: medicalIcons[i % medicalIcons.length],
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: 14 + depth * 34, // far=small(14), near=large(48)
-      duration: 20 - depth * 10 + Math.random() * 8, // far=slower, near=faster
+      size: 14 + depth * 34,
+      duration: 20 - depth * 10 + Math.random() * 8,
       delay: Math.random() * -20,
-      parallaxFactor: 0.1 + depth * 0.9, // far=less parallax, near=more
+      parallaxFactor: 0.1 + depth * 0.9,
       depth,
+      glowColor: glowColors[i % glowColors.length],
     };
   });
 }
@@ -79,13 +96,11 @@ function FloatingMedicalIcons() {
   const { x, y } = useParallax();
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
-      {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor, depth }) => {
-        // Depth-based opacity: far icons are dimmer
+      {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor, depth, glowColor }) => {
         const baseOpacityLight = 0.04 + depth * 0.08;
-        const baseOpacityDark = 0.1 + depth * 0.18;
-        const blurAmount = Math.max(0, (1 - depth) * 2); // far icons slightly blurred
+        const blurAmount = Math.max(0, (1 - depth) * 2);
         const glowSize = 4 + depth * 8;
-        // Movement amplitude scales with depth
+        const glowOpacity = (0.2 + depth * 0.3).toFixed(2);
         const moveY = 10 + depth * 25;
         const moveX = 5 + depth * 15;
         const rotateAmt = 4 + depth * 10;
@@ -115,15 +130,32 @@ function FloatingMedicalIcons() {
               ease: "easeInOut",
             }}
           >
-            <Icon
-              size={size}
-              strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+            {/* Light mode */}
+            <span className="dark:hidden">
+              <Icon
+                size={size}
+                strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+                style={{
+                  color: 'hsl(var(--primary))',
+                  opacity: baseOpacityLight,
+                }}
+              />
+            </span>
+            {/* Dark mode with colored glow */}
+            <span className="hidden dark:block"
               style={{
-                color: 'hsl(var(--primary))',
-                opacity: baseOpacityLight,
+                filter: `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`,
               }}
-              className="dark:!text-[#41c0c2]"
-            />
+            >
+              <Icon
+                size={size}
+                strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+                style={{
+                  color: glowColor.color,
+                  opacity: 0.15 + depth * 0.2,
+                }}
+              />
+            </span>
           </motion.div>
         );
       })}
