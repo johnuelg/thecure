@@ -50,19 +50,30 @@ function useParallax() {
   return offset;
 }
 
+// Glow color palette for dark mode - healthcare-themed
+const glowColors: GlowColor[] = [
+  { color: '#41c0c2', rgb: '65,192,194' },   // teal
+  { color: '#36a5e0', rgb: '54,165,224' },   // medical blue
+  { color: '#5b8cf7', rgb: '91,140,247' },   // soft blue
+  { color: '#44d7b6', rgb: '68,215,182' },   // mint green
+  { color: '#7c6cf7', rgb: '124,108,247' },  // soft purple
+  { color: '#e06894', rgb: '224,104,148' },   // rose
+];
+
 function generateIcons(count: number): FloatingIcon[] {
   return Array.from({ length: count }, (_, i) => {
-    const depth = Math.random(); // 0-1, affects size, opacity, speed, parallax
+    const depth = Math.random();
     return {
       id: i,
       Icon: medicalIcons[i % medicalIcons.length],
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: 14 + depth * 34, // far=small(14), near=large(48)
-      duration: 20 - depth * 10 + Math.random() * 8, // far=slower, near=faster
+      size: 14 + depth * 34,
+      duration: 20 - depth * 10 + Math.random() * 8,
       delay: Math.random() * -20,
-      parallaxFactor: 0.1 + depth * 0.9, // far=less parallax, near=more
+      parallaxFactor: 0.1 + depth * 0.9,
       depth,
+      glowColor: glowColors[i % glowColors.length],
     };
   });
 }
