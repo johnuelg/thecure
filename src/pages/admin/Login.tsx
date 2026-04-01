@@ -33,6 +33,11 @@ const Login = () => {
     queryFn: async () => {
       const { data } = await supabase
         .from('profile')
+        .select('logo_url, brand_name, brand_name_image_url')
+        .maybeSingle();
+      return data;
+    },
+  });
         .select('logo_url, brand_name')
         .maybeSingle();
       return data;
