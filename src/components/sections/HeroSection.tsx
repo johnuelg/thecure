@@ -18,6 +18,11 @@ const medicalIcons = [
   Scan, Radiation, Ear, Eye, Bone, Baby, BriefcaseMedical, Hospital, FileHeart, Tablets,
 ];
 
+interface GlowColor {
+  color: string;
+  rgb: string;
+}
+
 interface FloatingIcon {
   id: number;
   Icon: LucideIcon;
@@ -27,7 +32,8 @@ interface FloatingIcon {
   duration: number;
   delay: number;
   parallaxFactor: number;
-  depth: number; // 0 = far background, 1 = near foreground
+  depth: number;
+  glowColor: GlowColor;
 }
 
 function useParallax() {
