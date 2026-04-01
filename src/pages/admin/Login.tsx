@@ -33,7 +33,7 @@ const Login = () => {
     queryFn: async () => {
       const { data } = await supabase
         .from('profile')
-        .select('logo_url, brand_name')
+        .select('logo_url, brand_name, brand_name_image_url')
         .maybeSingle();
       return data;
     },
@@ -113,11 +113,17 @@ const Login = () => {
                   className="object-contain"
                   style={{ width: 150, height: 150 }}
                 />
-                {profile.brand_name && (
+                {profile.brand_name_image_url ? (
+                  <img
+                    src={profile.brand_name_image_url}
+                    alt={profile.brand_name || 'Brand'}
+                    className="h-10 w-auto object-contain"
+                  />
+                ) : profile.brand_name ? (
                   <span className="text-2xl font-bold font-display text-foreground tracking-tight">
                     {profile.brand_name}
                   </span>
-                )}
+                ) : null}
               </motion.div>
             ) : (
               <motion.div
@@ -130,7 +136,6 @@ const Login = () => {
               </motion.div>
             )}
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Welcome Back</h1>
-            <p className="text-sm text-muted-foreground mt-1.5">Sign in to your admin dashboard</p>
             <p className="text-sm text-muted-foreground mt-1.5">Sign in to your admin dashboard</p>
           </div>
 
