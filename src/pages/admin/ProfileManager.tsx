@@ -258,14 +258,36 @@ const ProfileManager = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="bookingUrl">Book a Call URL</Label>
+              <Label htmlFor="bookingUrl">Book a Call URL (Legacy/Fallback)</Label>
               <Input
                 id="bookingUrl"
                 value={bookingUrl}
                 onChange={(e) => setBookingUrl(e.target.value)}
                 placeholder="https://calendly.com/your-name or any booking link"
               />
-              <p className="text-xs text-muted-foreground">URL for the "Book a Call" button in the Contact section</p>
+              <p className="text-xs text-muted-foreground">Optional fallback URL for scheduling</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="zoomMeetingUrl">Zoom Meeting URL</Label>
+                <Input
+                  id="zoomMeetingUrl"
+                  value={zoomMeetingUrl}
+                  onChange={(e) => setZoomMeetingUrl(e.target.value)}
+                  placeholder="https://zoom.us/j/your-meeting-id"
+                />
+                <p className="text-xs text-muted-foreground">Your permanent Zoom meeting room link</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="teamsMeetingUrl">Microsoft Teams Meeting URL</Label>
+                <Input
+                  id="teamsMeetingUrl"
+                  value={teamsMeetingUrl}
+                  onChange={(e) => setTeamsMeetingUrl(e.target.value)}
+                  placeholder="https://teams.microsoft.com/l/meetup-join/..."
+                />
+                <p className="text-xs text-muted-foreground">Your permanent Teams meeting link</p>
+              </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
