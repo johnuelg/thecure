@@ -38,7 +38,7 @@ const handler = async (req: Request): Promise<Response> => {
     const resend = new Resend(resendApiKey);
 
     // Parse request body
-    const { name, email, subject, message }: ContactNotificationRequest = await req.json();
+    const { name, email, subject, message, meetingUrl, meetingPlatform, meetingDate, meetingTime }: ContactNotificationRequest = await req.json();
 
     // Validate required fields
     if (!name || !email || !message) {
