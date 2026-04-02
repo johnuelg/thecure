@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { ScheduleCallDialog } from "./ScheduleCallDialog";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Mail, MapPin, Phone, Send, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ export function ContactSection() {
   const { ref: sectionRef, isInView } = useScrollAnimation();
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -191,16 +193,14 @@ export function ContactSection() {
               <Button
                 variant="secondary"
                 className="w-full"
-                onClick={() => {
-                  const url = (profile as any)?.booking_url;
-                  if (url) window.open(url, '_blank');
-                }}
-                disabled={!(profile as any)?.booking_url}
+                onClick={() => setScheduleOpen(true)}
               >
                 Book a Call
               </Button>
             </div>
           </motion.div>
+
+          <ScheduleCallDialog open={scheduleOpen} onOpenChange={setScheduleOpen} />
 
           {/* Contact Form */}
           <motion.div
