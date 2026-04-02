@@ -138,7 +138,7 @@ const handler = async (req: Request): Promise<Response> => {
 </html>
     `;
 
-    // Send email using Resend
+    // Send admin notification email
     const emailResponse = await resend.emails.send({
       from: "Contact Form <onboarding@resend.dev>",
       to: [recipientEmail],
@@ -147,7 +147,84 @@ const handler = async (req: Request): Promise<Response> => {
       reply_to: email,
     });
 
-    console.log("Contact notification email sent successfully:", emailResponse);
+    console.log("Admin notification email sent successfully:", emailResponse);
+
+    // Send confirmation email to the caller if it's a scheduling request
+    if (meetingUrl && meetingPlatform && meetingDate) {
+      const profileName = profile?.full_name || "Our Team";
+      const callerConfirmationHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); padding: 30px; border-radius: 12px 12px 0 0;">
+    <h1 style="color: white; margin: 0; font-size: 24px;">Your Call Has Been Scheduled! 🎉</h1>
+    <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 14px;">We'll confirm your appointment shortly</p>
+  </div>
+  
+  <div style="background: #f8fafc; padding: 30px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 12px 12px;">
+    <p style="margin: 0 0 20px 0; font-size: 16px; color: #0f172a;">Hi ${name},</p>
+    <p style="margin: 0 0 20px 0; color: #475569;">Thank you for scheduling a discovery call. Here are your meeting details:</p>
+    
+    <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+      <h2 style="margin: 0 0 15px 0; font-size: 18px; color: #0f172a;">📋 Meeting Details</h2>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 8px 0; color: #64748b; width: 120px;">Platform:</td>
+          <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">${meetingPlatform}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #64748b;">Date:</td>
+          <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">${meetingDate}</td>
+        </tr>
+        ${meetingTime ? `
+        <tr>
+          <td style="padding: 8px 0; color: #64748b;">Time:</td>
+          <td style="padding: 8px 0; color: #0f172a; font-weight: 600;">${meetingTime}</td>
+        </tr>
+        ` : ''}
+      </table>
+    </div>
+
+    <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0; text-align: center;">
+      <h2 style="margin: 0 0 15px 0; font-size: 18px; color: #0f172a;">📹 Join Your Meeting</h2>
+      <a href="${meetingUrl}" style="display: inline-block; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">
+        Join ${meetingPlatform} Meeting
+      </a>
+      <p style="margin: 12px 0 0 0; font-size: 12px; color: #94a3b8; word-break: break-all;">${meetingUrl}</p>
+    </div>
+
+    <div style="background: #fffbeb; padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #fef3c7;">
+      <p style="margin: 0; font-size: 13px; color: #92400e;">
+        ⏰ <strong>Please note:</strong> The exact time will be confirmed by ${profileName} via email. Save the meeting link above for easy access on the day of your call.
+      </p>
+    </div>
+
+    <p style="margin: 0; font-size: 13px; color: #94a3b8; text-align: center;">
+      If you need to reschedule, please reply to this email or use the contact form on our website.
+    </p>
+  </div>
+</body>
+</html>
+      `;
+
+      try {
+        // In Resend testing mode, can only send to verified email
+        const callerEmail = "shielaj.projects@outlook.com"; // Replace with: email (when domain is verified)
+        const callerResponse = await resend.emails.send({
+          from: "Contact Form <onboarding@resend.dev>",
+          to: [callerEmail],
+          subject: `Your Call is Scheduled — ${meetingPlatform} on ${meetingDate}`,
+          html: callerConfirmationHtml,
+        });
+        console.log("Caller confirmation email sent successfully:", callerResponse);
+      } catch (callerError) {
+        console.error("Failed to send caller confirmation (non-blocking):", callerError);
+      }
+    }
 
     return new Response(
       JSON.stringify({ success: true, data: emailResponse }),
