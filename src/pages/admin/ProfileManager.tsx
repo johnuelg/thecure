@@ -58,6 +58,8 @@ const ProfileManager = () => {
   const [brandName, setBrandName] = useState('');
   const [brandNameImageUrl, setBrandNameImageUrl] = useState('');
   const [bookingUrl, setBookingUrl] = useState('');
+  const [zoomMeetingUrl, setZoomMeetingUrl] = useState('');
+  const [teamsMeetingUrl, setTeamsMeetingUrl] = useState('');
 
   const fetchProfile = async () => {
     try {
