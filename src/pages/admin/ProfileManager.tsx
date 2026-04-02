@@ -92,6 +92,8 @@ const ProfileManager = () => {
         setBrandName((data as any).brand_name || '');
         setBrandNameImageUrl((data as any).brand_name_image_url || '');
         setBookingUrl((data as any).booking_url || '');
+        setZoomMeetingUrl((data as any).zoom_meeting_url || '');
+        setTeamsMeetingUrl((data as any).teams_meeting_url || '');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
