@@ -97,6 +97,10 @@ export function ScheduleCallDialog({ open, onOpenChange }: ScheduleCallDialogPro
           email: formData.email,
           subject: `Call Scheduling Request (${platformLabel})`,
           message,
+          meetingUrl: meetingUrl || undefined,
+          meetingPlatform: platformLabel,
+          meetingDate: format(date, "PPPP"),
+          meetingTime: formData.preferredTime || undefined,
         },
       }).catch(console.error);
 

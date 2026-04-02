@@ -13,6 +13,10 @@ interface ContactNotificationRequest {
   email: string;
   subject: string | null;
   message: string;
+  meetingUrl?: string;
+  meetingPlatform?: string;
+  meetingDate?: string;
+  meetingTime?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
