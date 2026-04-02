@@ -13,6 +13,10 @@ interface ContactNotificationRequest {
   email: string;
   subject: string | null;
   message: string;
+  meetingUrl?: string;
+  meetingPlatform?: string;
+  meetingDate?: string;
+  meetingTime?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -34,7 +38,7 @@ const handler = async (req: Request): Promise<Response> => {
     const resend = new Resend(resendApiKey);
 
     // Parse request body
-    const { name, email, subject, message }: ContactNotificationRequest = await req.json();
+    const { name, email, subject, message, meetingUrl, meetingPlatform, meetingDate, meetingTime }: ContactNotificationRequest = await req.json();
 
     // Validate required fields
     if (!name || !email || !message) {
@@ -99,12 +103,25 @@ const handler = async (req: Request): Promise<Response> => {
       <p style="margin: 0 0 8px 0;"><strong>Name:</strong> ${name}</p>
       <p style="margin: 0 0 8px 0;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #0ea5e9;">${email}</a></p>
       ${subject ? `<p style="margin: 0;"><strong>Subject:</strong> ${subject}</p>` : ''}
+      ${meetingPlatform ? `<p style="margin: 8px 0 0 0;"><strong>Platform:</strong> ${meetingPlatform}</p>` : ''}
+      ${meetingDate ? `<p style="margin: 8px 0 0 0;"><strong>Preferred Date:</strong> ${meetingDate}</p>` : ''}
+      ${meetingTime ? `<p style="margin: 8px 0 0 0;"><strong>Preferred Time:</strong> ${meetingTime}</p>` : ''}
     </div>
     
     <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
       <h2 style="margin: 0 0 15px 0; font-size: 18px; color: #0f172a;">Message</h2>
       <p style="margin: 0; white-space: pre-wrap;">${message}</p>
     </div>
+    
+    ${meetingUrl ? `
+    <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+      <h2 style="margin: 0 0 15px 0; font-size: 18px; color: #0f172a;">📹 Meeting Link</h2>
+      <a href="${meetingUrl}" style="display: inline-block; background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+        Join ${meetingPlatform || 'Meeting'}
+      </a>
+      <p style="margin: 10px 0 0 0; font-size: 13px; color: #64748b; word-break: break-all;">${meetingUrl}</p>
+    </div>
+    ` : ''}
     
     <div style="text-align: center; margin-top: 25px;">
       <a href="mailto:${email}?subject=Re: ${subject || 'Your message'}" 
