@@ -23,6 +23,7 @@ export function ContactSection() {
   const { ref: sectionRef, isInView } = useScrollAnimation();
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
