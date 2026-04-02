@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { ScheduleCallDialog } from "./ScheduleCallDialog";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Mail, MapPin, Phone, Send, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
