@@ -103,6 +103,9 @@ const handler = async (req: Request): Promise<Response> => {
       <p style="margin: 0 0 8px 0;"><strong>Name:</strong> ${name}</p>
       <p style="margin: 0 0 8px 0;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #0ea5e9;">${email}</a></p>
       ${subject ? `<p style="margin: 0;"><strong>Subject:</strong> ${subject}</p>` : ''}
+      ${meetingPlatform ? `<p style="margin: 8px 0 0 0;"><strong>Platform:</strong> ${meetingPlatform}</p>` : ''}
+      ${meetingDate ? `<p style="margin: 8px 0 0 0;"><strong>Preferred Date:</strong> ${meetingDate}</p>` : ''}
+      ${meetingTime ? `<p style="margin: 8px 0 0 0;"><strong>Preferred Time:</strong> ${meetingTime}</p>` : ''}
     </div>
     
     <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
