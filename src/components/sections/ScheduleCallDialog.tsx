@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
-import { CalendarIcon, Clock, User, Mail, Send, CheckCircle, HeartPulse } from "lucide-react";
+import { CalendarIcon, Clock, User, Mail, Send, CheckCircle, HeartPulse, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,15 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ScheduleCallDialogProps {
@@ -28,11 +36,36 @@ export function ScheduleCallDialog({ open, onOpenChange }: ScheduleCallDialogPro
   const [date, setDate] = useState<Date>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [platform, setPlatform] = useState<string>("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     preferredTime: "",
   });
+
+  const { data: profile } = useQuery({
+    queryKey: ["schedule-call-profile"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profile")
+        .select("zoom_meeting_url, teams_meeting_url")
+        .maybeSingle();
+      return data as { zoom_meeting_url: string | null; teams_meeting_url: string | null } | null;
+    },
+  });
+
+  const hasZoom = !!profile?.zoom_meeting_url;
+  const hasTeams = !!profile?.teams_meeting_url;
+  const availablePlatforms = [
+    ...(hasZoom ? [{ value: "zoom", label: "Zoom Meeting", icon: "📹" }] : []),
+    ...(hasTeams ? [{ value: "teams", label: "Microsoft Teams", icon: "💻" }] : []),
+  ];
+
+  const getMeetingUrl = () => {
+    if (platform === "zoom") return profile?.zoom_meeting_url;
+    if (platform === "teams") return profile?.teams_meeting_url;
+    return null;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -40,17 +73,19 @@ export function ScheduleCallDialog({ open, onOpenChange }: ScheduleCallDialogPro
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!date) return;
+    if (!date || !platform) return;
 
     setIsSubmitting(true);
     try {
-      const message = `📅 Call Scheduling Request\n\nPreferred Date: ${format(date, "PPPP")}\nPreferred Time: ${formData.preferredTime || "Not specified"}\nName: ${formData.name}\nEmail: ${formData.email}`;
+      const meetingUrl = getMeetingUrl();
+      const platformLabel = platform === "zoom" ? "Zoom" : "Microsoft Teams";
+      const message = `📅 Call Scheduling Request\n\nPlatform: ${platformLabel}\nMeeting Link: ${meetingUrl || "Not configured"}\nPreferred Date: ${format(date, "PPPP")}\nPreferred Time: ${formData.preferredTime || "Not specified"}\nName: ${formData.name}\nEmail: ${formData.email}`;
 
       await supabase.from("contact_submissions").insert([
         {
           name: formData.name,
           email: formData.email,
-          subject: "Call Scheduling Request",
+          subject: `Call Scheduling Request (${platformLabel})`,
           message,
         },
       ]);
@@ -60,7 +95,7 @@ export function ScheduleCallDialog({ open, onOpenChange }: ScheduleCallDialogPro
         body: {
           name: formData.name,
           email: formData.email,
-          subject: "Call Scheduling Request",
+          subject: `Call Scheduling Request (${platformLabel})`,
           message,
         },
       }).catch(console.error);
@@ -86,6 +121,7 @@ export function ScheduleCallDialog({ open, onOpenChange }: ScheduleCallDialogPro
     setTimeout(() => {
       setIsSuccess(false);
       setDate(undefined);
+      setPlatform("");
       setFormData({ name: "", email: "", preferredTime: "" });
     }, 300);
   };
@@ -119,7 +155,7 @@ export function ScheduleCallDialog({ open, onOpenChange }: ScheduleCallDialogPro
                   Schedule a Discovery Call
                 </DialogTitle>
                 <DialogDescription className="text-primary-foreground/80 text-sm">
-                  Pick your preferred date and time
+                  Pick your preferred platform, date and time
                 </DialogDescription>
               </div>
             </div>
@@ -144,8 +180,11 @@ export function ScheduleCallDialog({ open, onOpenChange }: ScheduleCallDialogPro
                   {date && format(date, "PPPP")}
                   {formData.preferredTime && ` • ${formData.preferredTime}`}
                 </p>
+                <p className="text-muted-foreground text-sm mb-1">
+                  Platform: {platform === "zoom" ? "Zoom" : "Microsoft Teams"}
+                </p>
                 <p className="text-muted-foreground text-sm mb-6">
-                  A confirmation will be sent to your email shortly.
+                  A confirmation with the meeting link will be sent to your email shortly.
                 </p>
                 <Button variant="outline" onClick={handleClose}>
                   Close
@@ -194,6 +233,37 @@ export function ScheduleCallDialog({ open, onOpenChange }: ScheduleCallDialogPro
                     />
                   </div>
                 </div>
+
+                {/* Platform Selector */}
+                {availablePlatforms.length > 0 && (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium flex items-center gap-1.5">
+                      <Video className="w-3.5 h-3.5 text-primary" />
+                      Meeting Platform
+                    </Label>
+                    <Select value={platform} onValueChange={setPlatform} required>
+                      <SelectTrigger className="border-border/60 focus:ring-primary/30">
+                        <SelectValue placeholder="Choose a platform" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availablePlatforms.map((p) => (
+                          <SelectItem key={p.value} value={p.value}>
+                            <span className="flex items-center gap-2">
+                              <span>{p.icon}</span>
+                              <span>{p.label}</span>
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
+                {availablePlatforms.length === 0 && (
+                  <div className="rounded-lg border border-border/60 bg-muted/50 p-3 text-sm text-muted-foreground text-center">
+                    No meeting platforms configured yet. Please contact the admin.
+                  </div>
+                )}
 
                 {/* Date Picker */}
                 <div className="space-y-2">
@@ -250,7 +320,7 @@ export function ScheduleCallDialog({ open, onOpenChange }: ScheduleCallDialogPro
                   type="submit"
                   size="lg"
                   className="w-full healthcare-gradient border-0"
-                  disabled={isSubmitting || !date}
+                  disabled={isSubmitting || !date || !platform}
                 >
                   {isSubmitting ? (
                     "Scheduling..."

@@ -475,9 +475,11 @@ export type Database = {
           site_description: string | null
           site_title: string | null
           tagline: string | null
+          teams_meeting_url: string | null
           twitter_url: string | null
           updated_at: string
           video_url: string | null
+          zoom_meeting_url: string | null
         }
         Insert: {
           about_description?: string | null
@@ -508,9 +510,11 @@ export type Database = {
           site_description?: string | null
           site_title?: string | null
           tagline?: string | null
+          teams_meeting_url?: string | null
           twitter_url?: string | null
           updated_at?: string
           video_url?: string | null
+          zoom_meeting_url?: string | null
         }
         Update: {
           about_description?: string | null
@@ -541,9 +545,11 @@ export type Database = {
           site_description?: string | null
           site_title?: string | null
           tagline?: string | null
+          teams_meeting_url?: string | null
           twitter_url?: string | null
           updated_at?: string
           video_url?: string | null
+          zoom_meeting_url?: string | null
         }
         Relationships: []
       }
