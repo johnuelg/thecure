@@ -23,7 +23,8 @@ import {
   Gauge,
   Tags,
   Highlighter,
-  Type
+  Type,
+  Orbit
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -36,6 +37,7 @@ const navItems = [
   { title: 'Keyword Highlights', href: '/admin/keyword-highlights', icon: Highlighter },
   { title: 'Typewriter Keywords', href: '/admin/typewriter-keywords', icon: Type },
   { title: 'About Highlights', href: '/admin/about-highlights', icon: Sparkles },
+  { title: 'Parallax Icons', href: '/admin/parallax-icons', icon: Orbit },
   { title: 'Expertise Tags', href: '/admin/expertise', icon: Tags },
   { title: 'Footer Links', href: '/admin/footer-links', icon: Link2 },
   { title: 'Resume', href: '/admin/resume', icon: ScrollText },
