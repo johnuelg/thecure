@@ -1,6 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, Sparkles, MousePointer, ScrollText } from 'lucide-react';
+import { Check, Sparkles, MousePointer, ScrollText, Gauge } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+export type SpeedOption = 'slow' | 'medium' | 'fast';
 
 export interface AnimationPreset {
   id: string;
