@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { useDynamicFavicon } from "@/hooks/useDynamicFavicon";
+import { useThemeGradient } from "@/hooks/useThemeGradient";
 import Index from "./pages/Index";
 import ProjectDetail from "./pages/ProjectDetail";
 import AllProjects from "./pages/AllProjects";
@@ -33,12 +34,13 @@ import ExpertiseManager from "./pages/admin/ExpertiseManager";
 import KeywordHighlightsManager from "./pages/admin/KeywordHighlightsManager";
 import TypewriterKeywordsManager from "./pages/admin/TypewriterKeywordsManager";
 import ParallaxIconsManager from "./pages/admin/ParallaxIconsManager";
+import ThemeManager from "./pages/admin/ThemeManager";
 
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   useDynamicFavicon();
-
+  useThemeGradient();
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -77,6 +79,7 @@ const AppContent = () => {
             <Route path="keyword-highlights" element={<KeywordHighlightsManager />} />
             <Route path="typewriter-keywords" element={<TypewriterKeywordsManager />} />
             <Route path="parallax-icons" element={<ParallaxIconsManager />} />
+            <Route path="theme" element={<ThemeManager />} />
             <Route path="blog" element={<BlogManager />} />
             <Route path="testimonials" element={<TestimonialsManager />} />
             <Route path="messages" element={<MessagesManager />} />

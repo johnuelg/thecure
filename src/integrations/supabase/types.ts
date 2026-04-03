@@ -551,6 +551,8 @@ export type Database = {
           footer_description: string | null
           full_name: string
           github_url: string | null
+          gradient_color_from: string | null
+          gradient_color_to: string | null
           id: string
           linkedin_url: string | null
           location: string | null
@@ -591,6 +593,8 @@ export type Database = {
           footer_description?: string | null
           full_name?: string
           github_url?: string | null
+          gradient_color_from?: string | null
+          gradient_color_to?: string | null
           id?: string
           linkedin_url?: string | null
           location?: string | null
@@ -631,6 +635,8 @@ export type Database = {
           footer_description?: string | null
           full_name?: string
           github_url?: string | null
+          gradient_color_from?: string | null
+          gradient_color_to?: string | null
           id?: string
           linkedin_url?: string | null
           location?: string | null

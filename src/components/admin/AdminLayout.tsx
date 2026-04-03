@@ -24,7 +24,8 @@ import {
   Tags,
   Highlighter,
   Type,
-  Orbit
+  Orbit,
+  Palette
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -38,6 +39,7 @@ const navItems = [
   { title: 'Typewriter Keywords', href: '/admin/typewriter-keywords', icon: Type },
   { title: 'About Highlights', href: '/admin/about-highlights', icon: Sparkles },
   { title: 'Parallax Icons', href: '/admin/parallax-icons', icon: Orbit },
+  { title: 'Theme Gradient', href: '/admin/theme', icon: Palette },
   { title: 'Expertise Tags', href: '/admin/expertise', icon: Tags },
   { title: 'Footer Links', href: '/admin/footer-links', icon: Link2 },
   { title: 'Resume', href: '/admin/resume', icon: ScrollText },
