@@ -65,8 +65,8 @@ function hexToRgb(hex: string): string {
   return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : '65,192,194';
 }
 
-function generateIcons(iconNames: string[], glowColorsList?: { color: string; rgb: string }[]): FloatingIcon[] {
-  const count = 32;
+function generateIcons(iconNames: string[], glowColorsList?: { color: string; rgb: string }[], maxCount: number = 32): FloatingIcon[] {
+  const count = maxCount;
   const half = Math.ceil(count / 2);
   const colors = glowColorsList || defaultGlowColors;
   return Array.from({ length: count }, (_, i) => {
