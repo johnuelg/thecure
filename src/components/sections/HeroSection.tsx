@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Activity } from "lucide-react";
 import { TypewriterText } from "@/components/hero/TypewriterText";
@@ -36,17 +36,25 @@ interface FloatingIcon {
   glowColor: GlowColor;
 }
 
-function useParallax() {
+function useParallax(enabled: boolean) {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+
   useEffect(() => {
+    if (!enabled) {
+      setOffset({ x: 0, y: 0 });
+      return;
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       const cx = (e.clientX / window.innerWidth - 0.5) * 2;
       const cy = (e.clientY / window.innerHeight - 0.5) * 2;
       setOffset({ x: cx, y: cy });
     };
+
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [enabled]);
+
   return offset;
 }
 
@@ -103,8 +111,6 @@ interface Profile {
   bio: string | null;
 }
 function FloatingMedicalIcons() {
-  const { x, y } = useParallax();
-  
   const { data: dbIcons } = useQuery({
     queryKey: ["public-parallax-icons"],
     queryFn: async () => {
@@ -136,11 +142,10 @@ function FloatingMedicalIcons() {
   const hoverEffect = (iconSettings as any)?.parallax_hover_effect || 'soft-glow';
   const scrollEffect = (iconSettings as any)?.parallax_scroll_effect || 'parallax-shift';
   const animSpeed = (iconSettings as any)?.parallax_animation_speed || 'slow';
+  const interactionEnabled = parallaxEnabled && scrollEffect !== 'none';
+  const { x, y } = useParallax(interactionEnabled);
 
-  // Speed multiplier: slow=1 (30-45s), medium=0.55 (15-25s), fast=0.3 (8-15s)
   const speedMultiplier = animSpeed === 'fast' ? 0.3 : animSpeed === 'medium' ? 0.55 : 1;
-
-  if (!parallaxEnabled) return null;
 
   const iconNames = dbIcons && dbIcons.length > 0
     ? dbIcons.map(i => i.icon_name)
@@ -150,10 +155,19 @@ function FloatingMedicalIcons() {
     ? dbIcons.map(i => ({ color: i.glow_color, rgb: hexToRgb(i.glow_color) }))
     : defaultGlowColors;
 
-  const currentIcons = generateIcons(iconNames, glowColorsList, maxCount);
+  const currentIcons = useMemo(
+    () => generateIcons(iconNames, glowColorsList, maxCount),
+    [maxCount, iconNames.join('|'), glowColorsList.map((color) => `${color.color}:${color.rgb}`).join('|')]
+  );
+
+  if (!parallaxEnabled) return null;
 
   // Build animation props based on selected style
   const getAnimationProps = (icon: FloatingIcon) => {
+    if (animStyle === 'none') {
+      return undefined;
+    }
+
     const { depth, duration: baseDuration, delay } = icon;
     const duration = baseDuration * speedMultiplier;
     const moveY = 5 + depth * 10;
@@ -242,7 +256,7 @@ function FloatingMedicalIcons() {
   const getWhileHover = () => {
     switch (hoverEffect) {
       case 'none':
-        return {};
+        return undefined;
       case 'scale-up':
         return { scale: 1.25, transition: { duration: 0.3 } };
       case 'pulse-ring':
@@ -258,27 +272,24 @@ function FloatingMedicalIcons() {
   };
 
   // Scroll/mouse interaction effect
-  const getScrollOffset = (parallaxFactor: number, iconX: number, iconY: number) => {
+  const getScrollOffset = (parallaxFactor: number) => {
     const multiplier = 40;
     switch (scrollEffect) {
       case 'none':
         return { x: 0, y: 0 };
       case 'scatter': {
-        // Icons move away from cursor position
         return {
           x: -x * parallaxFactor * multiplier * 0.8,
           y: -y * parallaxFactor * multiplier * 0.8,
         };
       }
       case 'magnetic': {
-        // Icons attracted toward cursor
         return {
           x: x * parallaxFactor * multiplier * 1.5,
           y: y * parallaxFactor * multiplier * 1.5,
         };
       }
       case 'wave-ripple': {
-        // Radial displacement based on distance from center
         const dist = Math.sqrt(x * x + y * y);
         const wave = Math.sin(dist * 3 + parallaxFactor * 6) * 0.5 + 0.5;
         return {
@@ -307,7 +318,7 @@ function FloatingMedicalIcons() {
 
         const motionProps = getAnimationProps(icon);
         const hoverFilter = getHoverStyle(glowColor, depth);
-        const scrollOffset = getScrollOffset(parallaxFactor, ix, iy);
+        const scrollOffset = getScrollOffset(parallaxFactor);
         const whileHover = getWhileHover();
 
         return (
@@ -318,7 +329,7 @@ function FloatingMedicalIcons() {
               left: `${ix}%`,
               top: `${iy}%`,
               transform: `translate(${scrollOffset.x}px, ${scrollOffset.y}px)`,
-              transition: 'transform 0.15s ease-out',
+              transition: interactionEnabled ? 'transform 0.15s ease-out' : undefined,
               zIndex: Math.round(depth * 10),
             }}
           >
@@ -327,7 +338,8 @@ function FloatingMedicalIcons() {
               style={{
                 filter: blurAmount > 0.5 ? `blur(${blurAmount}px)` : undefined,
               }}
-              {...motionProps}
+              animate={motionProps?.animate}
+              transition={motionProps?.transition}
               whileHover={whileHover}
             >
             {/* Light mode */}
@@ -353,7 +365,9 @@ function FloatingMedicalIcons() {
                 filter: `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`,
                 transition: 'filter 0.3s ease',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.filter = hoverFilter; }}
+              onMouseEnter={(e) => {
+                if (hoverEffect !== 'none') e.currentTarget.style.filter = hoverFilter;
+              }}
               onMouseLeave={(e) => { e.currentTarget.style.filter = `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`; }}
             >
               <Icon
