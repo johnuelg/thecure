@@ -212,6 +212,18 @@ const ParallaxIconsManager = () => {
         </Button>
       </div>
 
+      <AnimationStyleSelector
+        selected={animationStyle}
+        onSelect={async (preset: AnimationPreset) => {
+          setAnimationStyle(preset.id);
+          if (profileId) {
+            await supabase.from('profile').update({ parallax_animation_style: preset.id }).eq('id', profileId);
+            queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
+            toast({ title: `Animation set to "${preset.name}"` });
+          }
+        }}
+      />
+
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
