@@ -12,6 +12,7 @@ export interface AnimationPreset {
 }
 
 export const ANIMATION_PRESETS: AnimationPreset[] = [
+  { id: 'none', name: 'None', description: 'Fully static — no floating animation', icon: '🚫' },
   { id: 'gentle-float', name: 'Gentle Float', description: 'Slow, calm drifting — healing & serene', icon: '🌊' },
   { id: 'breathing-glow', name: 'Breathing Glow', description: 'Soft pulse with expanding glow aura', icon: '💫' },
   { id: 'orbital-drift', name: 'Orbital Drift', description: 'Smooth circular paths — flowing motion', icon: '🪐' },
