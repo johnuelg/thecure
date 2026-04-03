@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Trash2, GripVertical, Type, Save, Info } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
@@ -128,6 +129,7 @@ const TypewriterKeywordsManager = () => {
   });
 
   const currentTagline = profile?.tagline || '';
+  const wordCount = useMemo(() => currentTagline.split(/\s+/).filter(Boolean).length, [currentTagline]);
 
   return (
     <div className="space-y-6">
@@ -212,17 +214,25 @@ const TypewriterKeywordsManager = () => {
               </AlertDescription>
             </Alert>
           )}
-          <div className="space-y-2">
-            <Label>Words on first line</Label>
-            <div className="flex gap-2 items-center">
-              <Input
-                type="number"
-                min={1}
-                max={20}
-                value={lineBreak}
-                onChange={(e) => setLineBreak(Number(e.target.value))}
-                className="w-24"
-              />
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label>Words on first line</Label>
+              <span className="text-sm font-semibold bg-primary/10 text-primary px-2.5 py-0.5 rounded-full">
+                {lineBreak === 0 ? 'No break' : `${lineBreak} word${lineBreak > 1 ? 's' : ''}`}
+              </span>
+            </div>
+            <Slider
+              value={[lineBreak]}
+              onValueChange={([v]) => setLineBreak(v)}
+              min={0}
+              max={Math.max(wordCount, 1)}
+              step={1}
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>No break</span>
+              <span>{wordCount} words (full)</span>
+            </div>
+            <div className="flex justify-end">
               <Button
                 onClick={() => saveLineBreakMutation.mutate(lineBreak)}
                 disabled={saveLineBreakMutation.isPending}
@@ -231,9 +241,6 @@ const TypewriterKeywordsManager = () => {
                 <Save className="w-4 h-4 mr-1" /> Save
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Set to 0 to keep the entire headline on one line.
-            </p>
           </div>
         </CardContent>
       </Card>
