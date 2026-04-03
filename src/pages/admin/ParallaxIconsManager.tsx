@@ -15,7 +15,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Trash2, Loader2, GripVertical, Sparkles, HeartPulse } from 'lucide-react';
+import { Plus, Trash2, Loader2, GripVertical, Sparkles, HeartPulse, Filter } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { icons } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { IconPicker } from '@/components/admin/IconPicker';
@@ -49,67 +50,101 @@ const getIcon = (name: string): LucideIcon => {
   return (icons as Record<string, LucideIcon>)[name] || icons.Award;
 };
 
-// Curated healthcare icons with themed glow colors
-const HEALTHCARE_ICONS: { name: string; color: string }[] = [
-  { name: 'Brain', color: '#7c6cf7' },
-  { name: 'BrainCircuit', color: '#8b7cf8' },
-  { name: 'BrainCog', color: '#6e5ce0' },
-  { name: 'Heart', color: '#e06894' },
-  { name: 'HeartPulse', color: '#e0688a' },
-  { name: 'HeartHandshake', color: '#d4607e' },
-  { name: 'HeartCrack', color: '#c75878' },
-  { name: 'Stethoscope', color: '#41c0c2' },
-  { name: 'Hospital', color: '#36a5e0' },
-  { name: 'Ambulance', color: '#e05555' },
-  { name: 'Pill', color: '#44d7b6' },
-  { name: 'PillBottle', color: '#3cc4a5' },
-  { name: 'Tablets', color: '#38b99e' },
-  { name: 'Syringe', color: '#5b8cf7' },
-  { name: 'Thermometer', color: '#e09044' },
-  { name: 'ThermometerSun', color: '#e0a044' },
-  { name: 'Microscope', color: '#6e8ef0' },
-  { name: 'Dna', color: '#9b6cf7' },
-  { name: 'Ribbon', color: '#e06894' },
-  { name: 'Cross', color: '#e05555' },
-  { name: 'Activity', color: '#41c0c2' },
-  { name: 'SquareActivity', color: '#3aafb1' },
-  { name: 'Bandage', color: '#d4a574' },
-  { name: 'Baby', color: '#f0a0c0' },
-  { name: 'Bone', color: '#c8c0b0' },
-  { name: 'Ear', color: '#d49070' },
-  { name: 'Eye', color: '#5ba0e0' },
-  { name: 'Accessibility', color: '#44b8d7' },
-  { name: 'ShieldCheck', color: '#44d7b6' },
-  { name: 'ShieldPlus', color: '#3cc4a5' },
-  { name: 'TestTube', color: '#7c9cf7' },
-  { name: 'TestTubeDiagonal', color: '#6e8ef0' },
-  { name: 'TestTubes', color: '#5b80e8' },
-  { name: 'FlaskConical', color: '#8b7cf8' },
-  { name: 'FlaskRound', color: '#7c6cf7' },
-  { name: 'Bed', color: '#6a8cd0' },
-  { name: 'BedDouble', color: '#5a7cc0' },
-  { name: 'ClipboardCheck', color: '#44b8d7' },
-  { name: 'ClipboardList', color: '#3aa8c7' },
-  { name: 'ClipboardPlus', color: '#41c0c2' },
-  { name: 'FileHeart', color: '#e06894' },
-  { name: 'FileScan', color: '#5b8cf7' },
-  { name: 'Scan', color: '#5ba0e0' },
-  { name: 'ScanFace', color: '#4a90d0' },
-  { name: 'ScanEye', color: '#5b8cf7' },
-  { name: 'CircleGauge', color: '#44d7b6' },
-  { name: 'Droplet', color: '#e05555' },
-  { name: 'Droplets', color: '#e06060' },
-  { name: 'Apple', color: '#44d780' },
-  { name: 'Leaf', color: '#44c070' },
-  { name: 'LeafyGreen', color: '#3cb868' },
-  { name: 'Salad', color: '#44c070' },
-  { name: 'HandHeart', color: '#e06894' },
-  { name: 'HandHelping', color: '#44b8d7' },
-  { name: 'UserRound', color: '#5b8cf7' },
-  { name: 'Users', color: '#4a7ce0' },
-  { name: 'Monitor', color: '#36a5e0' },
-  { name: 'Cigarette', color: '#a09090' },
-  { name: 'CigaretteOff', color: '#44d7b6' },
+// Healthcare icon categories
+type HealthcareCategory = 'All' | 'Cardiology' | 'Neurology' | 'Pharma' | 'Diagnostics' | 'Organs & Body' | 'Equipment' | 'Facilities' | 'Wellness' | 'Patient Care' | 'Records' | 'Safety';
+
+const HEALTHCARE_CATEGORIES: HealthcareCategory[] = [
+  'All', 'Cardiology', 'Neurology', 'Pharma', 'Diagnostics', 'Organs & Body',
+  'Equipment', 'Facilities', 'Wellness', 'Patient Care', 'Records', 'Safety',
+];
+
+interface HealthcareIcon {
+  name: string;
+  color: string;
+  category: HealthcareCategory;
+}
+
+const HEALTHCARE_ICONS: HealthcareIcon[] = [
+  // Cardiology
+  { name: 'Heart', color: '#e06894', category: 'Cardiology' },
+  { name: 'HeartPulse', color: '#e0688a', category: 'Cardiology' },
+  { name: 'HeartHandshake', color: '#d4607e', category: 'Cardiology' },
+  { name: 'HeartCrack', color: '#c75878', category: 'Cardiology' },
+  { name: 'Activity', color: '#41c0c2', category: 'Cardiology' },
+  { name: 'SquareActivity', color: '#3aafb1', category: 'Cardiology' },
+  { name: 'Droplet', color: '#e05555', category: 'Cardiology' },
+  { name: 'Droplets', color: '#e06060', category: 'Cardiology' },
+
+  // Neurology
+  { name: 'Brain', color: '#7c6cf7', category: 'Neurology' },
+  { name: 'BrainCircuit', color: '#8b7cf8', category: 'Neurology' },
+  { name: 'BrainCog', color: '#6e5ce0', category: 'Neurology' },
+
+  // Pharma
+  { name: 'Pill', color: '#44d7b6', category: 'Pharma' },
+  { name: 'PillBottle', color: '#3cc4a5', category: 'Pharma' },
+  { name: 'Tablets', color: '#38b99e', category: 'Pharma' },
+  { name: 'Syringe', color: '#5b8cf7', category: 'Pharma' },
+
+  // Diagnostics
+  { name: 'Stethoscope', color: '#41c0c2', category: 'Diagnostics' },
+  { name: 'Thermometer', color: '#e09044', category: 'Diagnostics' },
+  { name: 'ThermometerSun', color: '#e0a044', category: 'Diagnostics' },
+  { name: 'Microscope', color: '#6e8ef0', category: 'Diagnostics' },
+  { name: 'Dna', color: '#9b6cf7', category: 'Diagnostics' },
+  { name: 'TestTube', color: '#7c9cf7', category: 'Diagnostics' },
+  { name: 'TestTubeDiagonal', color: '#6e8ef0', category: 'Diagnostics' },
+  { name: 'TestTubes', color: '#5b80e8', category: 'Diagnostics' },
+  { name: 'FlaskConical', color: '#8b7cf8', category: 'Diagnostics' },
+  { name: 'FlaskRound', color: '#7c6cf7', category: 'Diagnostics' },
+  { name: 'Scan', color: '#5ba0e0', category: 'Diagnostics' },
+  { name: 'ScanFace', color: '#4a90d0', category: 'Diagnostics' },
+  { name: 'ScanEye', color: '#5b8cf7', category: 'Diagnostics' },
+  { name: 'CircleGauge', color: '#44d7b6', category: 'Diagnostics' },
+
+  // Organs & Body
+  { name: 'Baby', color: '#f0a0c0', category: 'Organs & Body' },
+  { name: 'Bone', color: '#c8c0b0', category: 'Organs & Body' },
+  { name: 'Ear', color: '#d49070', category: 'Organs & Body' },
+  { name: 'Eye', color: '#5ba0e0', category: 'Organs & Body' },
+
+  // Equipment
+  { name: 'Bandage', color: '#d4a574', category: 'Equipment' },
+  { name: 'Cross', color: '#e05555', category: 'Equipment' },
+  { name: 'Ribbon', color: '#e06894', category: 'Equipment' },
+  { name: 'Monitor', color: '#36a5e0', category: 'Equipment' },
+
+  // Facilities
+  { name: 'Hospital', color: '#36a5e0', category: 'Facilities' },
+  { name: 'Ambulance', color: '#e05555', category: 'Facilities' },
+  { name: 'Bed', color: '#6a8cd0', category: 'Facilities' },
+  { name: 'BedDouble', color: '#5a7cc0', category: 'Facilities' },
+
+  // Wellness
+  { name: 'Apple', color: '#44d780', category: 'Wellness' },
+  { name: 'Leaf', color: '#44c070', category: 'Wellness' },
+  { name: 'LeafyGreen', color: '#3cb868', category: 'Wellness' },
+  { name: 'Salad', color: '#44c070', category: 'Wellness' },
+  { name: 'CigaretteOff', color: '#44d7b6', category: 'Wellness' },
+  { name: 'Cigarette', color: '#a09090', category: 'Wellness' },
+  { name: 'Accessibility', color: '#44b8d7', category: 'Wellness' },
+
+  // Patient Care
+  { name: 'HandHeart', color: '#e06894', category: 'Patient Care' },
+  { name: 'HandHelping', color: '#44b8d7', category: 'Patient Care' },
+  { name: 'UserRound', color: '#5b8cf7', category: 'Patient Care' },
+  { name: 'Users', color: '#4a7ce0', category: 'Patient Care' },
+
+  // Records
+  { name: 'ClipboardCheck', color: '#44b8d7', category: 'Records' },
+  { name: 'ClipboardList', color: '#3aa8c7', category: 'Records' },
+  { name: 'ClipboardPlus', color: '#41c0c2', category: 'Records' },
+  { name: 'FileHeart', color: '#e06894', category: 'Records' },
+  { name: 'FileScan', color: '#5b8cf7', category: 'Records' },
+
+  // Safety
+  { name: 'ShieldCheck', color: '#44d7b6', category: 'Safety' },
+  { name: 'ShieldPlus', color: '#3cc4a5', category: 'Safety' },
 ];
 
 function SortableIconRow({
@@ -168,6 +203,7 @@ const ParallaxIconsManager = () => {
   const [animSpeed, setAnimSpeed] = useState<SpeedOption>('slow');
   const [parallaxEnabled, setParallaxEnabled] = useState(true);
   const [profileId, setProfileId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<HealthcareCategory>('All');
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -260,14 +296,19 @@ const ParallaxIconsManager = () => {
     }
   };
 
+  const filteredHealthcareIcons = selectedCategory === 'All'
+    ? HEALTHCARE_ICONS
+    : HEALTHCARE_ICONS.filter(h => h.category === selectedCategory);
+
   const handleAddAllHealthcare = async () => {
     const existingNames = new Set(items.map(i => i.icon_name));
-    const toAdd = HEALTHCARE_ICONS.filter(h => !existingNames.has(h.name));
+    const toAdd = filteredHealthcareIcons.filter(h => !existingNames.has(h.name));
     if (toAdd.length === 0) {
-      toast({ title: 'All healthcare icons already added' });
+      toast({ title: selectedCategory === 'All' ? 'All healthcare icons already added' : `All ${selectedCategory} icons already added` });
       return;
     }
-    if (!confirm(`Add ${toAdd.length} healthcare icons to your parallax background?`)) return;
+    const label = selectedCategory === 'All' ? 'healthcare' : selectedCategory;
+    if (!confirm(`Add ${toAdd.length} ${label} icons to your parallax background?`)) return;
     try {
       const inserts = toAdd.map((h, i) => ({
         icon_name: h.name,
@@ -276,7 +317,7 @@ const ParallaxIconsManager = () => {
       }));
       const { error } = await supabase.from('hero_parallax_icons').insert(inserts);
       if (error) throw error;
-      toast({ title: `${toAdd.length} healthcare icons added` });
+      toast({ title: `${toAdd.length} ${label} icons added` });
       fetchItems();
       queryClient.invalidateQueries({ queryKey: ['public-parallax-icons'] });
     } catch (error: any) {
@@ -323,16 +364,79 @@ const ParallaxIconsManager = () => {
           <p className="text-muted-foreground">Customize the floating animated icons on the hero section</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={handleAddAllHealthcare}>
-            <HeartPulse className="h-4 w-4 mr-2" />
-            Add All Healthcare Icons
-          </Button>
           <Button onClick={() => setIsDialogOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Add Icon
           </Button>
         </div>
       </div>
+
+      {/* Healthcare Icon Library with Category Filter */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <HeartPulse className="h-5 w-5" />
+            Healthcare Icon Library
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Category chips */}
+          <div className="flex flex-wrap gap-2">
+            {HEALTHCARE_CATEGORIES.map((cat) => {
+              const count = cat === 'All' ? HEALTHCARE_ICONS.length : HEALTHCARE_ICONS.filter(h => h.category === cat).length;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                    selectedCategory === cat
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                  }`}
+                >
+                  {cat}
+                  <span className={`text-[10px] ${selectedCategory === cat ? 'text-primary-foreground/70' : 'text-muted-foreground/60'}`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Preview grid of filtered icons */}
+          <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-1.5">
+            {filteredHealthcareIcons.map((h) => {
+              const Icon = getIcon(h.name);
+              const alreadyAdded = items.some(i => i.icon_name === h.name);
+              return (
+                <div
+                  key={h.name}
+                  title={`${h.name} (${h.category})${alreadyAdded ? ' — already added' : ''}`}
+                  className={`flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] border transition-colors ${
+                    alreadyAdded
+                      ? 'border-primary/30 bg-primary/5 text-primary'
+                      : 'border-transparent bg-muted/50 text-muted-foreground'
+                  }`}
+                >
+                  <Icon className="h-5 w-5" style={{ color: h.color }} />
+                  <span className="truncate w-full text-center leading-tight">{h.name}</span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Bulk add button */}
+          <div className="flex items-center justify-between pt-2 border-t">
+            <p className="text-xs text-muted-foreground">
+              {filteredHealthcareIcons.filter(h => !items.some(i => i.icon_name === h.name)).length} of {filteredHealthcareIcons.length} not yet added
+            </p>
+            <Button variant="outline" size="sm" onClick={handleAddAllHealthcare}>
+              <HeartPulse className="h-4 w-4 mr-2" />
+              Add {selectedCategory === 'All' ? 'All' : selectedCategory} Icons
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Master toggle and bulk actions */}
       <Card>
