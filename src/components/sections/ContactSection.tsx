@@ -34,7 +34,7 @@ export function ContactSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("email, phone, location, contact_description, booking_url")
+        .select("email, phone, location, contact_description")
         .maybeSingle();
       
       if (error) throw error;
