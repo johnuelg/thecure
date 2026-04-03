@@ -123,13 +123,14 @@ function FloatingMedicalIcons() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("max_parallax_icons, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect, parallax_animation_speed")
+        .select("max_parallax_icons, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect, parallax_animation_speed, parallax_enabled")
         .maybeSingle();
       if (error) throw error;
       return data;
     },
   });
 
+  const parallaxEnabled = (iconSettings as any)?.parallax_enabled !== false;
   const maxCount = (iconSettings as any)?.max_parallax_icons ?? 32;
   const animStyle = (iconSettings as any)?.parallax_animation_style || 'gentle-float';
   const hoverEffect = (iconSettings as any)?.parallax_hover_effect || 'soft-glow';
@@ -138,6 +139,8 @@ function FloatingMedicalIcons() {
 
   // Speed multiplier: slow=1 (30-45s), medium=0.55 (15-25s), fast=0.3 (8-15s)
   const speedMultiplier = animSpeed === 'fast' ? 0.3 : animSpeed === 'medium' ? 0.55 : 1;
+
+  if (!parallaxEnabled) return null;
 
   const iconNames = dbIcons && dbIcons.length > 0
     ? dbIcons.map(i => i.icon_name)
