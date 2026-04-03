@@ -5,6 +5,7 @@ import { TypewriterText } from "@/components/hero/TypewriterText";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 import { icons } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
