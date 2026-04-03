@@ -26,6 +26,7 @@ import FooterLinksManager from "./pages/admin/FooterLinksManager";
 import ServicesManager from "./pages/admin/ServicesManager";
 import ProjectsManager from "./pages/admin/ProjectsManager";
 import BlogManager from "./pages/admin/BlogManager";
+import BlogSettingsManager from "./pages/admin/BlogSettingsManager";
 import TestimonialsManager from "./pages/admin/TestimonialsManager";
 import MessagesManager from "./pages/admin/MessagesManager";
 import VisualizationsManager from "./pages/admin/VisualizationsManager";
