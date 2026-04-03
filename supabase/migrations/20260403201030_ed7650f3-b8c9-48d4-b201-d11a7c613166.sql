@@ -1,0 +1,1 @@
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS font_heading text DEFAULT 'Plus Jakarta Sans', ADD COLUMN IF NOT EXISTS font_body text DEFAULT 'DM Sans';

@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Save, Palette, Check, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FontSelector, HEALTHCARE_FONT_PAIRS, type FontPair } from '@/components/admin/FontSelector';
 
 interface GradientPreset {
   name: string;
@@ -198,13 +199,16 @@ const ThemeManager = () => {
   // Dark mode
   const [darkFrom, setDarkFrom] = useState('210 65% 55%');
   const [darkTo, setDarkTo] = useState('175 55% 45%');
+  // Fonts
+  const [fontHeading, setFontHeading] = useState('Plus Jakarta Sans');
+  const [fontBody, setFontBody] = useState('DM Sans');
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const { data, error } = await supabase
           .from('profile')
-          .select('id, gradient_color_from, gradient_color_to, gradient_dark_from, gradient_dark_to')
+          .select('id, gradient_color_from, gradient_color_to, gradient_dark_from, gradient_dark_to, font_heading, font_body')
           .maybeSingle();
         if (error) throw error;
         if (data) {
@@ -213,6 +217,8 @@ const ThemeManager = () => {
           setLightTo((data as any).gradient_color_to || '175 60% 40%');
           setDarkFrom((data as any).gradient_dark_from || '210 65% 55%');
           setDarkTo((data as any).gradient_dark_to || '175 55% 45%');
+          setFontHeading((data as any).font_heading || 'Plus Jakarta Sans');
+          setFontBody((data as any).font_body || 'DM Sans');
         }
       } catch (error) {
         console.error('Error fetching theme:', error);
@@ -239,6 +245,8 @@ const ThemeManager = () => {
           gradient_color_to: lightTo,
           gradient_dark_from: darkFrom,
           gradient_dark_to: darkTo,
+          font_heading: fontHeading,
+          font_body: fontBody,
         })
         .eq('id', profileId);
       if (error) throw error;
@@ -310,6 +318,17 @@ const ThemeManager = () => {
           />
         </TabsContent>
       </Tabs>
+
+      <FontSelector
+        selectedHeading={fontHeading}
+        selectedBody={fontBody}
+        onSelect={(pair: FontPair) => {
+          setFontHeading(pair.heading);
+          setFontBody(pair.body);
+          document.documentElement.style.setProperty('--font-display', `"${pair.heading}", system-ui, sans-serif`);
+          document.documentElement.style.setProperty('--font-sans', `"${pair.body}", system-ui, sans-serif`);
+        }}
+      />
     </div>
   );
 };

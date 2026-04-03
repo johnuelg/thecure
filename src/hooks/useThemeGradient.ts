@@ -3,11 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTheme } from "next-themes";
 
-interface GradientData {
+interface ThemeData {
   gradient_color_from: string | null;
   gradient_color_to: string | null;
   gradient_dark_from: string | null;
   gradient_dark_to: string | null;
+  font_heading: string | null;
+  font_body: string | null;
 }
 
 export function useThemeGradient() {
@@ -18,10 +20,10 @@ export function useThemeGradient() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("gradient_color_from, gradient_color_to, gradient_dark_from, gradient_dark_to")
+        .select("gradient_color_from, gradient_color_to, gradient_dark_from, gradient_dark_to, font_heading, font_body")
         .maybeSingle();
       if (error) throw error;
-      return data as GradientData | null;
+      return data as ThemeData | null;
     },
     staleTime: 1000 * 60 * 5,
   });
@@ -50,5 +52,11 @@ export function useThemeGradient() {
       root.style.setProperty("--accent", to);
       root.style.setProperty("--healthcare-pulse", to);
     }
+
+    // Apply font families
+    const heading = data.font_heading || "Plus Jakarta Sans";
+    const body = data.font_body || "DM Sans";
+    root.style.setProperty("--font-display", `"${heading}", system-ui, sans-serif`);
+    root.style.setProperty("--font-sans", `"${body}", system-ui, sans-serif`);
   }, [data, resolvedTheme]);
 }

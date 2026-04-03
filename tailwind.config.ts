@@ -71,8 +71,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ['"DM Sans"', "system-ui", "sans-serif"],
-        display: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", '"DM Sans"', "system-ui", "sans-serif"],
+        display: ["var(--font-display)", '"Plus Jakarta Sans"', "system-ui", "sans-serif"],
       },
       fontSize: {
         "xs": ["0.75rem", { lineHeight: "1.5", letterSpacing: "0.01em" }],
