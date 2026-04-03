@@ -318,7 +318,7 @@ function FloatingMedicalIcons() {
 
         const motionProps = getAnimationProps(icon);
         const hoverFilter = getHoverStyle(glowColor, depth);
-        const scrollOffset = getScrollOffset(parallaxFactor, ix, iy);
+        const scrollOffset = getScrollOffset(parallaxFactor);
         const whileHover = getWhileHover();
 
         return (
@@ -329,7 +329,7 @@ function FloatingMedicalIcons() {
               left: `${ix}%`,
               top: `${iy}%`,
               transform: `translate(${scrollOffset.x}px, ${scrollOffset.y}px)`,
-              transition: 'transform 0.15s ease-out',
+              transition: interactionEnabled ? 'transform 0.15s ease-out' : undefined,
               zIndex: Math.round(depth * 10),
             }}
           >
@@ -338,7 +338,8 @@ function FloatingMedicalIcons() {
               style={{
                 filter: blurAmount > 0.5 ? `blur(${blurAmount}px)` : undefined,
               }}
-              {...motionProps}
+              animate={motionProps?.animate}
+              transition={motionProps?.transition}
               whileHover={whileHover}
             >
             {/* Light mode */}
@@ -364,7 +365,9 @@ function FloatingMedicalIcons() {
                 filter: `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`,
                 transition: 'filter 0.3s ease',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.filter = hoverFilter; }}
+              onMouseEnter={(e) => {
+                if (hoverEffect !== 'none') e.currentTarget.style.filter = hoverFilter;
+              }}
               onMouseLeave={(e) => { e.currentTarget.style.filter = `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`; }}
             >
               <Icon
