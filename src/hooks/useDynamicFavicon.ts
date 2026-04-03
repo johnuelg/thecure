@@ -90,8 +90,8 @@ export function useDynamicFavicon() {
           if (isCancelled) return;
 
           // Fallback: use the URL directly (works if CORS allows it)
-          setFaviconLinks(p.favicon_url, '');
-          activeIconHrefRef.current = p.favicon_url;
+          setFaviconLinks(faviconSource, '');
+          activeIconHrefRef.current = faviconSource;
         }
       } else {
         if (isCancelled) return;
