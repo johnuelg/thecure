@@ -103,6 +103,7 @@ const ParallaxIconsManager = () => {
   const [hoverEffect, setHoverEffect] = useState('soft-glow');
   const [scrollEffect, setScrollEffect] = useState('parallax-shift');
   const [animSpeed, setAnimSpeed] = useState<SpeedOption>('slow');
+  const [parallaxEnabled, setParallaxEnabled] = useState(true);
   const [profileId, setProfileId] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -131,13 +132,14 @@ const ParallaxIconsManager = () => {
   useEffect(() => {
     fetchItems();
     const fetchAnimStyle = async () => {
-      const { data } = await supabase.from('profile').select('id, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect, parallax_animation_speed').maybeSingle();
+      const { data } = await supabase.from('profile').select('id, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect, parallax_animation_speed, parallax_enabled').maybeSingle();
       if (data) {
         setProfileId(data.id);
         setAnimationStyle((data as any).parallax_animation_style || 'gentle-float');
         setHoverEffect((data as any).parallax_hover_effect || 'soft-glow');
         setScrollEffect((data as any).parallax_scroll_effect || 'parallax-shift');
         setAnimSpeed(((data as any).parallax_animation_speed || 'slow') as SpeedOption);
+        setParallaxEnabled((data as any).parallax_enabled !== false);
       }
     };
     fetchAnimStyle();
@@ -183,6 +185,27 @@ const ParallaxIconsManager = () => {
     }
   };
 
+  const handleDeleteAll = async () => {
+    if (!confirm('Remove ALL parallax icons? This cannot be undone.')) return;
+    try {
+      const { error } = await supabase.from('hero_parallax_icons').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      if (error) throw error;
+      setItems([]);
+      toast({ title: 'All icons removed' });
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
+  const handleToggleEnabled = async (enabled: boolean) => {
+    setParallaxEnabled(enabled);
+    if (profileId) {
+      await supabase.from('profile').update({ parallax_enabled: enabled }).eq('id', profileId);
+      queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
+      toast({ title: enabled ? 'Parallax animations enabled' : 'All animations disabled' });
+    }
+  };
+
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -212,11 +235,36 @@ const ParallaxIconsManager = () => {
           <h1 className="text-2xl font-bold">Parallax Icons</h1>
           <p className="text-muted-foreground">Customize the floating animated icons on the hero section</p>
         </div>
-        <Button onClick={() => setIsDialogOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Icon
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button onClick={() => setIsDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Icon
+          </Button>
+        </div>
       </div>
+
+      {/* Master toggle and bulk actions */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Switch checked={parallaxEnabled} onCheckedChange={handleToggleEnabled} />
+              <div>
+                <Label className="text-sm font-medium">Enable Parallax Animations</Label>
+                <p className="text-xs text-muted-foreground">
+                  {parallaxEnabled ? 'Floating icons are visible on the hero section' : 'All parallax animations are disabled'}
+                </p>
+              </div>
+            </div>
+            {items.length > 0 && (
+              <Button variant="destructive" size="sm" onClick={handleDeleteAll}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Remove All Icons
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       <AnimationStyleSelector
         selected={animationStyle}

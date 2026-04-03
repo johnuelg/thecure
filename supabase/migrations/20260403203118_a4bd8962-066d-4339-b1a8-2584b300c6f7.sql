@@ -1,0 +1,1 @@
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS parallax_enabled boolean DEFAULT true;
