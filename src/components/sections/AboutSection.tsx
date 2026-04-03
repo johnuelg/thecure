@@ -194,7 +194,7 @@ export function AboutSection() {
                   return (
                     <motion.div
                       key={item.id}
-                      className="group p-5 rounded-xl bg-card border border-border hover:border-primary/40 hover:shadow-md transition-all duration-300"
+                      className="card-medical p-5 group"
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
