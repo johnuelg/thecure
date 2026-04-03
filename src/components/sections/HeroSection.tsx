@@ -267,22 +267,21 @@ export function HeroSection() {
         return (
           <span
             key={i}
-            className="font-semibold transition-all duration-300 cursor-default hover:scale-105 inline-block"
+            className="font-semibold transition-all duration-300 cursor-default hover:scale-105 inline-block healthcare-gradient-text"
             style={{
-              textShadow: isDark ? `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40` : 'none',
-              color: match.glow_color,
+              filter: isDark ? `drop-shadow(0 0 8px ${match.glow_color}80)` : 'none',
             }}
             onMouseEnter={(e) => {
               const dark = document.documentElement.classList.contains('dark');
               if (dark) {
-                e.currentTarget.style.textShadow = `0 0 12px ${match.glow_color}cc, 0 0 30px ${match.glow_color}80, 0 0 50px ${match.glow_color}40`;
+                e.currentTarget.style.filter = `drop-shadow(0 0 12px ${match.glow_color}cc) brightness(1.2)`;
+              } else {
+                e.currentTarget.style.filter = `brightness(0.85)`;
               }
-              e.currentTarget.style.filter = dark ? `brightness(1.2)` : `brightness(0.85)`;
             }}
             onMouseLeave={(e) => {
               const dark = document.documentElement.classList.contains('dark');
-              e.currentTarget.style.textShadow = dark ? `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40` : 'none';
-              e.currentTarget.style.filter = `brightness(1)`;
+              e.currentTarget.style.filter = dark ? `drop-shadow(0 0 8px ${match.glow_color}80)` : 'none';
             }}
           >
             {part}
