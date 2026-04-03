@@ -203,6 +203,7 @@ const ParallaxIconsManager = () => {
   const [animSpeed, setAnimSpeed] = useState<SpeedOption>('slow');
   const [parallaxEnabled, setParallaxEnabled] = useState(true);
   const [profileId, setProfileId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<HealthcareCategory>('All');
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
