@@ -19,6 +19,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Pencil, Trash2, Loader2, Eye, EyeOff, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface BlogPost {
   id: string;
