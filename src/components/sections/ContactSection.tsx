@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ScheduleCallDialog } from "./ScheduleCallDialog";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Mail, MapPin, Phone, Send, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,14 +15,12 @@ interface Profile {
   phone: string | null;
   location: string | null;
   contact_description: string | null;
-  booking_url: string | null;
 }
 
 export function ContactSection() {
   const { ref: sectionRef, isInView } = useScrollAnimation();
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [scheduleOpen, setScheduleOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
