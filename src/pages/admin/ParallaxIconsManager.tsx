@@ -235,10 +235,36 @@ const ParallaxIconsManager = () => {
           <h1 className="text-2xl font-bold">Parallax Icons</h1>
           <p className="text-muted-foreground">Customize the floating animated icons on the hero section</p>
         </div>
-        <Button onClick={() => setIsDialogOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Icon
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button onClick={() => setIsDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Icon
+          </Button>
+        </div>
+      </div>
+
+      {/* Master toggle and bulk actions */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Switch checked={parallaxEnabled} onCheckedChange={handleToggleEnabled} />
+              <div>
+                <Label className="text-sm font-medium">Enable Parallax Animations</Label>
+                <p className="text-xs text-muted-foreground">
+                  {parallaxEnabled ? 'Floating icons are visible on the hero section' : 'All parallax animations are disabled'}
+                </p>
+              </div>
+            </div>
+            {items.length > 0 && (
+              <Button variant="destructive" size="sm" onClick={handleDeleteAll}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Remove All Icons
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
       </div>
 
       <AnimationStyleSelector
