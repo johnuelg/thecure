@@ -230,6 +230,18 @@ const ParallaxIconsManager = () => {
         }}
       />
 
+      <SpeedSelector
+        selected={animSpeed}
+        onSelect={async (speed: SpeedOption) => {
+          setAnimSpeed(speed);
+          if (profileId) {
+            await supabase.from('profile').update({ parallax_animation_speed: speed }).eq('id', profileId);
+            queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
+            toast({ title: `Speed set to "${speed}"` });
+          }
+        }}
+      />
+
       <HoverEffectSelector
         selected={hoverEffect}
         onSelect={async (preset: AnimationPreset) => {
