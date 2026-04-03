@@ -19,7 +19,7 @@ import { Plus, Trash2, Loader2, GripVertical, Sparkles } from 'lucide-react';
 import { icons } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { IconPicker } from '@/components/admin/IconPicker';
-import { AnimationStyleSelector, type AnimationPreset } from '@/components/admin/AnimationStyleSelector';
+import { AnimationStyleSelector, HoverEffectSelector, ScrollEffectSelector, type AnimationPreset } from '@/components/admin/AnimationStyleSelector';
 import {
   DndContext,
   closestCenter,
