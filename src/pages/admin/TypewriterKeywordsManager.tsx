@@ -129,6 +129,7 @@ const TypewriterKeywordsManager = () => {
   });
 
   const currentTagline = profile?.tagline || '';
+  const wordCount = useMemo(() => currentTagline.split(/\s+/).filter(Boolean).length, [currentTagline]);
 
   return (
     <div className="space-y-6">
