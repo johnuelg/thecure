@@ -160,7 +160,7 @@ export default function AllProjects() {
                       </div>
                     )}
                     <div className="flex items-center gap-3 mt-auto">
-                      <Link to={`/projects/${project.id}`}>
+                      <Link to={`/projects/${project.id}`} state={{ from: '/projects' }}>
                         <Button variant="ghost" size="sm" className="group/btn p-0 h-auto">
                           View Case Study
                           <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
