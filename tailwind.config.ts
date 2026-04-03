@@ -123,6 +123,10 @@ export default {
           "0%": { strokeDashoffset: "2100" },
           "100%": { strokeDashoffset: "-2100" },
         },
+        "keyword-shimmer": {
+          "0%, 100%": { opacity: "1", textShadow: "0 0 8px var(--glow-color, hsl(var(--primary)))" },
+          "50%": { opacity: "0.85", textShadow: "0 0 18px var(--glow-color, hsl(var(--primary))), 0 0 36px var(--glow-color, hsl(var(--primary)))" },
+        },
         "chat-pulse": {
           "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.4)" },
           "50%": { boxShadow: "0 0 20px 8px hsl(var(--primary) / 0.2)" },
@@ -142,7 +146,9 @@ export default {
         "scale-in": "scale-in 0.4s ease-out",
         "pulse-line": "pulse-line 2s ease-in-out infinite",
         "ecg-sweep": "ecg-sweep 5s linear infinite",
+        "keyword-shimmer": "keyword-shimmer 3s ease-in-out infinite",
         "chat-pulse": "chat-pulse 2s ease-in-out infinite",
+        "chat-pulse-dark": "chat-pulse-dark 2s ease-in-out infinite",
         "chat-pulse-dark": "chat-pulse-dark 2s ease-in-out infinite",
       },
     },

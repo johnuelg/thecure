@@ -354,11 +354,12 @@ export function HeroSection() {
                   return (
                     <span
                       key={i}
-                      className="font-semibold text-foreground transition-all duration-300"
+                      className="font-semibold text-foreground animate-keyword-shimmer"
                       style={{
                         textShadow: `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`,
                         color: match.glow_color,
-                      }}
+                        '--glow-color': match.glow_color,
+                      } as React.CSSProperties}
                     >
                       {part}
                     </span>
