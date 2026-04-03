@@ -1,0 +1,1 @@
+ALTER TABLE public.profile ADD COLUMN tagline_line_break integer DEFAULT 4;
