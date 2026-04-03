@@ -233,6 +233,44 @@ export function HeroSection() {
     "Through Intelligent Solutions"
   ];
 
+  // Filter highlights by target
+  const headlineHighlights = keywordHighlights?.filter(k => k.target === 'headline' || k.target === 'both') || [];
+  const bioHighlights = keywordHighlights?.filter(k => k.target === 'bio' || k.target === 'both') || [];
+
+  const renderHighlightedText = (text: string, highlights: { keyword: string; glow_color: string }[]) => {
+    if (!highlights.length) return text;
+    const sorted = [...highlights].sort((a, b) => b.keyword.length - a.keyword.length);
+    const escaped = sorted.map(k => k.keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const regex = new RegExp(`(${escaped.join('|')})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, i) => {
+      const match = sorted.find(k => k.keyword.toLowerCase() === part.toLowerCase());
+      if (match) {
+        return (
+          <span
+            key={i}
+            className="font-semibold transition-all duration-300 cursor-default hover:scale-105 inline-block"
+            style={{
+              textShadow: `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`,
+              color: match.glow_color,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.textShadow = `0 0 12px ${match.glow_color}cc, 0 0 30px ${match.glow_color}80, 0 0 50px ${match.glow_color}40`;
+              e.currentTarget.style.filter = `brightness(1.2)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.textShadow = `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`;
+              e.currentTarget.style.filter = `brightness(1)`;
+            }}
+          >
+            {part}
+          </span>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <section
       id="about"
