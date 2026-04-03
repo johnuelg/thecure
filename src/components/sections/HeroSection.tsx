@@ -320,6 +320,11 @@ export function HeroSection() {
             {headlineParts[1] && (
               <span className="block healthcare-gradient-text">{renderHighlightedText(headlineParts[1], headlineHighlights)}</span>
             )}
+            {typewriterKeywords && typewriterKeywords.length > 0 && (
+              <span className="block mt-2">
+                <TypewriterText words={typewriterKeywords} typingSpeed={80} deletingSpeed={50} pauseDuration={2000} />
+              </span>
+            )}
           </motion.h1>
 
           {/* ECG heartbeat animation between headline and description */}
