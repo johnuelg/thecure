@@ -183,11 +183,11 @@ export function HeroSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("full_name, professional_title, tagline, bio")
+        .select("full_name, professional_title, tagline, bio, typewriter_anchor")
         .maybeSingle();
       
       if (error) throw error;
-      return data as Profile | null;
+      return data as (Profile & { typewriter_anchor: string | null }) | null;
     },
   });
 
@@ -316,15 +316,43 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mb-6"
           >
-            {renderHighlightedText(headlineParts[0], headlineHighlights)}
-            {headlineParts[1] && (
-              <span className="block healthcare-gradient-text">{renderHighlightedText(headlineParts[1], headlineHighlights)}</span>
-            )}
-            {typewriterKeywords && typewriterKeywords.length > 0 && (
-              <span className="block mt-2">
-                <TypewriterText words={typewriterKeywords} typingSpeed={80} deletingSpeed={50} pauseDuration={2000} />
-              </span>
-            )}
+            {(() => {
+              const anchor = profile?.typewriter_anchor;
+              const fullHeadline = headlineParts.join(" ");
+              
+              // If we have an anchor and typewriter keywords, embed inline
+              if (anchor && typewriterKeywords && typewriterKeywords.length > 0) {
+                const anchorIndex = fullHeadline.toLowerCase().indexOf(anchor.toLowerCase());
+                if (anchorIndex !== -1) {
+                  const before = fullHeadline.slice(0, anchorIndex);
+                  const after = fullHeadline.slice(anchorIndex + anchor.length);
+                  // Include the anchor as the first word so it starts naturally
+                  const allWords = [anchor, ...typewriterKeywords.filter(k => k.toLowerCase() !== anchor.toLowerCase())];
+                  return (
+                    <>
+                      {before.trim() && <>{renderHighlightedText(before, headlineHighlights)} </>}
+                      <TypewriterText words={allWords} typingSpeed={80} deletingSpeed={50} pauseDuration={2000} />
+                      {after.trim() && <>{renderHighlightedText(after, headlineHighlights)}</>}
+                    </>
+                  );
+                }
+              }
+              
+              // Fallback: render headline normally with typewriter below
+              return (
+                <>
+                  {renderHighlightedText(headlineParts[0], headlineHighlights)}
+                  {headlineParts[1] && (
+                    <span className="block healthcare-gradient-text">{renderHighlightedText(headlineParts[1], headlineHighlights)}</span>
+                  )}
+                  {typewriterKeywords && typewriterKeywords.length > 0 && (
+                    <span className="block mt-2">
+                      <TypewriterText words={typewriterKeywords} typingSpeed={80} deletingSpeed={50} pauseDuration={2000} />
+                    </span>
+                  )}
+                </>
+              );
+            })()}
           </motion.h1>
 
           {/* ECG heartbeat animation between headline and description */}
