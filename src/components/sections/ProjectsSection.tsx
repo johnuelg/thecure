@@ -152,63 +152,70 @@ export function ProjectsSection() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {displayProjects.map((project, index) => (
-              <motion.article
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.4, delay: 0.1 + index * 0.1 }}
-                className="card-medical overflow-hidden group"
-              >
-                {/* Image */}
-                <div className="relative h-56 overflow-hidden">
-                  <img
-                    src={project.image_url || "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop"}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  {project.category && (
-                    <span className="absolute bottom-4 left-4 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-medium">
-                      {project.category}
-                    </span>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-                    {project.description}
-                  </p>
-
-                  {/* Tags */}
-                  {getProjectTags(project).length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {getProjectTags(project).map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium"
-                        >
-                          {tag}
+          <Carousel opts={{ align: "start", loop: true }} className="w-full">
+            <CarouselContent className="-ml-4">
+              {displayProjects.map((project, index) => (
+                <CarouselItem key={project.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                  <motion.article
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    transition={{ duration: 0.4, delay: 0.1 + index * 0.1 }}
+                    className="card-medical overflow-hidden group h-full"
+                  >
+                    {/* Image */}
+                    <div className="relative h-56 overflow-hidden">
+                      <img
+                        src={project.image_url || "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop"}
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      {project.category && (
+                        <span className="absolute bottom-4 left-4 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-medium">
+                          {project.category}
                         </span>
-                      ))}
+                      )}
                     </div>
-                  )}
 
-                  <Link to={`/projects/${project.id}`}>
-                    <Button variant="ghost" size="sm" className="group/btn p-0 h-auto">
-                      View Case Study
-                      <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                    </Button>
-                  </Link>
-                </div>
-              </motion.article>
-            ))}
-          </div>
+                    {/* Content */}
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-3">
+                        {project.description}
+                      </p>
+
+                      {/* Tags */}
+                      {getProjectTags(project).length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {getProjectTags(project).map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      <Link to={`/projects/${project.id}`}>
+                        <Button variant="ghost" size="sm" className="group/btn p-0 h-auto">
+                          View Case Study
+                          <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </motion.article>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-2 mt-8">
+              <CarouselPrevious className="static translate-y-0" />
+              <CarouselNext className="static translate-y-0" />
+            </div>
+          </Carousel>
         )}
 
         <motion.div
