@@ -147,8 +147,6 @@ function FloatingMedicalIcons() {
 
   const speedMultiplier = animSpeed === 'fast' ? 0.3 : animSpeed === 'medium' ? 0.55 : 1;
 
-  if (!parallaxEnabled) return null;
-
   const iconNames = dbIcons && dbIcons.length > 0
     ? dbIcons.map(i => i.icon_name)
     : defaultMedicalIcons;
@@ -161,6 +159,8 @@ function FloatingMedicalIcons() {
     () => generateIcons(iconNames, glowColorsList, maxCount),
     [maxCount, iconNames.join('|'), glowColorsList.map((color) => `${color.color}:${color.rgb}`).join('|')]
   );
+
+  if (!parallaxEnabled) return null;
 
   // Build animation props based on selected style
   const getAnimationProps = (icon: FloatingIcon) => {
