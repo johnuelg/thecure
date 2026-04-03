@@ -98,7 +98,10 @@ const ParallaxIconsManager = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newIconName, setNewIconName] = useState('Brain');
   const [newGlowColor, setNewGlowColor] = useState('#41c0c2');
+  const [animationStyle, setAnimationStyle] = useState('gentle-float');
+  const [profileId, setProfileId] = useState<string | null>(null);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
