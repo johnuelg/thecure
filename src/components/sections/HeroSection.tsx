@@ -13,9 +13,9 @@ const getIcon = (iconName: string): LucideIcon => {
   return (icons as Record<string, LucideIcon>)[iconName] || icons.Award;
 };
 
-const medicalIcons = [
-  Brain, Heart, PersonStanding, Stethoscope, Syringe, Cross, HeartPulse,
-  Pill, Thermometer, Hospital, Ambulance, Dna, Microscope, Ribbon, Monitor, Database, UserRound,
+const defaultMedicalIcons = [
+  "Brain", "Heart", "PersonStanding", "Stethoscope", "Syringe", "Cross", "HeartPulse",
+  "Pill", "Thermometer", "Hospital", "Ambulance", "Dna", "Microscope", "Ribbon", "Monitor", "Database", "UserRound",
 ];
 
 interface GlowColor {
@@ -50,30 +50,34 @@ function useParallax() {
   return offset;
 }
 
-// Glow color palette for dark mode - healthcare-themed
-const glowColors: GlowColor[] = [
-  { color: '#41c0c2', rgb: '65,192,194' },   // teal
-  { color: '#36a5e0', rgb: '54,165,224' },   // medical blue
-  { color: '#5b8cf7', rgb: '91,140,247' },   // soft blue
-  { color: '#44d7b6', rgb: '68,215,182' },   // mint green
-  { color: '#7c6cf7', rgb: '124,108,247' },  // soft purple
-  { color: '#e06894', rgb: '224,104,148' },   // rose
+// Default glow color palette
+const defaultGlowColors: GlowColor[] = [
+  { color: '#41c0c2', rgb: '65,192,194' },
+  { color: '#36a5e0', rgb: '54,165,224' },
+  { color: '#5b8cf7', rgb: '91,140,247' },
+  { color: '#44d7b6', rgb: '68,215,182' },
+  { color: '#7c6cf7', rgb: '124,108,247' },
+  { color: '#e06894', rgb: '224,104,148' },
 ];
 
-function generateIcons(count: number): FloatingIcon[] {
+function hexToRgb(hex: string): string {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : '65,192,194';
+}
+
+function generateIcons(iconNames: string[], glowColorsList?: { color: string; rgb: string }[]): FloatingIcon[] {
+  const count = 32;
   const half = Math.ceil(count / 2);
+  const colors = glowColorsList || defaultGlowColors;
   return Array.from({ length: count }, (_, i) => {
     const depth = Math.random();
     const isLeft = i < half;
-    // Left side: 2-38%, Right side: 62-98% — avoids center content area
-    const x = isLeft
-      ? 2 + Math.random() * 36
-      : 62 + Math.random() * 36;
-    // Vertically distributed across the section, biased toward center
+    const x = isLeft ? 2 + Math.random() * 36 : 62 + Math.random() * 36;
     const y = 10 + Math.random() * 80;
+    const iconName = iconNames[i % iconNames.length];
     return {
       id: i,
-      Icon: medicalIcons[i % medicalIcons.length],
+      Icon: getIcon(iconName),
       x,
       y,
       size: 14 + depth * 34,
@@ -81,12 +85,10 @@ function generateIcons(count: number): FloatingIcon[] {
       delay: Math.random() * -20,
       parallaxFactor: 0.1 + depth * 0.9,
       depth,
-      glowColor: glowColors[i % glowColors.length],
+      glowColor: colors[i % colors.length],
     };
   });
 }
-
-const floatingIcons = generateIcons(32);
 
 const defaultStats = [
   { icon: "Brain", value: "3+", label: "Years Healthcare Experience" },
