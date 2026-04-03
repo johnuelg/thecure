@@ -123,7 +123,7 @@ function FloatingMedicalIcons() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("max_parallax_icons, parallax_animation_style")
+        .select("max_parallax_icons, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect")
         .maybeSingle();
       if (error) throw error;
       return data;
@@ -132,6 +132,8 @@ function FloatingMedicalIcons() {
 
   const maxCount = (iconSettings as any)?.max_parallax_icons ?? 32;
   const animStyle = (iconSettings as any)?.parallax_animation_style || 'gentle-float';
+  const hoverEffect = (iconSettings as any)?.parallax_hover_effect || 'soft-glow';
+  const scrollEffect = (iconSettings as any)?.parallax_scroll_effect || 'parallax-shift';
 
   const iconNames = dbIcons && dbIcons.length > 0
     ? dbIcons.map(i => i.icon_name)
