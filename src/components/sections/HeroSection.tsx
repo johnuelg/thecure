@@ -190,6 +190,19 @@ export function HeroSection() {
     },
   });
 
+  const { data: keywordHighlights } = useQuery({
+    queryKey: ["public-keyword-highlights"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("hero_keyword_highlights")
+        .select("keyword, glow_color")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data as { keyword: string; glow_color: string }[];
+    },
+  });
+
   const { data: heroStats } = useQuery({
     queryKey: ["public-hero-stats"],
     queryFn: async () => {
