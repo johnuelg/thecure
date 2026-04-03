@@ -52,6 +52,8 @@ const AppContent = () => {
           <Route path="/" element={<Index />} />
           <Route path="/projects" element={<AllProjects />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
 
           {/* Admin auth routes */}
           <Route path="/admin/login" element={<Login />} />
