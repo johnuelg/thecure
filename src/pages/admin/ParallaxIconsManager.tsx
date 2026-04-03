@@ -124,7 +124,17 @@ const ParallaxIconsManager = () => {
     }
   };
 
-  useEffect(() => { fetchItems(); }, []);
+  useEffect(() => {
+    fetchItems();
+    const fetchAnimStyle = async () => {
+      const { data } = await supabase.from('profile').select('id, parallax_animation_style').maybeSingle();
+      if (data) {
+        setProfileId(data.id);
+        setAnimationStyle((data as any).parallax_animation_style || 'gentle-float');
+      }
+    };
+    fetchAnimStyle();
+  }, []);
 
   const handleAdd = async () => {
     try {
