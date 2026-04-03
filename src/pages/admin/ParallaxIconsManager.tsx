@@ -223,7 +223,31 @@ const ParallaxIconsManager = () => {
           if (profileId) {
             await supabase.from('profile').update({ parallax_animation_style: preset.id }).eq('id', profileId);
             queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
-            toast({ title: `Animation set to "${preset.name}"` });
+            toast({ title: `Float animation: "${preset.name}"` });
+          }
+        }}
+      />
+
+      <HoverEffectSelector
+        selected={hoverEffect}
+        onSelect={async (preset: AnimationPreset) => {
+          setHoverEffect(preset.id);
+          if (profileId) {
+            await supabase.from('profile').update({ parallax_hover_effect: preset.id }).eq('id', profileId);
+            queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
+            toast({ title: `Hover effect: "${preset.name}"` });
+          }
+        }}
+      />
+
+      <ScrollEffectSelector
+        selected={scrollEffect}
+        onSelect={async (preset: AnimationPreset) => {
+          setScrollEffect(preset.id);
+          if (profileId) {
+            await supabase.from('profile').update({ parallax_scroll_effect: preset.id }).eq('id', profileId);
+            queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
+            toast({ title: `Scroll effect: "${preset.name}"` });
           }
         }}
       />
