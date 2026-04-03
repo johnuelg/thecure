@@ -241,11 +241,13 @@ export function HeroSection() {
     }
   };
 
-  // Extract headline parts from tagline or use defaults
-  const headlineParts = profile?.tagline?.split("|").map(s => s.trim()) || [
-    "Transforming Healthcare",
-    "Through Intelligent Solutions"
-  ];
+  // Extract headline parts: first 4 words on line 1, rest on line 2
+  const headlineParts = (() => {
+    const tagline = profile?.tagline || "Transforming Healthcare Through Intelligent Solutions";
+    const words = tagline.split(/\s+/);
+    if (words.length <= 4) return [tagline];
+    return [words.slice(0, 4).join(" "), words.slice(4).join(" ")];
+  })();
 
   // Filter highlights by target
   const headlineHighlights = keywordHighlights?.filter(k => k.target === 'headline' || k.target === 'both') || [];
