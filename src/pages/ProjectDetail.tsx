@@ -87,9 +87,9 @@ export default function ProjectDetail() {
             transition={{ duration: 0.5 }}
           >
             {/* Back link */}
-            <Link to="/#projects" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-8">
+            <Link to={backLink} className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-8">
               <ArrowLeft className="mr-2 w-4 h-4" />
-              Back to Projects
+              {backLabel}
             </Link>
 
             {/* Category */}
