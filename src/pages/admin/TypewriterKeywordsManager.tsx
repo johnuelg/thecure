@@ -184,6 +184,60 @@ const TypewriterKeywordsManager = () => {
         </CardContent>
       </Card>
 
+      {/* Headline Line Break */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Headline Line Break</CardTitle>
+          <CardDescription>
+            Control how many words appear on the first line of the hero headline. Remaining words wrap to the next line.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {currentTagline && (
+            <Alert>
+              <Info className="w-4 h-4" />
+              <AlertDescription>
+                <span className="font-medium">Preview:</span>{' '}
+                <span className="text-foreground font-semibold">
+                  {currentTagline.split(/\s+/).slice(0, lineBreak).join(' ')}
+                </span>
+                {currentTagline.split(/\s+/).length > lineBreak && (
+                  <>
+                    <br />
+                    <span className="text-muted-foreground">
+                      {currentTagline.split(/\s+/).slice(lineBreak).join(' ')}
+                    </span>
+                  </>
+                )}
+              </AlertDescription>
+            </Alert>
+          )}
+          <div className="space-y-2">
+            <Label>Words on first line</Label>
+            <div className="flex gap-2 items-center">
+              <Input
+                type="number"
+                min={1}
+                max={20}
+                value={lineBreak}
+                onChange={(e) => setLineBreak(Number(e.target.value))}
+                className="w-24"
+              />
+              <Button
+                onClick={() => saveLineBreakMutation.mutate(lineBreak)}
+                disabled={saveLineBreakMutation.isPending}
+                className="healthcare-gradient border-0"
+              >
+                <Save className="w-4 h-4 mr-1" /> Save
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Set to 0 to keep the entire headline on one line.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>Add Keyword</CardTitle>
