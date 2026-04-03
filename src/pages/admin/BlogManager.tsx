@@ -19,6 +19,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Pencil, Trash2, Loader2, Eye, EyeOff, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface BlogPost {
   id: string;
@@ -379,25 +380,22 @@ const BlogManager = () => {
                   required
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="featuredImageUrl">Featured Image URL</Label>
-                  <Input
-                    id="featuredImageUrl"
-                    value={featuredImageUrl}
-                    onChange={(e) => setFeaturedImageUrl(e.target.value)}
-                    placeholder="https://..."
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
-                  <Input
-                    id="category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    placeholder="e.g., AI in Healthcare"
-                  />
-                </div>
+              <ImageUpload
+                value={featuredImageUrl}
+                onChange={setFeaturedImageUrl}
+                bucket="portfolio-images"
+                label="Featured Image"
+                accept="image/jpeg,image/png,image/gif,.jpg,.jpeg,.png,.gif"
+                sizeHint="Supports JPG, PNG, and GIF (max 10MB)"
+              />
+              <div className="space-y-2">
+                <Label htmlFor="category">Category</Label>
+                <Input
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  placeholder="e.g., AI in Healthcare"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="tags">Tags (comma-separated)</Label>
