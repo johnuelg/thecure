@@ -24,6 +24,7 @@ const KeywordHighlightsManager = () => {
   const queryClient = useQueryClient();
   const [newKeyword, setNewKeyword] = useState("");
   const [newColor, setNewColor] = useState("#41c0c2");
+  const [newTarget, setNewTarget] = useState("bio");
 
   const { data: keywords = [], isLoading } = useQuery({
     queryKey: ["admin-keyword-highlights"],
