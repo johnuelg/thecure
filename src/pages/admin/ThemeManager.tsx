@@ -217,6 +217,8 @@ const ThemeManager = () => {
           setLightTo((data as any).gradient_color_to || '175 60% 40%');
           setDarkFrom((data as any).gradient_dark_from || '210 65% 55%');
           setDarkTo((data as any).gradient_dark_to || '175 55% 45%');
+          setFontHeading((data as any).font_heading || 'Plus Jakarta Sans');
+          setFontBody((data as any).font_body || 'DM Sans');
         }
       } catch (error) {
         console.error('Error fetching theme:', error);
