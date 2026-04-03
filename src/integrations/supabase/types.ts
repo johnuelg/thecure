@@ -548,6 +548,8 @@ export type Database = {
           created_at: string
           email: string | null
           favicon_url: string | null
+          font_body: string | null
+          font_heading: string | null
           footer_description: string | null
           full_name: string
           github_url: string | null
@@ -592,6 +594,8 @@ export type Database = {
           created_at?: string
           email?: string | null
           favicon_url?: string | null
+          font_body?: string | null
+          font_heading?: string | null
           footer_description?: string | null
           full_name?: string
           github_url?: string | null
@@ -636,6 +640,8 @@ export type Database = {
           created_at?: string
           email?: string | null
           favicon_url?: string | null
+          font_body?: string | null
+          font_heading?: string | null
           footer_description?: string | null
           full_name?: string
           github_url?: string | null
