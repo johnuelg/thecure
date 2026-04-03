@@ -24,7 +24,8 @@ import {
   Tags,
   Highlighter,
   Type,
-  Orbit
+  Orbit,
+  Palette
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
