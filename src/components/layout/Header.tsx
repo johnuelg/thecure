@@ -47,11 +47,21 @@ export function Header() {
   }, []);
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
     setIsMobileMenuOpen(false);
+    if (href.startsWith('#')) {
+      if (isHomePage) {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        navigate('/' + href);
+      }
+    } else if (href.startsWith('/')) {
+      navigate(href);
+    } else {
+      window.open(href, '_blank');
+    }
   };
 
   return (
