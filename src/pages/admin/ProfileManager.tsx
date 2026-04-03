@@ -419,6 +419,43 @@ const ProfileManager = () => {
           </CardContent>
         </Card>
 
+        {/* Display Limits */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Palette className="h-5 w-5" />
+              Display Limits
+            </CardTitle>
+            <CardDescription>Control how many featured items appear on the homepage</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-3">
+              <Label>Max Featured Projects: {maxFeaturedProjects}</Label>
+              <Slider
+                value={[maxFeaturedProjects]}
+                onValueCommit={(value) => setMaxFeaturedProjects(value[0])}
+                onValueChange={(value) => setMaxFeaturedProjects(value[0])}
+                min={1}
+                max={12}
+                step={1}
+              />
+              <p className="text-xs text-muted-foreground">Number of projects shown in the Featured Projects section</p>
+            </div>
+            <div className="space-y-3">
+              <Label>Max Data Analytics Showcases: {maxFeaturedVisualizations}</Label>
+              <Slider
+                value={[maxFeaturedVisualizations]}
+                onValueCommit={(value) => setMaxFeaturedVisualizations(value[0])}
+                onValueChange={(value) => setMaxFeaturedVisualizations(value[0])}
+                min={1}
+                max={12}
+                step={1}
+              />
+              <p className="text-xs text-muted-foreground">Number of visualizations shown in the Data Analytics Showcase section</p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Resume */}
         <Card>
           <CardHeader>
