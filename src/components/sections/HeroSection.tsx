@@ -118,6 +118,20 @@ function FloatingMedicalIcons() {
     },
   });
 
+  const { data: iconSettings } = useQuery({
+    queryKey: ["public-profile-parallax"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profile")
+        .select("max_parallax_icons")
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const maxCount = (iconSettings as any)?.max_parallax_icons ?? 32;
+
   const iconNames = dbIcons && dbIcons.length > 0
     ? dbIcons.map(i => i.icon_name)
     : defaultMedicalIcons;
@@ -126,9 +140,7 @@ function FloatingMedicalIcons() {
     ? dbIcons.map(i => ({ color: i.glow_color, rgb: hexToRgb(i.glow_color) }))
     : defaultGlowColors;
 
-  const [floatingIcons] = useState(() => generateIcons(iconNames, glowColorsList));
-  // Regenerate when DB data changes
-  const currentIcons = dbIcons ? generateIcons(iconNames, glowColorsList) : floatingIcons;
+  const currentIcons = generateIcons(iconNames, glowColorsList, maxCount);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
