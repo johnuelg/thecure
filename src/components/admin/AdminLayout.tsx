@@ -21,7 +21,8 @@ import {
   Sparkles,
   Link2,
   Gauge,
-  Tags
+  Tags,
+  Highlighter
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
