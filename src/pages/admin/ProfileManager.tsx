@@ -60,6 +60,7 @@ const ProfileManager = () => {
   const [brandNameImageUrl, setBrandNameImageUrl] = useState('');
   const [maxFeaturedProjects, setMaxFeaturedProjects] = useState(4);
   const [maxFeaturedVisualizations, setMaxFeaturedVisualizations] = useState(4);
+  const [maxParallaxIcons, setMaxParallaxIcons] = useState(32);
 
   const fetchProfile = async () => {
     try {
@@ -93,6 +94,7 @@ const ProfileManager = () => {
         setBrandNameImageUrl((data as any).brand_name_image_url || '');
         setMaxFeaturedProjects((data as any).max_featured_projects ?? 4);
         setMaxFeaturedVisualizations((data as any).max_featured_visualizations ?? 4);
+        setMaxParallaxIcons((data as any).max_parallax_icons ?? 32);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -136,6 +138,7 @@ const ProfileManager = () => {
       brand_name_image_url: brandNameImageUrl || null,
       max_featured_projects: maxFeaturedProjects,
       max_featured_visualizations: maxFeaturedVisualizations,
+      max_parallax_icons: maxParallaxIcons,
     };
 
     try {
@@ -453,6 +456,18 @@ const ProfileManager = () => {
                 step={1}
               />
               <p className="text-xs text-muted-foreground">Number of visualizations shown in the Data Analytics Showcase section</p>
+            </div>
+            <div className="space-y-3">
+              <Label>Max Parallax Icons: {maxParallaxIcons}</Label>
+              <Slider
+                value={[maxParallaxIcons]}
+                onValueCommit={(value) => setMaxParallaxIcons(value[0])}
+                onValueChange={(value) => setMaxParallaxIcons(value[0])}
+                min={4}
+                max={64}
+                step={2}
+              />
+              <p className="text-xs text-muted-foreground">Number of floating animated icons in the hero section background</p>
             </div>
           </CardContent>
         </Card>
