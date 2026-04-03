@@ -104,9 +104,35 @@ interface Profile {
 }
 function FloatingMedicalIcons() {
   const { x, y } = useParallax();
+  
+  const { data: dbIcons } = useQuery({
+    queryKey: ["public-parallax-icons"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("hero_parallax_icons")
+        .select("icon_name, glow_color")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const iconNames = dbIcons && dbIcons.length > 0
+    ? dbIcons.map(i => i.icon_name)
+    : defaultMedicalIcons;
+  
+  const glowColorsList = dbIcons && dbIcons.length > 0
+    ? dbIcons.map(i => ({ color: i.glow_color, rgb: hexToRgb(i.glow_color) }))
+    : defaultGlowColors;
+
+  const [floatingIcons] = useState(() => generateIcons(iconNames, glowColorsList));
+  // Regenerate when DB data changes
+  const currentIcons = dbIcons ? generateIcons(iconNames, glowColorsList) : floatingIcons;
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
-      {floatingIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor, depth, glowColor }) => {
+      {currentIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor, depth, glowColor }) => {
         // Light mode: much more visible with subtle shadow
         const baseOpacityLight = 0.12 + depth * 0.18;
         const lightGlowSize = 3 + depth * 5;
