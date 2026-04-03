@@ -12,6 +12,8 @@ import Index from "./pages/Index";
 import ProjectDetail from "./pages/ProjectDetail";
 import AllProjects from "./pages/AllProjects";
 import NotFound from "./pages/NotFound";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import Login from "./pages/admin/Login";
 import ForgotPassword from "./pages/admin/ForgotPassword";
 import ResetPassword from "./pages/admin/ResetPassword";
