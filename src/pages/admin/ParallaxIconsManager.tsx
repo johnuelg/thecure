@@ -323,6 +323,10 @@ const ParallaxIconsManager = () => {
           <p className="text-muted-foreground">Customize the floating animated icons on the hero section</p>
         </div>
         <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={handleAddAllHealthcare}>
+            <HeartPulse className="h-4 w-4 mr-2" />
+            Add All Healthcare Icons
+          </Button>
           <Button onClick={() => setIsDialogOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Add Icon
