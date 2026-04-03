@@ -74,6 +74,17 @@ const fallbackProjects: Project[] = [
 ];
 
 export function ProjectsSection() {
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+    api.on("select", () => setCurrent(api.selectedScrollSnap()));
+  }, [api]);
+
   const { ref: sectionRef, isInView } = useScrollAnimation();
 
   const { data: profile } = useQuery({
