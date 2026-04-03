@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
 
   const { data: profile } = useQuery({
     queryKey: ['public-profile-footer'],
