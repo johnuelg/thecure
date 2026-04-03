@@ -60,7 +60,8 @@ export function useDynamicFavicon() {
       const p = profile;
       if (!p) return;
 
-      if (p.favicon_url) {
+      const faviconSource = p.favicon_url || p.logo_url;
+      if (faviconSource) {
         try {
           // Use a simple fetch — Supabase storage has CORS enabled
           const response = await fetch(p.favicon_url);
