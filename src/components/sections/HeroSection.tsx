@@ -87,7 +87,7 @@ function generateIcons(iconNames: string[], glowColorsList?: { color: string; rg
   return Array.from({ length: count }, (_, i) => {
     const col = i % cols;
     const row = Math.floor(i / cols);
-    const depth = 0.2 + (i / count) * 0.8; // ordered depth: first icons smaller/back, last icons larger/front
+    const depth = 0.4 + (i / count) * 0.6;
     const jitterX = (Math.random() - 0.5) * cellW * 0.6;
     const jitterY = (Math.random() - 0.5) * cellH * 0.6;
     const x = 2 + col * cellW + cellW / 2 + jitterX;
