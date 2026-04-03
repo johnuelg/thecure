@@ -20,6 +20,7 @@ interface TypewriterKeyword {
 const TypewriterKeywordsManager = () => {
   const [newKeyword, setNewKeyword] = useState('');
   const [anchorText, setAnchorText] = useState('');
+  const [lineBreak, setLineBreak] = useState(4);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
