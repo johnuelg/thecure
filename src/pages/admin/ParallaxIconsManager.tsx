@@ -19,7 +19,7 @@ import { Plus, Trash2, Loader2, GripVertical, Sparkles } from 'lucide-react';
 import { icons } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { IconPicker } from '@/components/admin/IconPicker';
-import { AnimationStyleSelector, type AnimationPreset } from '@/components/admin/AnimationStyleSelector';
+import { AnimationStyleSelector, HoverEffectSelector, ScrollEffectSelector, type AnimationPreset } from '@/components/admin/AnimationStyleSelector';
 import {
   DndContext,
   closestCenter,
@@ -100,6 +100,8 @@ const ParallaxIconsManager = () => {
   const [newIconName, setNewIconName] = useState('Brain');
   const [newGlowColor, setNewGlowColor] = useState('#41c0c2');
   const [animationStyle, setAnimationStyle] = useState('gentle-float');
+  const [hoverEffect, setHoverEffect] = useState('soft-glow');
+  const [scrollEffect, setScrollEffect] = useState('parallax-shift');
   const [profileId, setProfileId] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -128,10 +130,12 @@ const ParallaxIconsManager = () => {
   useEffect(() => {
     fetchItems();
     const fetchAnimStyle = async () => {
-      const { data } = await supabase.from('profile').select('id, parallax_animation_style').maybeSingle();
+      const { data } = await supabase.from('profile').select('id, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect').maybeSingle();
       if (data) {
         setProfileId(data.id);
         setAnimationStyle((data as any).parallax_animation_style || 'gentle-float');
+        setHoverEffect((data as any).parallax_hover_effect || 'soft-glow');
+        setScrollEffect((data as any).parallax_scroll_effect || 'parallax-shift');
       }
     };
     fetchAnimStyle();
@@ -219,7 +223,31 @@ const ParallaxIconsManager = () => {
           if (profileId) {
             await supabase.from('profile').update({ parallax_animation_style: preset.id }).eq('id', profileId);
             queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
-            toast({ title: `Animation set to "${preset.name}"` });
+            toast({ title: `Float animation: "${preset.name}"` });
+          }
+        }}
+      />
+
+      <HoverEffectSelector
+        selected={hoverEffect}
+        onSelect={async (preset: AnimationPreset) => {
+          setHoverEffect(preset.id);
+          if (profileId) {
+            await supabase.from('profile').update({ parallax_hover_effect: preset.id }).eq('id', profileId);
+            queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
+            toast({ title: `Hover effect: "${preset.name}"` });
+          }
+        }}
+      />
+
+      <ScrollEffectSelector
+        selected={scrollEffect}
+        onSelect={async (preset: AnimationPreset) => {
+          setScrollEffect(preset.id);
+          if (profileId) {
+            await supabase.from('profile').update({ parallax_scroll_effect: preset.id }).eq('id', profileId);
+            queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
+            toast({ title: `Scroll effect: "${preset.name}"` });
           }
         }}
       />
