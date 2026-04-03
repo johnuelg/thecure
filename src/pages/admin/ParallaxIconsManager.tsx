@@ -260,6 +260,30 @@ const ParallaxIconsManager = () => {
     }
   };
 
+  const handleAddAllHealthcare = async () => {
+    const existingNames = new Set(items.map(i => i.icon_name));
+    const toAdd = HEALTHCARE_ICONS.filter(h => !existingNames.has(h.name));
+    if (toAdd.length === 0) {
+      toast({ title: 'All healthcare icons already added' });
+      return;
+    }
+    if (!confirm(`Add ${toAdd.length} healthcare icons to your parallax background?`)) return;
+    try {
+      const inserts = toAdd.map((h, i) => ({
+        icon_name: h.name,
+        glow_color: h.color,
+        display_order: items.length + i,
+      }));
+      const { error } = await supabase.from('hero_parallax_icons').insert(inserts);
+      if (error) throw error;
+      toast({ title: `${toAdd.length} healthcare icons added` });
+      fetchItems();
+      queryClient.invalidateQueries({ queryKey: ['public-parallax-icons'] });
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
   const handleToggleEnabled = async (enabled: boolean) => {
     setParallaxEnabled(enabled);
     if (profileId) {
