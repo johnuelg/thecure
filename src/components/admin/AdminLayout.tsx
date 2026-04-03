@@ -22,7 +22,8 @@ import {
   Link2,
   Gauge,
   Tags,
-  Highlighter
+  Highlighter,
+  Type
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
