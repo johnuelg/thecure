@@ -1,21 +1,27 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useTheme } from "next-themes";
 
-/**
- * Fetches gradient colors from the profile and applies them as CSS custom properties.
- * This overrides the default --healthcare-blue and --healthcare-teal variables at runtime.
- */
+interface GradientData {
+  gradient_color_from: string | null;
+  gradient_color_to: string | null;
+  gradient_dark_from: string | null;
+  gradient_dark_to: string | null;
+}
+
 export function useThemeGradient() {
+  const { resolvedTheme } = useTheme();
+
   const { data } = useQuery({
     queryKey: ["public-profile-gradient"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("gradient_color_from, gradient_color_to")
+        .select("gradient_color_from, gradient_color_to, gradient_dark_from, gradient_dark_to")
         .maybeSingle();
       if (error) throw error;
-      return data as { gradient_color_from: string | null; gradient_color_to: string | null } | null;
+      return data as GradientData | null;
     },
     staleTime: 1000 * 60 * 5,
   });
@@ -23,11 +29,16 @@ export function useThemeGradient() {
   useEffect(() => {
     if (!data) return;
     const root = document.documentElement;
-    if (data.gradient_color_from) {
-      root.style.setProperty("--healthcare-blue", data.gradient_color_from);
-    }
-    if (data.gradient_color_to) {
-      root.style.setProperty("--healthcare-teal", data.gradient_color_to);
-    }
-  }, [data]);
+    const isDark = resolvedTheme === "dark";
+
+    const from = isDark
+      ? (data.gradient_dark_from || data.gradient_color_from)
+      : data.gradient_color_from;
+    const to = isDark
+      ? (data.gradient_dark_to || data.gradient_color_to)
+      : data.gradient_color_to;
+
+    if (from) root.style.setProperty("--healthcare-blue", from);
+    if (to) root.style.setProperty("--healthcare-teal", to);
+  }, [data, resolvedTheme]);
 }

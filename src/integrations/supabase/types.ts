@@ -553,6 +553,8 @@ export type Database = {
           github_url: string | null
           gradient_color_from: string | null
           gradient_color_to: string | null
+          gradient_dark_from: string | null
+          gradient_dark_to: string | null
           id: string
           linkedin_url: string | null
           location: string | null
@@ -595,6 +597,8 @@ export type Database = {
           github_url?: string | null
           gradient_color_from?: string | null
           gradient_color_to?: string | null
+          gradient_dark_from?: string | null
+          gradient_dark_to?: string | null
           id?: string
           linkedin_url?: string | null
           location?: string | null
@@ -637,6 +641,8 @@ export type Database = {
           github_url?: string | null
           gradient_color_from?: string | null
           gradient_color_to?: string | null
+          gradient_dark_from?: string | null
+          gradient_dark_to?: string | null
           id?: string
           linkedin_url?: string | null
           location?: string | null
