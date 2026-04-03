@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -15,9 +15,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Pencil, Trash2, Loader2, Star, ExternalLink } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, Star, ExternalLink, Tag, X } from 'lucide-react';
 import { ImageUpload } from '@/components/admin/ImageUpload';
+
+interface ProjectCategory {
+  id: string;
+  name: string;
+  display_order: number;
+  is_active: boolean;
+}
 
 interface Project {
   id: string;
@@ -42,6 +56,10 @@ const ProjectsManager = () => {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
+
+  const [categories, setCategories] = useState<ProjectCategory[]>([]);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
 
   // Form state
   const [title, setTitle] = useState('');
@@ -76,8 +94,49 @@ const ProjectsManager = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('project_categories')
+        .select('*')
+        .order('display_order', { ascending: true });
+      if (error) throw error;
+      setCategories(data || []);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) return;
+    try {
+      const { error } = await supabase
+        .from('project_categories')
+        .insert({ name: newCategoryName.trim(), display_order: categories.length });
+      if (error) throw error;
+      toast({ title: 'Category added' });
+      setNewCategoryName('');
+      fetchCategories();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    if (!confirm('Delete this category?')) return;
+    try {
+      const { error } = await supabase.from('project_categories').delete().eq('id', id);
+      if (error) throw error;
+      toast({ title: 'Category deleted' });
+      fetchCategories();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
+    fetchCategories();
   }, []);
 
   const resetForm = () => {
@@ -216,6 +275,71 @@ const ProjectsManager = () => {
         </Button>
       </div>
 
+      {/* Categories Management */}
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Tag className="h-5 w-5" />
+              Project Categories
+            </CardTitle>
+            <Button variant="outline" size="sm" onClick={() => setIsCategoryDialogOpen(true)}>
+              <Plus className="h-3 w-3 mr-1" />
+              Add Category
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {categories.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No categories yet. Add one to get started.</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => (
+                <Badge
+                  key={cat.id}
+                  variant={cat.is_active ? "default" : "secondary"}
+                  className="px-3 py-1.5 text-sm gap-1.5"
+                >
+                  {cat.name}
+                  <button
+                    onClick={() => handleDeleteCategory(cat.id)}
+                    className="ml-1 hover:text-destructive transition-colors"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Add Category Dialog */}
+      <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Add Category</DialogTitle>
+            <DialogDescription>Create a new project category</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="categoryName">Category Name</Label>
+              <Input
+                id="categoryName"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                placeholder="e.g., Machine Learning"
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddCategory(); setIsCategoryDialogOpen(false); }}}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsCategoryDialogOpen(false)}>Cancel</Button>
+            <Button onClick={() => { handleAddCategory(); setIsCategoryDialogOpen(false); }}>Add</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {projects.length === 0 ? (
         <Card>
           <CardContent className="text-center py-12">
@@ -326,12 +450,18 @@ const ProjectsManager = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="category">Category</Label>
-                  <Input
-                    id="category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    placeholder="e.g., Healthcare AI"
-                  />
+                  <Select value={category} onValueChange={setCategory}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.filter(c => c.is_active).map((cat) => (
+                        <SelectItem key={cat.id} value={cat.name}>
+                          {cat.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               <div className="space-y-2">

@@ -35,10 +35,20 @@ export default function AllProjects() {
     },
   });
 
-  const categories = [
-    "All",
-    ...Array.from(new Set(projects?.map((p) => p.category).filter(Boolean) as string[])),
-  ];
+  const { data: dbCategories } = useQuery({
+    queryKey: ["project-categories"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("project_categories")
+        .select("name")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data?.map((c) => c.name) || [];
+    },
+  });
+
+  const categories = ["All", ...(dbCategories || [])];
 
   const filteredProjects =
     activeCategory === "All"
