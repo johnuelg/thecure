@@ -86,6 +86,7 @@ const AppContent = () => {
             <Route path="parallax-icons" element={<ParallaxIconsManager />} />
             <Route path="theme" element={<ThemeManager />} />
             <Route path="blog" element={<BlogManager />} />
+            <Route path="blog-settings" element={<BlogSettingsManager />} />
             <Route path="testimonials" element={<TestimonialsManager />} />
             <Route path="messages" element={<MessagesManager />} />
           </Route>

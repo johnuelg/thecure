@@ -48,6 +48,7 @@ const navItems = [
   { title: 'Visualizations', href: '/admin/visualizations', icon: BarChart3 },
   { title: 'Knowledge Base', href: '/admin/knowledge-base', icon: BookOpen },
   { title: 'Blog Posts', href: '/admin/blog', icon: FileText },
+  { title: 'Blog Settings', href: '/admin/blog-settings', icon: FileText },
   { title: 'Testimonials', href: '/admin/testimonials', icon: Quote },
   { title: 'Messages', href: '/admin/messages', icon: Mail },
 ];
