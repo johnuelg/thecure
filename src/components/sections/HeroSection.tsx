@@ -143,9 +143,8 @@ function FloatingMedicalIcons() {
   const currentIcons = generateIcons(iconNames, glowColorsList, maxCount);
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
+    <div className="absolute inset-0 overflow-hidden z-[1]">
       {currentIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor, depth, glowColor }) => {
-        // Light mode: much more visible with subtle shadow
         const baseOpacityLight = 0.12 + depth * 0.18;
         const lightGlowSize = 3 + depth * 5;
         const blurAmount = Math.max(0, (1 - depth) * 1.5);
@@ -154,11 +153,12 @@ function FloatingMedicalIcons() {
         const moveY = 10 + depth * 25;
         const moveX = 5 + depth * 15;
         const rotateAmt = 4 + depth * 10;
+        const hoverDuration = duration * 0.15;
 
         return (
           <motion.div
             key={id}
-            className="absolute"
+            className="absolute cursor-pointer"
             style={{
               left: `${ix}%`,
               top: `${iy}%`,
@@ -179,11 +179,24 @@ function FloatingMedicalIcons() {
               repeat: Infinity,
               ease: "easeInOut",
             }}
+            whileHover={{
+              scale: 1.35 + depth * 0.15,
+              rotate: rotateAmt * 1.5,
+              filter: blurAmount > 0.5 ? 'blur(0px)' : undefined,
+              transition: {
+                duration: hoverDuration,
+                ease: "easeInOut",
+              },
+            }}
           >
             {/* Light mode - enhanced visibility with soft shadow */}
-            <span className="dark:hidden"
+            <motion.span className="dark:hidden block"
               style={{
                 filter: `drop-shadow(0 0 ${lightGlowSize}px rgba(var(--primary-rgb, 14,165,233), 0.15))`,
+              }}
+              whileHover={{
+                filter: `drop-shadow(0 0 ${lightGlowSize * 2.5}px rgba(var(--primary-rgb, 14,165,233), 0.4))`,
+                transition: { duration: hoverDuration, ease: "easeInOut" },
               }}
             >
               <Icon
@@ -194,11 +207,15 @@ function FloatingMedicalIcons() {
                   opacity: baseOpacityLight,
                 }}
               />
-            </span>
+            </motion.span>
             {/* Dark mode with colored glow */}
-            <span className="hidden dark:block"
+            <motion.span className="hidden dark:block"
               style={{
                 filter: `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`,
+              }}
+              whileHover={{
+                filter: `drop-shadow(0 0 ${glowSize * 2.5}px rgba(${glowColor.rgb}, 0.7))`,
+                transition: { duration: hoverDuration, ease: "easeInOut" },
               }}
             >
               <Icon
@@ -209,7 +226,7 @@ function FloatingMedicalIcons() {
                   opacity: 0.15 + depth * 0.2,
                 }}
               />
-            </span>
+            </motion.span>
           </motion.div>
         );
       })}
