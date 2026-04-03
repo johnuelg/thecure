@@ -397,7 +397,6 @@ const BlogManager = () => {
                     onChange={(e) => setCategory(e.target.value)}
                     placeholder="e.g., AI in Healthcare"
                   />
-                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="tags">Tags (comma-separated)</Label>
