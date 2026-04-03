@@ -151,7 +151,8 @@ function FloatingMedicalIcons() {
 
   // Build animation props based on selected style
   const getAnimationProps = (icon: FloatingIcon) => {
-    const { depth, duration, delay } = icon;
+    const { depth, duration: baseDuration, delay } = icon;
+    const duration = baseDuration * speedMultiplier;
     const moveY = 5 + depth * 10;
     const moveX = 3 + depth * 6;
 
