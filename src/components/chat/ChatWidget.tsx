@@ -350,6 +350,7 @@ const ChatWidget = () => {
                   type="submit"
                   size="icon"
                   disabled={!inputValue.trim() || isLoading}
+                  className="healthcare-gradient border-0 text-primary-foreground hover:shadow-[0_4px_20px_-4px_hsl(var(--primary)/0.5)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-300"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
