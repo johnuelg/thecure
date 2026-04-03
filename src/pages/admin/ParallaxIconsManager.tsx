@@ -364,16 +364,79 @@ const ParallaxIconsManager = () => {
           <p className="text-muted-foreground">Customize the floating animated icons on the hero section</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={handleAddAllHealthcare}>
-            <HeartPulse className="h-4 w-4 mr-2" />
-            Add All Healthcare Icons
-          </Button>
           <Button onClick={() => setIsDialogOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Add Icon
           </Button>
         </div>
       </div>
+
+      {/* Healthcare Icon Library with Category Filter */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <HeartPulse className="h-5 w-5" />
+            Healthcare Icon Library
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Category chips */}
+          <div className="flex flex-wrap gap-2">
+            {HEALTHCARE_CATEGORIES.map((cat) => {
+              const count = cat === 'All' ? HEALTHCARE_ICONS.length : HEALTHCARE_ICONS.filter(h => h.category === cat).length;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                    selectedCategory === cat
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                  }`}
+                >
+                  {cat}
+                  <span className={`text-[10px] ${selectedCategory === cat ? 'text-primary-foreground/70' : 'text-muted-foreground/60'}`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Preview grid of filtered icons */}
+          <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-1.5">
+            {filteredHealthcareIcons.map((h) => {
+              const Icon = getIcon(h.name);
+              const alreadyAdded = items.some(i => i.icon_name === h.name);
+              return (
+                <div
+                  key={h.name}
+                  title={`${h.name} (${h.category})${alreadyAdded ? ' — already added' : ''}`}
+                  className={`flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] border transition-colors ${
+                    alreadyAdded
+                      ? 'border-primary/30 bg-primary/5 text-primary'
+                      : 'border-transparent bg-muted/50 text-muted-foreground'
+                  }`}
+                >
+                  <Icon className="h-5 w-5" style={{ color: h.color }} />
+                  <span className="truncate w-full text-center leading-tight">{h.name}</span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Bulk add button */}
+          <div className="flex items-center justify-between pt-2 border-t">
+            <p className="text-xs text-muted-foreground">
+              {filteredHealthcareIcons.filter(h => !items.some(i => i.icon_name === h.name)).length} of {filteredHealthcareIcons.length} not yet added
+            </p>
+            <Button variant="outline" size="sm" onClick={handleAddAllHealthcare}>
+              <HeartPulse className="h-4 w-4 mr-2" />
+              Add {selectedCategory === 'All' ? 'All' : selectedCategory} Icons
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Master toggle and bulk actions */}
       <Card>
