@@ -133,6 +133,8 @@ const ProfileManager = () => {
       site_description: siteDescription || null,
       brand_name: brandName || 'HealthcareAI',
       brand_name_image_url: brandNameImageUrl || null,
+      max_featured_projects: maxFeaturedProjects,
+      max_featured_visualizations: maxFeaturedVisualizations,
     };
 
     try {
