@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Trash2, GripVertical, Type } from 'lucide-react';
+import { Plus, Trash2, GripVertical, Type, Save, Info } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface TypewriterKeyword {
   id: string;
@@ -17,8 +19,27 @@ interface TypewriterKeyword {
 
 const TypewriterKeywordsManager = () => {
   const [newKeyword, setNewKeyword] = useState('');
+  const [anchorText, setAnchorText] = useState('');
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  const { data: profile } = useQuery({
+    queryKey: ['admin-profile-typewriter'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('profile')
+        .select('tagline, typewriter_anchor')
+        .maybeSingle();
+      if (error) throw error;
+      return data as { tagline: string | null; typewriter_anchor: string | null } | null;
+    },
+  });
+
+  useEffect(() => {
+    if (profile?.typewriter_anchor) {
+      setAnchorText(profile.typewriter_anchor);
+    }
+  }, [profile]);
 
   const { data: keywords = [], isLoading } = useQuery({
     queryKey: ['admin-typewriter-keywords'],
@@ -30,6 +51,22 @@ const TypewriterKeywordsManager = () => {
       if (error) throw error;
       return data as TypewriterKeyword[];
     },
+  });
+
+  const saveAnchorMutation = useMutation({
+    mutationFn: async (anchor: string) => {
+      const { error } = await supabase
+        .from('profile')
+        .update({ typewriter_anchor: anchor || null })
+        .not('id', 'is', null);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-profile-typewriter'] });
+      queryClient.invalidateQueries({ queryKey: ['public-profile'] });
+      toast({ title: 'Typewriter anchor saved' });
+    },
+    onError: () => toast({ title: 'Error saving anchor', variant: 'destructive' }),
   });
 
   const addMutation = useMutation({
@@ -70,6 +107,8 @@ const TypewriterKeywordsManager = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin-typewriter-keywords'] }),
   });
 
+  const currentTagline = profile?.tagline || '';
+
   return (
     <div className="space-y-6">
       <div>
@@ -78,14 +117,57 @@ const TypewriterKeywordsManager = () => {
           Typewriter Keywords
         </h1>
         <p className="text-muted-foreground mt-1">
-          Manage the rotating keywords in the hero headline typewriter animation.
+          Manage the rotating keywords and choose where the typewriter effect appears in the hero headline.
         </p>
       </div>
+
+      {/* Anchor Configuration */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Typewriter Anchor Phrase</CardTitle>
+          <CardDescription>
+            Set which phrase in your headline gets replaced by the cycling typewriter animation.
+            This phrase must exactly match a part of your current headline.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {currentTagline && (
+            <Alert>
+              <Info className="w-4 h-4" />
+              <AlertDescription>
+                <span className="font-medium">Current headline:</span>{' '}
+                <span className="text-foreground">{currentTagline.replace('|', ' ')}</span>
+              </AlertDescription>
+            </Alert>
+          )}
+          <div className="space-y-2">
+            <Label>Anchor phrase (the part to animate)</Label>
+            <div className="flex gap-2">
+              <Input
+                placeholder="e.g. Smarter AI Tools"
+                value={anchorText}
+                onChange={(e) => setAnchorText(e.target.value)}
+              />
+              <Button
+                onClick={() => saveAnchorMutation.mutate(anchorText.trim())}
+                disabled={saveAnchorMutation.isPending}
+                className="healthcare-gradient border-0"
+              >
+                <Save className="w-4 h-4 mr-1" /> Save
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              The anchor phrase will appear first, then cycle through your keywords below.
+              Leave empty to show keywords on a separate line below the headline.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
           <CardTitle>Add Keyword</CardTitle>
-          <CardDescription>Add a new rotating keyword for the hero headline</CardDescription>
+          <CardDescription>Add a new rotating keyword that cycles in place of the anchor phrase</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-2">
