@@ -111,8 +111,6 @@ interface Profile {
   bio: string | null;
 }
 function FloatingMedicalIcons() {
-  const { x, y } = useParallax();
-  
   const { data: dbIcons } = useQuery({
     queryKey: ["public-parallax-icons"],
     queryFn: async () => {
@@ -144,8 +142,9 @@ function FloatingMedicalIcons() {
   const hoverEffect = (iconSettings as any)?.parallax_hover_effect || 'soft-glow';
   const scrollEffect = (iconSettings as any)?.parallax_scroll_effect || 'parallax-shift';
   const animSpeed = (iconSettings as any)?.parallax_animation_speed || 'slow';
+  const interactionEnabled = parallaxEnabled && scrollEffect !== 'none';
+  const { x, y } = useParallax(interactionEnabled);
 
-  // Speed multiplier: slow=1 (30-45s), medium=0.55 (15-25s), fast=0.3 (8-15s)
   const speedMultiplier = animSpeed === 'fast' ? 0.3 : animSpeed === 'medium' ? 0.55 : 1;
 
   if (!parallaxEnabled) return null;
@@ -158,7 +157,10 @@ function FloatingMedicalIcons() {
     ? dbIcons.map(i => ({ color: i.glow_color, rgb: hexToRgb(i.glow_color) }))
     : defaultGlowColors;
 
-  const currentIcons = generateIcons(iconNames, glowColorsList, maxCount);
+  const currentIcons = useMemo(
+    () => generateIcons(iconNames, glowColorsList, maxCount),
+    [maxCount, iconNames.join('|'), glowColorsList.map((color) => `${color.color}:${color.rgb}`).join('|')]
+  );
 
   // Build animation props based on selected style
   const getAnimationProps = (icon: FloatingIcon) => {
