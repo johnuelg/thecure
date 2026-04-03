@@ -1,5 +1,21 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  horizontalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,7 +39,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Pencil, Trash2, Loader2, Star, ExternalLink, Tag, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, Star, ExternalLink, Tag, X, GripVertical } from 'lucide-react';
 import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface ProjectCategory {
@@ -31,6 +47,33 @@ interface ProjectCategory {
   name: string;
   display_order: number;
   is_active: boolean;
+}
+
+function SortableCategoryBadge({ cat, onDelete }: { cat: ProjectCategory; onDelete: (id: string) => void }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: cat.id });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    cursor: 'grab',
+  };
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <Badge
+        variant={cat.is_active ? "default" : "secondary"}
+        className="px-3 py-1.5 text-sm gap-1.5 select-none"
+      >
+        <GripVertical className="h-3 w-3 opacity-50" />
+        {cat.name}
+        <button
+          onClick={(e) => { e.stopPropagation(); onDelete(cat.id); }}
+          className="ml-1 hover:text-destructive transition-colors"
+        >
+          <X className="h-3 w-3" />
+        </button>
+      </Badge>
+    </div>
+  );
 }
 
 interface Project {
@@ -60,6 +103,26 @@ const ProjectsManager = () => {
   const [categories, setCategories] = useState<ProjectCategory[]>([]);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor)
+  );
+
+  const handleCategoryDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = categories.findIndex((c) => c.id === active.id);
+    const newIndex = categories.findIndex((c) => c.id === over.id);
+    const reordered = arrayMove(categories, oldIndex, newIndex);
+    setCategories(reordered);
+    // Persist
+    await Promise.all(
+      reordered.map((cat, i) =>
+        supabase.from('project_categories').update({ display_order: i }).eq('id', cat.id)
+      )
+    );
+  };
 
   // Form state
   const [title, setTitle] = useState('');
@@ -293,23 +356,15 @@ const ProjectsManager = () => {
           {categories.length === 0 ? (
             <p className="text-sm text-muted-foreground">No categories yet. Add one to get started.</p>
           ) : (
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <Badge
-                  key={cat.id}
-                  variant={cat.is_active ? "default" : "secondary"}
-                  className="px-3 py-1.5 text-sm gap-1.5"
-                >
-                  {cat.name}
-                  <button
-                    onClick={() => handleDeleteCategory(cat.id)}
-                    className="ml-1 hover:text-destructive transition-colors"
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </Badge>
-              ))}
-            </div>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleCategoryDragEnd}>
+              <SortableContext items={categories.map((c) => c.id)} strategy={horizontalListSortingStrategy}>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((cat) => (
+                    <SortableCategoryBadge key={cat.id} cat={cat} onDelete={handleDeleteCategory} />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
           )}
         </CardContent>
       </Card>
