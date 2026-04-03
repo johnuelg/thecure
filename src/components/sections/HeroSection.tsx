@@ -150,9 +150,8 @@ function FloatingMedicalIcons() {
         const blurAmount = Math.max(0, (1 - depth) * 1.5);
         const glowSize = 4 + depth * 8;
         const glowOpacity = (0.2 + depth * 0.3).toFixed(2);
-        const moveY = 10 + depth * 25;
-        const moveX = 5 + depth * 15;
-        const rotateAmt = 4 + depth * 10;
+        const moveY = 5 + depth * 10;
+        const moveX = 3 + depth * 6;
 
         return (
           <motion.div
