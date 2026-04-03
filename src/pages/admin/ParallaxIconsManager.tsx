@@ -185,6 +185,27 @@ const ParallaxIconsManager = () => {
     }
   };
 
+  const handleDeleteAll = async () => {
+    if (!confirm('Remove ALL parallax icons? This cannot be undone.')) return;
+    try {
+      const { error } = await supabase.from('hero_parallax_icons').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      if (error) throw error;
+      setItems([]);
+      toast({ title: 'All icons removed' });
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
+  const handleToggleEnabled = async (enabled: boolean) => {
+    setParallaxEnabled(enabled);
+    if (profileId) {
+      await supabase.from('profile').update({ parallax_enabled: enabled }).eq('id', profileId);
+      queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
+      toast({ title: enabled ? 'Parallax animations enabled' : 'All animations disabled' });
+    }
+  };
+
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
