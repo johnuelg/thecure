@@ -64,7 +64,7 @@ export function useDynamicFavicon() {
       if (faviconSource) {
         try {
           // Use a simple fetch — Supabase storage has CORS enabled
-          const response = await fetch(p.favicon_url);
+          const response = await fetch(faviconSource);
 
           if (!response.ok) {
             throw new Error(`Failed to load favicon: ${response.status}`);
