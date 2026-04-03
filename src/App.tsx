@@ -79,6 +79,7 @@ const AppContent = () => {
             <Route path="keyword-highlights" element={<KeywordHighlightsManager />} />
             <Route path="typewriter-keywords" element={<TypewriterKeywordsManager />} />
             <Route path="parallax-icons" element={<ParallaxIconsManager />} />
+            <Route path="theme" element={<ThemeManager />} />
             <Route path="blog" element={<BlogManager />} />
             <Route path="testimonials" element={<TestimonialsManager />} />
             <Route path="messages" element={<MessagesManager />} />
