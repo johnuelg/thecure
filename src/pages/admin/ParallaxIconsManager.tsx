@@ -265,7 +265,6 @@ const ParallaxIconsManager = () => {
           </div>
         </CardContent>
       </Card>
-      </div>
 
       <AnimationStyleSelector
         selected={animationStyle}
