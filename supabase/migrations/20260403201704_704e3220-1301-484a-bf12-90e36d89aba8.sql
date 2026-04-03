@@ -1,0 +1,1 @@
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS parallax_animation_style text DEFAULT 'gentle-float';

@@ -123,7 +123,7 @@ function FloatingMedicalIcons() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("max_parallax_icons")
+        .select("max_parallax_icons, parallax_animation_style")
         .maybeSingle();
       if (error) throw error;
       return data;
@@ -131,6 +131,7 @@ function FloatingMedicalIcons() {
   });
 
   const maxCount = (iconSettings as any)?.max_parallax_icons ?? 32;
+  const animStyle = (iconSettings as any)?.parallax_animation_style || 'gentle-float';
 
   const iconNames = dbIcons && dbIcons.length > 0
     ? dbIcons.map(i => i.icon_name)
@@ -142,21 +143,103 @@ function FloatingMedicalIcons() {
 
   const currentIcons = generateIcons(iconNames, glowColorsList, maxCount);
 
+  // Build animation props based on selected style
+  const getAnimationProps = (icon: FloatingIcon) => {
+    const { depth, duration, delay } = icon;
+    const moveY = 5 + depth * 10;
+    const moveX = 3 + depth * 6;
+
+    switch (animStyle) {
+      case 'breathing-glow':
+        return {
+          animate: {
+            y: [0, -moveY * 0.5, 0],
+            x: [0, moveX * 0.3, 0],
+            scale: [1, 1.08 + depth * 0.06, 1],
+            opacity: [0.7, 1, 0.7],
+          },
+          transition: { duration: duration * 0.8, delay, repeat: Infinity, ease: "easeInOut" as const },
+        };
+      case 'orbital-drift':
+        return {
+          animate: {
+            y: [0, -moveY, moveY * 0.3, -moveY * 0.5, 0],
+            x: [0, moveX, moveX * 1.2, -moveX * 0.5, 0],
+          },
+          transition: { duration: duration * 1.2, delay, repeat: Infinity, ease: "easeInOut" as const },
+        };
+      case 'rising-bubbles':
+        return {
+          animate: {
+            y: [0, -moveY * 2, -moveY * 3, 0],
+            x: [0, moveX * 0.8, -moveX * 0.6, 0],
+            opacity: [0.5, 1, 0.8, 0.5],
+          },
+          transition: { duration: duration * 1.5, delay, repeat: Infinity, ease: "easeInOut" as const },
+        };
+      case 'wave-motion': {
+        const phase = icon.id * 0.5;
+        return {
+          animate: {
+            y: [0, -moveY * Math.sin(phase), moveY * Math.cos(phase), 0],
+            x: [0, moveX * Math.cos(phase), -moveX * Math.sin(phase), 0],
+          },
+          transition: { duration, delay, repeat: Infinity, ease: "easeInOut" as const },
+        };
+      }
+      case 'firefly-twinkle':
+        return {
+          animate: {
+            y: [0, -moveY * 0.7, 0, moveY * 0.4, 0],
+            x: [0, moveX * 0.5, -moveX * 0.3, moveX * 0.2, 0],
+            opacity: [0.3, 1, 0.4, 0.9, 0.3],
+          },
+          transition: { duration: duration * 1.1, delay, repeat: Infinity, ease: "easeInOut" as const },
+        };
+      case 'gentle-float':
+      default:
+        return {
+          animate: {
+            y: [0, -moveY, 0, moveY * 0.6, 0],
+            x: [0, moveX, -moveX * 0.8, moveX * 0.4, 0],
+          },
+          transition: { duration, delay, repeat: Infinity, ease: "easeInOut" as const },
+        };
+    }
+  };
+
+  // Hover style per animation preset
+  const getHoverStyle = (glowColor: GlowColor, depth: number) => {
+    const glowSize = 4 + depth * 8;
+    switch (animStyle) {
+      case 'breathing-glow':
+        return `drop-shadow(0 0 ${glowSize * 2}px rgba(${glowColor.rgb}, 0.6))`;
+      case 'firefly-twinkle':
+        return `drop-shadow(0 0 ${glowSize * 1.8}px rgba(${glowColor.rgb}, 0.7)) brightness(1.3)`;
+      case 'orbital-drift':
+        return `drop-shadow(0 0 ${glowSize * 1.5}px rgba(${glowColor.rgb}, 0.5))`;
+      default:
+        return `drop-shadow(0 0 ${glowSize * 1.2}px rgba(${glowColor.rgb}, 0.45))`;
+    }
+  };
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
-      {currentIcons.map(({ id, Icon, x: ix, y: iy, size, duration, delay, parallaxFactor, depth, glowColor }) => {
+      {currentIcons.map((icon) => {
+        const { id, Icon, x: ix, y: iy, size, parallaxFactor, depth, glowColor } = icon;
         const baseOpacityLight = 0.12 + depth * 0.18;
         const lightGlowSize = 3 + depth * 5;
         const blurAmount = Math.max(0, (1 - depth) * 1.5);
         const glowSize = 4 + depth * 8;
         const glowOpacity = (0.2 + depth * 0.3).toFixed(2);
-        const moveY = 5 + depth * 10;
-        const moveX = 3 + depth * 6;
+
+        const motionProps = getAnimationProps(icon);
+        const hoverFilter = getHoverStyle(glowColor, depth);
 
         return (
           <motion.div
             key={id}
-            className="absolute"
+            className="absolute pointer-events-auto cursor-default"
             style={{
               left: `${ix}%`,
               top: `${iy}%`,
@@ -165,21 +248,14 @@ function FloatingMedicalIcons() {
               filter: blurAmount > 0.5 ? `blur(${blurAmount}px)` : undefined,
               zIndex: Math.round(depth * 10),
             }}
-            animate={{
-              y: [0, -moveY, 0, moveY * 0.6, 0],
-              x: [0, moveX, -moveX * 0.8, moveX * 0.4, 0],
-            }}
-            transition={{
-              duration,
-              delay,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
+            {...motionProps}
+            whileHover={{ scale: 1.15, transition: { duration: 0.3 } }}
           >
             {/* Light mode */}
             <span className="dark:hidden"
               style={{
                 filter: `drop-shadow(0 0 ${lightGlowSize}px rgba(var(--primary-rgb, 14,165,233), 0.15))`,
+                transition: 'filter 0.3s ease',
               }}
             >
               <Icon
@@ -188,6 +264,7 @@ function FloatingMedicalIcons() {
                 style={{
                   color: 'hsl(var(--primary))',
                   opacity: baseOpacityLight,
+                  transition: 'opacity 0.3s ease',
                 }}
               />
             </span>
@@ -195,7 +272,10 @@ function FloatingMedicalIcons() {
             <span className="hidden dark:block"
               style={{
                 filter: `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`,
+                transition: 'filter 0.3s ease',
               }}
+              onMouseEnter={(e) => { e.currentTarget.style.filter = hoverFilter; }}
+              onMouseLeave={(e) => { e.currentTarget.style.filter = `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`; }}
             >
               <Icon
                 size={size}
@@ -203,6 +283,7 @@ function FloatingMedicalIcons() {
                 style={{
                   color: glowColor.color,
                   opacity: 0.15 + depth * 0.2,
+                  transition: 'opacity 0.3s ease',
                 }}
               />
             </span>

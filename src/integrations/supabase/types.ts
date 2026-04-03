@@ -564,6 +564,7 @@ export type Database = {
           max_featured_projects: number | null
           max_featured_visualizations: number | null
           max_parallax_icons: number | null
+          parallax_animation_style: string | null
           phone: string | null
           professional_title: string
           profile_image_url: string | null
@@ -610,6 +611,7 @@ export type Database = {
           max_featured_projects?: number | null
           max_featured_visualizations?: number | null
           max_parallax_icons?: number | null
+          parallax_animation_style?: string | null
           phone?: string | null
           professional_title?: string
           profile_image_url?: string | null
@@ -656,6 +658,7 @@ export type Database = {
           max_featured_projects?: number | null
           max_featured_visualizations?: number | null
           max_parallax_icons?: number | null
+          parallax_animation_style?: string | null
           phone?: string | null
           professional_title?: string
           profile_image_url?: string | null
