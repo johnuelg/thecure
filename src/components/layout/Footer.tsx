@@ -129,7 +129,16 @@ export function Footer() {
             © {currentYear} {copyrightText}
           </p>
           <p className="text-sm text-muted-foreground flex items-center gap-1">
-            Made with <Heart className="w-4 h-4 text-destructive" /> for better healthcare
+            Made with{" "}
+            <Heart
+              className="w-4 h-4 animate-pulse"
+              style={{
+                color: 'hsl(var(--healthcare-teal))',
+                filter: 'drop-shadow(0 0 6px hsl(var(--healthcare-teal) / 0.6)) drop-shadow(0 0 12px hsl(var(--healthcare-blue) / 0.3))',
+              }}
+              fill="hsl(var(--healthcare-teal))"
+            />{" "}
+            for better healthcare
           </p>
         </div>
       </div>
