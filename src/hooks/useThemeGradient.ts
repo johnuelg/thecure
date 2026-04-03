@@ -38,7 +38,17 @@ export function useThemeGradient() {
       ? (data.gradient_dark_to || data.gradient_color_to)
       : data.gradient_color_to;
 
-    if (from) root.style.setProperty("--healthcare-blue", from);
-    if (to) root.style.setProperty("--healthcare-teal", to);
+    if (from) {
+      root.style.setProperty("--healthcare-blue", from);
+      root.style.setProperty("--primary", from);
+      root.style.setProperty("--ring", from);
+      root.style.setProperty("--sidebar-primary", from);
+      root.style.setProperty("--sidebar-ring", from);
+    }
+    if (to) {
+      root.style.setProperty("--healthcare-teal", to);
+      root.style.setProperty("--accent", to);
+      root.style.setProperty("--healthcare-pulse", to);
+    }
   }, [data, resolvedTheme]);
 }
