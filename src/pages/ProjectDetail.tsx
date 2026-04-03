@@ -52,10 +52,10 @@ export default function ProjectDetail() {
         <main className="container-wide py-24 text-center">
           <h1 className="text-3xl font-bold mb-4">Project Not Found</h1>
           <p className="text-muted-foreground mb-8">The project you're looking for doesn't exist.</p>
-          <Link to="/#projects">
+          <Link to={backLink}>
             <Button variant="outline">
               <ArrowLeft className="mr-2 w-4 h-4" />
-              Back to Projects
+              {backLabel}
             </Button>
           </Link>
         </main>
