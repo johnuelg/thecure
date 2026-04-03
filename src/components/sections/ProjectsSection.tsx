@@ -72,7 +72,7 @@ export function ProjectsSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("projects_description")
+        .select("projects_description, max_featured_projects")
         .maybeSingle();
       if (error) throw error;
       return data;
