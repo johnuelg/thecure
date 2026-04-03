@@ -34,6 +34,7 @@ import ExpertiseManager from "./pages/admin/ExpertiseManager";
 import KeywordHighlightsManager from "./pages/admin/KeywordHighlightsManager";
 import TypewriterKeywordsManager from "./pages/admin/TypewriterKeywordsManager";
 import ParallaxIconsManager from "./pages/admin/ParallaxIconsManager";
+import ThemeManager from "./pages/admin/ThemeManager";
 
 const queryClient = new QueryClient();
 
