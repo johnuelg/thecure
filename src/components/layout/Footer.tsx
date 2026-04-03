@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Heart, Linkedin, Github, Twitter, Mail } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,6 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   const { data: profile } = useQuery({
     queryKey: ['public-profile-footer'],
@@ -43,9 +45,13 @@ export function Footer() {
 
   const scrollToSection = (href: string) => {
     if (href.startsWith('#')) {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+      if (isHomePage) {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        navigate('/' + href);
       }
     } else if (href.startsWith('/')) {
       navigate(href);
