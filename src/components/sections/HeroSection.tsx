@@ -302,9 +302,9 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mb-6"
           >
-            {headlineParts[0]}
+            {renderHighlightedText(headlineParts[0], headlineHighlights)}
             {headlineParts[1] && (
-              <span className="block healthcare-gradient-text">{headlineParts[1]}</span>
+              <span className="block healthcare-gradient-text">{renderHighlightedText(headlineParts[1], headlineHighlights)}</span>
             )}
           </motion.h1>
 
