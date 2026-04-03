@@ -183,11 +183,11 @@ export function HeroSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("full_name, professional_title, tagline, bio")
+        .select("full_name, professional_title, tagline, bio, typewriter_anchor")
         .maybeSingle();
       
       if (error) throw error;
-      return data as Profile | null;
+      return data as (Profile & { typewriter_anchor: string | null }) | null;
     },
   });
 
