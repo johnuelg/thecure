@@ -318,6 +318,17 @@ const ThemeManager = () => {
           />
         </TabsContent>
       </Tabs>
+
+      <FontSelector
+        selectedHeading={fontHeading}
+        selectedBody={fontBody}
+        onSelect={(pair: FontPair) => {
+          setFontHeading(pair.heading);
+          setFontBody(pair.body);
+          document.documentElement.style.setProperty('--font-display', `"${pair.heading}", system-ui, sans-serif`);
+          document.documentElement.style.setProperty('--font-sans', `"${pair.body}", system-ui, sans-serif`);
+        }}
+      />
     </div>
   );
 };
