@@ -102,6 +102,7 @@ const ParallaxIconsManager = () => {
   const [animationStyle, setAnimationStyle] = useState('gentle-float');
   const [hoverEffect, setHoverEffect] = useState('soft-glow');
   const [scrollEffect, setScrollEffect] = useState('parallax-shift');
+  const [animSpeed, setAnimSpeed] = useState<SpeedOption>('slow');
   const [profileId, setProfileId] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
