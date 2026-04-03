@@ -76,19 +76,28 @@ function hexToRgb(hex: string): string {
 
 function generateIcons(iconNames: string[], glowColorsList?: { color: string; rgb: string }[], maxCount: number = 32): FloatingIcon[] {
   const count = Math.min(maxCount, iconNames.length);
-  const half = Math.ceil(count / 2);
   const colors = glowColorsList || defaultGlowColors;
+
+  // Calculate grid layout to scatter icons evenly across the header area
+  const cols = Math.ceil(Math.sqrt(count * 1.5)); // wider than tall
+  const rows = Math.ceil(count / cols);
+  const cellW = 96 / cols; // leave 2% margin each side
+  const cellH = 80 / rows; // spread across 10%-90% vertically
+
   return Array.from({ length: count }, (_, i) => {
-    const depth = Math.random();
-    const isLeft = i < half;
-    const x = isLeft ? 2 + Math.random() * 36 : 62 + Math.random() * 36;
-    const y = 10 + Math.random() * 80;
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const depth = 0.2 + (i / count) * 0.8; // ordered depth: first icons smaller/back, last icons larger/front
+    const jitterX = (Math.random() - 0.5) * cellW * 0.6;
+    const jitterY = (Math.random() - 0.5) * cellH * 0.6;
+    const x = 2 + col * cellW + cellW / 2 + jitterX;
+    const y = 10 + row * cellH + cellH / 2 + jitterY;
     const iconName = iconNames[i];
     return {
       id: i,
       Icon: getIcon(iconName),
-      x,
-      y,
+      x: Math.max(2, Math.min(98, x)),
+      y: Math.max(5, Math.min(95, y)),
       size: 14 + depth * 34,
       duration: 30 + Math.random() * 15,
       delay: Math.random() * -30,
