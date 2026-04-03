@@ -87,7 +87,7 @@ const KeywordHighlightsManager = () => {
       <div>
         <h1 className="text-2xl font-bold">Keyword Highlights</h1>
         <p className="text-muted-foreground">
-          Add keywords that should glow/highlight in the hero sub-headline (bio text).
+          Add keywords that should glow/highlight in the hero headline and/or bio text. Choose where each keyword applies.
         </p>
       </div>
 
