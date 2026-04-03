@@ -1,3 +1,4 @@
+import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { ExternalLink, ArrowRight } from "lucide-react";
@@ -11,6 +12,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 
 interface Project {
