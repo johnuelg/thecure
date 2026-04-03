@@ -298,6 +298,8 @@ function FloatingMedicalIcons() {
 
         const motionProps = getAnimationProps(icon);
         const hoverFilter = getHoverStyle(glowColor, depth);
+        const scrollOffset = getScrollOffset(parallaxFactor, ix, iy);
+        const whileHover = getWhileHover();
 
         return (
           <motion.div
@@ -306,13 +308,13 @@ function FloatingMedicalIcons() {
             style={{
               left: `${ix}%`,
               top: `${iy}%`,
-              x: x * parallaxFactor * 40,
-              y: y * parallaxFactor * 40,
+              x: scrollOffset.x,
+              y: scrollOffset.y,
               filter: blurAmount > 0.5 ? `blur(${blurAmount}px)` : undefined,
               zIndex: Math.round(depth * 10),
             }}
             {...motionProps}
-            whileHover={{ scale: 1.15, transition: { duration: 0.3 } }}
+            whileHover={whileHover}
           >
             {/* Light mode */}
             <span className="dark:hidden"
