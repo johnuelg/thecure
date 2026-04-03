@@ -39,6 +39,9 @@ const TypewriterKeywordsManager = () => {
     if (profile?.typewriter_anchor) {
       setAnchorText(profile.typewriter_anchor);
     }
+    if (profile?.tagline_line_break != null) {
+      setLineBreak(profile.tagline_line_break);
+    }
   }, [profile]);
 
   const { data: keywords = [], isLoading } = useQuery({
