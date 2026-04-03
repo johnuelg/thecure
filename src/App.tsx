@@ -12,6 +12,8 @@ import Index from "./pages/Index";
 import ProjectDetail from "./pages/ProjectDetail";
 import AllProjects from "./pages/AllProjects";
 import NotFound from "./pages/NotFound";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import Login from "./pages/admin/Login";
 import ForgotPassword from "./pages/admin/ForgotPassword";
 import ResetPassword from "./pages/admin/ResetPassword";
@@ -24,6 +26,7 @@ import FooterLinksManager from "./pages/admin/FooterLinksManager";
 import ServicesManager from "./pages/admin/ServicesManager";
 import ProjectsManager from "./pages/admin/ProjectsManager";
 import BlogManager from "./pages/admin/BlogManager";
+import BlogSettingsManager from "./pages/admin/BlogSettingsManager";
 import TestimonialsManager from "./pages/admin/TestimonialsManager";
 import MessagesManager from "./pages/admin/MessagesManager";
 import VisualizationsManager from "./pages/admin/VisualizationsManager";
@@ -49,6 +52,8 @@ const AppContent = () => {
           <Route path="/" element={<Index />} />
           <Route path="/projects" element={<AllProjects />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
 
           {/* Admin auth routes */}
           <Route path="/admin/login" element={<Login />} />
@@ -81,6 +86,7 @@ const AppContent = () => {
             <Route path="parallax-icons" element={<ParallaxIconsManager />} />
             <Route path="theme" element={<ThemeManager />} />
             <Route path="blog" element={<BlogManager />} />
+            <Route path="blog-settings" element={<BlogSettingsManager />} />
             <Route path="testimonials" element={<TestimonialsManager />} />
             <Route path="messages" element={<MessagesManager />} />
           </Route>
