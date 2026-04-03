@@ -43,6 +43,7 @@ const KeywordHighlightsManager = () => {
       const { error } = await supabase.from("hero_keyword_highlights").insert({
         keyword: newKeyword.trim(),
         glow_color: newColor,
+        target: newTarget,
         display_order: keywords.length,
       });
       if (error) throw error;
