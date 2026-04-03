@@ -256,7 +256,7 @@ function FloatingMedicalIcons() {
   const getWhileHover = () => {
     switch (hoverEffect) {
       case 'none':
-        return {};
+        return undefined;
       case 'scale-up':
         return { scale: 1.25, transition: { duration: 0.3 } };
       case 'pulse-ring':
