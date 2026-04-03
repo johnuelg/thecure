@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Activity, Heart, Stethoscope, Pill, Syringe, Brain, HeartPulse, Microscope, Dna, Thermometer, Cross, Hospital, Ambulance, Ribbon, Monitor, Database, UserRound, PersonStanding } from "lucide-react";
+import { TypewriterText } from "@/components/hero/TypewriterText";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
