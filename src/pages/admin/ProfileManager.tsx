@@ -138,6 +138,7 @@ const ProfileManager = () => {
       brand_name_image_url: brandNameImageUrl || null,
       max_featured_projects: maxFeaturedProjects,
       max_featured_visualizations: maxFeaturedVisualizations,
+      max_parallax_icons: maxParallaxIcons,
     };
 
     try {
