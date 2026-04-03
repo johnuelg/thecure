@@ -159,63 +159,64 @@ function FloatingMedicalIcons() {
     const moveY = 5 + depth * 10;
     const moveX = 3 + depth * 6;
 
+    // Base float keyframes
+    let animateObj: Record<string, number[]> = {};
+    let transitionDuration = duration;
+
     switch (animStyle) {
       case 'breathing-glow':
-        return {
-          animate: {
-            y: [0, -moveY * 0.5, 0],
-            x: [0, moveX * 0.3, 0],
-            scale: [1, 1.08 + depth * 0.06, 1],
-            opacity: [0.7, 1, 0.7],
-          },
-          transition: { duration: duration * 0.8, delay, repeat: Infinity, ease: "easeInOut" as const },
+        animateObj = {
+          y: [0, -moveY * 0.5, 0],
+          x: [0, moveX * 0.3, 0],
+          scale: [1, 1.08 + depth * 0.06, 1],
+          opacity: [0.7, 1, 0.7],
         };
+        transitionDuration = duration * 0.8;
+        break;
       case 'orbital-drift':
-        return {
-          animate: {
-            y: [0, -moveY, moveY * 0.3, -moveY * 0.5, 0],
-            x: [0, moveX, moveX * 1.2, -moveX * 0.5, 0],
-          },
-          transition: { duration: duration * 1.2, delay, repeat: Infinity, ease: "easeInOut" as const },
+        animateObj = {
+          y: [0, -moveY, moveY * 0.3, -moveY * 0.5, 0],
+          x: [0, moveX, moveX * 1.2, -moveX * 0.5, 0],
         };
+        transitionDuration = duration * 1.2;
+        break;
       case 'rising-bubbles':
-        return {
-          animate: {
-            y: [0, -moveY * 2, -moveY * 3, 0],
-            x: [0, moveX * 0.8, -moveX * 0.6, 0],
-            opacity: [0.5, 1, 0.8, 0.5],
-          },
-          transition: { duration: duration * 1.5, delay, repeat: Infinity, ease: "easeInOut" as const },
+        animateObj = {
+          y: [0, -moveY * 2, -moveY * 3, 0],
+          x: [0, moveX * 0.8, -moveX * 0.6, 0],
+          opacity: [0.5, 1, 0.8, 0.5],
         };
+        transitionDuration = duration * 1.5;
+        break;
       case 'wave-motion': {
         const phase = icon.id * 0.5;
-        return {
-          animate: {
-            y: [0, -moveY * Math.sin(phase), moveY * Math.cos(phase), 0],
-            x: [0, moveX * Math.cos(phase), -moveX * Math.sin(phase), 0],
-          },
-          transition: { duration, delay, repeat: Infinity, ease: "easeInOut" as const },
+        animateObj = {
+          y: [0, -moveY * Math.sin(phase), moveY * Math.cos(phase), 0],
+          x: [0, moveX * Math.cos(phase), -moveX * Math.sin(phase), 0],
         };
+        break;
       }
       case 'firefly-twinkle':
-        return {
-          animate: {
-            y: [0, -moveY * 0.7, 0, moveY * 0.4, 0],
-            x: [0, moveX * 0.5, -moveX * 0.3, moveX * 0.2, 0],
-            opacity: [0.3, 1, 0.4, 0.9, 0.3],
-          },
-          transition: { duration: duration * 1.1, delay, repeat: Infinity, ease: "easeInOut" as const },
+        animateObj = {
+          y: [0, -moveY * 0.7, 0, moveY * 0.4, 0],
+          x: [0, moveX * 0.5, -moveX * 0.3, moveX * 0.2, 0],
+          opacity: [0.3, 1, 0.4, 0.9, 0.3],
         };
+        transitionDuration = duration * 1.1;
+        break;
       case 'gentle-float':
       default:
-        return {
-          animate: {
-            y: [0, -moveY, 0, moveY * 0.6, 0],
-            x: [0, moveX, -moveX * 0.8, moveX * 0.4, 0],
-          },
-          transition: { duration, delay, repeat: Infinity, ease: "easeInOut" as const },
+        animateObj = {
+          y: [0, -moveY, 0, moveY * 0.6, 0],
+          x: [0, moveX, -moveX * 0.8, moveX * 0.4, 0],
         };
+        break;
     }
+
+    return {
+      animate: animateObj,
+      transition: { duration: transitionDuration, delay, repeat: Infinity, ease: "easeInOut" as const },
+    };
   };
 
   // Hover style based on hover effect setting
@@ -310,20 +311,25 @@ function FloatingMedicalIcons() {
         const whileHover = getWhileHover();
 
         return (
-          <motion.div
+          <div
             key={id}
-            className="absolute pointer-events-auto cursor-default"
+            className="absolute"
             style={{
               left: `${ix}%`,
               top: `${iy}%`,
-              x: scrollOffset.x,
-              y: scrollOffset.y,
-              filter: blurAmount > 0.5 ? `blur(${blurAmount}px)` : undefined,
+              transform: `translate(${scrollOffset.x}px, ${scrollOffset.y}px)`,
+              transition: 'transform 0.15s ease-out',
               zIndex: Math.round(depth * 10),
             }}
-            {...motionProps}
-            whileHover={whileHover}
           >
+            <motion.div
+              className="pointer-events-auto cursor-default"
+              style={{
+                filter: blurAmount > 0.5 ? `blur(${blurAmount}px)` : undefined,
+              }}
+              {...motionProps}
+              whileHover={whileHover}
+            >
             {/* Light mode */}
             <span className="dark:hidden"
               style={{
@@ -360,7 +366,8 @@ function FloatingMedicalIcons() {
                 }}
               />
             </span>
-          </motion.div>
+            </motion.div>
+          </div>
         );
       })}
     </div>
