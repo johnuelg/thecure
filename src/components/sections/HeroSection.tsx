@@ -36,17 +36,25 @@ interface FloatingIcon {
   glowColor: GlowColor;
 }
 
-function useParallax() {
+function useParallax(enabled: boolean) {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+
   useEffect(() => {
+    if (!enabled) {
+      setOffset({ x: 0, y: 0 });
+      return;
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       const cx = (e.clientX / window.innerWidth - 0.5) * 2;
       const cy = (e.clientY / window.innerHeight - 0.5) * 2;
       setOffset({ x: cx, y: cy });
     };
+
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [enabled]);
+
   return offset;
 }
 
