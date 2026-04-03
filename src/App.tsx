@@ -32,6 +32,7 @@ import HeroStatsManager from "./pages/admin/HeroStatsManager";
 import ExpertiseManager from "./pages/admin/ExpertiseManager";
 import KeywordHighlightsManager from "./pages/admin/KeywordHighlightsManager";
 import TypewriterKeywordsManager from "./pages/admin/TypewriterKeywordsManager";
+import ParallaxIconsManager from "./pages/admin/ParallaxIconsManager";
 
 const queryClient = new QueryClient();
 
