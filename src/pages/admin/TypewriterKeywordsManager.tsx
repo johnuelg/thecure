@@ -28,10 +28,10 @@ const TypewriterKeywordsManager = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('tagline, typewriter_anchor')
+        .select('tagline, typewriter_anchor, tagline_line_break')
         .maybeSingle();
       if (error) throw error;
-      return data as { tagline: string | null; typewriter_anchor: string | null } | null;
+      return data as { tagline: string | null; typewriter_anchor: string | null; tagline_line_break: number | null } | null;
     },
   });
 
