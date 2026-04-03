@@ -39,7 +39,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Pencil, Trash2, Loader2, Star, ExternalLink, Tag, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, Star, ExternalLink, Tag, X, GripVertical } from 'lucide-react';
 import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface ProjectCategory {
