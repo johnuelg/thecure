@@ -245,6 +245,8 @@ const ThemeManager = () => {
           gradient_color_to: lightTo,
           gradient_dark_from: darkFrom,
           gradient_dark_to: darkTo,
+          font_heading: fontHeading,
+          font_body: fontBody,
         })
         .eq('id', profileId);
       if (error) throw error;
