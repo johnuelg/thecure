@@ -263,20 +263,25 @@ export function HeroSection() {
     return parts.map((part, i) => {
       const match = sorted.find(k => k.keyword.toLowerCase() === part.toLowerCase());
       if (match) {
+        const isDark = document.documentElement.classList.contains('dark');
         return (
           <span
             key={i}
             className="font-semibold transition-all duration-300 cursor-default hover:scale-105 inline-block"
             style={{
-              textShadow: `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`,
+              textShadow: isDark ? `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40` : 'none',
               color: match.glow_color,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.textShadow = `0 0 12px ${match.glow_color}cc, 0 0 30px ${match.glow_color}80, 0 0 50px ${match.glow_color}40`;
-              e.currentTarget.style.filter = `brightness(1.2)`;
+              const dark = document.documentElement.classList.contains('dark');
+              if (dark) {
+                e.currentTarget.style.textShadow = `0 0 12px ${match.glow_color}cc, 0 0 30px ${match.glow_color}80, 0 0 50px ${match.glow_color}40`;
+              }
+              e.currentTarget.style.filter = dark ? `brightness(1.2)` : `brightness(0.85)`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.textShadow = `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`;
+              const dark = document.documentElement.classList.contains('dark');
+              e.currentTarget.style.textShadow = dark ? `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40` : 'none';
               e.currentTarget.style.filter = `brightness(1)`;
             }}
           >
