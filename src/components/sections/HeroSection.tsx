@@ -322,20 +322,49 @@ export function HeroSection() {
             {(() => {
               const anchor = profile?.typewriter_anchor;
               const fullHeadline = headlineParts.join(" ");
+              const breakAt = profile?.tagline_line_break ?? 4;
               
-              // If we have an anchor and typewriter keywords, embed inline
+              // If we have an anchor and typewriter keywords, embed inline with line break
               if (anchor && typewriterKeywords && typewriterKeywords.length > 0) {
                 const anchorIndex = fullHeadline.toLowerCase().indexOf(anchor.toLowerCase());
                 if (anchorIndex !== -1) {
                   const before = fullHeadline.slice(0, anchorIndex);
                   const after = fullHeadline.slice(anchorIndex + anchor.length);
-                  // Include the anchor as the first word so it starts naturally
                   const allWords = [anchor, ...typewriterKeywords.filter(k => k.toLowerCase() !== anchor.toLowerCase())];
+                  
+                  // Count words before the anchor to determine line break placement
+                  const wordsBeforeAnchor = before.trim() ? before.trim().split(/\s+/).length : 0;
+                  const anchorWordCount = anchor.trim().split(/\s+/).length;
+                  const afterWords = after.trim() ? after.trim().split(/\s+/) : [];
+                  
+                  // Determine how many after-words go on line 1
+                  const wordsOnLine1 = breakAt - wordsBeforeAnchor - anchorWordCount;
+                  
+                  if (breakAt > 0 && afterWords.length > 0 && wordsOnLine1 >= 0) {
+                    const afterLine1 = afterWords.slice(0, wordsOnLine1).join(" ");
+                    const afterLine2 = afterWords.slice(wordsOnLine1).join(" ");
+                    return (
+                      <>
+                        <span>
+                          {before.trim() && <>{renderHighlightedText(before, headlineHighlights)} </>}
+                          <TypewriterText words={allWords} typingSpeed={80} deletingSpeed={50} pauseDuration={2000} />
+                          {afterLine1 && <> {renderHighlightedText(afterLine1, headlineHighlights)}</>}
+                        </span>
+                        {afterLine2 && (
+                          <span className="block healthcare-gradient-text">
+                            {renderHighlightedText(afterLine2, headlineHighlights)}
+                          </span>
+                        )}
+                      </>
+                    );
+                  }
+                  
+                  // No line break needed
                   return (
                     <>
                       {before.trim() && <>{renderHighlightedText(before, headlineHighlights)} </>}
                       <TypewriterText words={allWords} typingSpeed={80} deletingSpeed={50} pauseDuration={2000} />
-                      {after.trim() && <>{renderHighlightedText(after, headlineHighlights)}</>}
+                      {after.trim() && <> {renderHighlightedText(after, headlineHighlights)}</>}
                     </>
                   );
                 }
