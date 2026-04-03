@@ -15,7 +15,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Trash2, Loader2, GripVertical, Sparkles, HeartPulse } from 'lucide-react';
+import { Plus, Trash2, Loader2, GripVertical, Sparkles, HeartPulse, Filter } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { icons } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { IconPicker } from '@/components/admin/IconPicker';
