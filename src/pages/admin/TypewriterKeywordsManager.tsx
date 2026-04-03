@@ -60,7 +60,7 @@ const TypewriterKeywordsManager = () => {
     mutationFn: async (anchor: string) => {
       const { error } = await supabase
         .from('profile')
-        .update({ typewriter_anchor: anchor || null })
+        .update({ typewriter_anchor: anchor || null } as any)
         .not('id', 'is', null);
       if (error) throw error;
     },
@@ -70,6 +70,22 @@ const TypewriterKeywordsManager = () => {
       toast({ title: 'Typewriter anchor saved' });
     },
     onError: () => toast({ title: 'Error saving anchor', variant: 'destructive' }),
+  });
+
+  const saveLineBreakMutation = useMutation({
+    mutationFn: async (value: number) => {
+      const { error } = await supabase
+        .from('profile')
+        .update({ tagline_line_break: value } as any)
+        .not('id', 'is', null);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-profile-typewriter'] });
+      queryClient.invalidateQueries({ queryKey: ['public-profile'] });
+      toast({ title: 'Headline line break saved' });
+    },
+    onError: () => toast({ title: 'Error saving line break', variant: 'destructive' }),
   });
 
   const addMutation = useMutation({
