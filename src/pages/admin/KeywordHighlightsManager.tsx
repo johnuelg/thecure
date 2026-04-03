@@ -118,6 +118,19 @@ const KeywordHighlightsManager = () => {
               />
             </div>
           </div>
+          <div className="space-y-1">
+            <Label>Target</Label>
+            <Select value={newTarget} onValueChange={setNewTarget}>
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="bio">Bio</SelectItem>
+                <SelectItem value="headline">Headline</SelectItem>
+                <SelectItem value="both">Both</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <Button
             onClick={() => addMutation.mutate()}
             disabled={!newKeyword.trim() || addMutation.isPending}
