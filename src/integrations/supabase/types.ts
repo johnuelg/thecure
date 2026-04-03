@@ -537,6 +537,7 @@ export type Database = {
           tagline: string | null
           teams_meeting_url: string | null
           twitter_url: string | null
+          typewriter_anchor: string | null
           updated_at: string
           video_url: string | null
           zoom_meeting_url: string | null
@@ -572,6 +573,7 @@ export type Database = {
           tagline?: string | null
           teams_meeting_url?: string | null
           twitter_url?: string | null
+          typewriter_anchor?: string | null
           updated_at?: string
           video_url?: string | null
           zoom_meeting_url?: string | null
@@ -607,6 +609,7 @@ export type Database = {
           tagline?: string | null
           teams_meeting_url?: string | null
           twitter_url?: string | null
+          typewriter_anchor?: string | null
           updated_at?: string
           video_url?: string | null
           zoom_meeting_url?: string | null

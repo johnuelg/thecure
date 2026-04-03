@@ -1,0 +1,1 @@
+ALTER TABLE public.profile ADD COLUMN typewriter_anchor text DEFAULT NULL;
