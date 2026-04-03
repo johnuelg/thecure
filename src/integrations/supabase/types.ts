@@ -376,6 +376,36 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_keyword_highlights: {
+        Row: {
+          created_at: string
+          display_order: number
+          glow_color: string
+          id: string
+          is_active: boolean
+          keyword: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          glow_color?: string
+          id?: string
+          is_active?: boolean
+          keyword: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          glow_color?: string
+          id?: string
+          is_active?: boolean
+          keyword?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hero_stats: {
         Row: {
           created_at: string
