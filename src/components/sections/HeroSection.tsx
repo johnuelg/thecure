@@ -342,7 +342,7 @@ export function HeroSection() {
                           {before.trim() && <>{renderHighlightedText(before, headlineHighlights)} </>}
                           <TypewriterText words={allWords} typingSpeed={80} deletingSpeed={50} pauseDuration={2000} />
                         </span>
-                        <span className="block healthcare-gradient-text">
+                        <span className="block">
                           {renderHighlightedText(afterText, headlineHighlights)}
                         </span>
                       </>
