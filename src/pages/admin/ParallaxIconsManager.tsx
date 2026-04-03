@@ -50,67 +50,101 @@ const getIcon = (name: string): LucideIcon => {
   return (icons as Record<string, LucideIcon>)[name] || icons.Award;
 };
 
-// Curated healthcare icons with themed glow colors
-const HEALTHCARE_ICONS: { name: string; color: string }[] = [
-  { name: 'Brain', color: '#7c6cf7' },
-  { name: 'BrainCircuit', color: '#8b7cf8' },
-  { name: 'BrainCog', color: '#6e5ce0' },
-  { name: 'Heart', color: '#e06894' },
-  { name: 'HeartPulse', color: '#e0688a' },
-  { name: 'HeartHandshake', color: '#d4607e' },
-  { name: 'HeartCrack', color: '#c75878' },
-  { name: 'Stethoscope', color: '#41c0c2' },
-  { name: 'Hospital', color: '#36a5e0' },
-  { name: 'Ambulance', color: '#e05555' },
-  { name: 'Pill', color: '#44d7b6' },
-  { name: 'PillBottle', color: '#3cc4a5' },
-  { name: 'Tablets', color: '#38b99e' },
-  { name: 'Syringe', color: '#5b8cf7' },
-  { name: 'Thermometer', color: '#e09044' },
-  { name: 'ThermometerSun', color: '#e0a044' },
-  { name: 'Microscope', color: '#6e8ef0' },
-  { name: 'Dna', color: '#9b6cf7' },
-  { name: 'Ribbon', color: '#e06894' },
-  { name: 'Cross', color: '#e05555' },
-  { name: 'Activity', color: '#41c0c2' },
-  { name: 'SquareActivity', color: '#3aafb1' },
-  { name: 'Bandage', color: '#d4a574' },
-  { name: 'Baby', color: '#f0a0c0' },
-  { name: 'Bone', color: '#c8c0b0' },
-  { name: 'Ear', color: '#d49070' },
-  { name: 'Eye', color: '#5ba0e0' },
-  { name: 'Accessibility', color: '#44b8d7' },
-  { name: 'ShieldCheck', color: '#44d7b6' },
-  { name: 'ShieldPlus', color: '#3cc4a5' },
-  { name: 'TestTube', color: '#7c9cf7' },
-  { name: 'TestTubeDiagonal', color: '#6e8ef0' },
-  { name: 'TestTubes', color: '#5b80e8' },
-  { name: 'FlaskConical', color: '#8b7cf8' },
-  { name: 'FlaskRound', color: '#7c6cf7' },
-  { name: 'Bed', color: '#6a8cd0' },
-  { name: 'BedDouble', color: '#5a7cc0' },
-  { name: 'ClipboardCheck', color: '#44b8d7' },
-  { name: 'ClipboardList', color: '#3aa8c7' },
-  { name: 'ClipboardPlus', color: '#41c0c2' },
-  { name: 'FileHeart', color: '#e06894' },
-  { name: 'FileScan', color: '#5b8cf7' },
-  { name: 'Scan', color: '#5ba0e0' },
-  { name: 'ScanFace', color: '#4a90d0' },
-  { name: 'ScanEye', color: '#5b8cf7' },
-  { name: 'CircleGauge', color: '#44d7b6' },
-  { name: 'Droplet', color: '#e05555' },
-  { name: 'Droplets', color: '#e06060' },
-  { name: 'Apple', color: '#44d780' },
-  { name: 'Leaf', color: '#44c070' },
-  { name: 'LeafyGreen', color: '#3cb868' },
-  { name: 'Salad', color: '#44c070' },
-  { name: 'HandHeart', color: '#e06894' },
-  { name: 'HandHelping', color: '#44b8d7' },
-  { name: 'UserRound', color: '#5b8cf7' },
-  { name: 'Users', color: '#4a7ce0' },
-  { name: 'Monitor', color: '#36a5e0' },
-  { name: 'Cigarette', color: '#a09090' },
-  { name: 'CigaretteOff', color: '#44d7b6' },
+// Healthcare icon categories
+type HealthcareCategory = 'All' | 'Cardiology' | 'Neurology' | 'Pharma' | 'Diagnostics' | 'Organs & Body' | 'Equipment' | 'Facilities' | 'Wellness' | 'Patient Care' | 'Records' | 'Safety';
+
+const HEALTHCARE_CATEGORIES: HealthcareCategory[] = [
+  'All', 'Cardiology', 'Neurology', 'Pharma', 'Diagnostics', 'Organs & Body',
+  'Equipment', 'Facilities', 'Wellness', 'Patient Care', 'Records', 'Safety',
+];
+
+interface HealthcareIcon {
+  name: string;
+  color: string;
+  category: HealthcareCategory;
+}
+
+const HEALTHCARE_ICONS: HealthcareIcon[] = [
+  // Cardiology
+  { name: 'Heart', color: '#e06894', category: 'Cardiology' },
+  { name: 'HeartPulse', color: '#e0688a', category: 'Cardiology' },
+  { name: 'HeartHandshake', color: '#d4607e', category: 'Cardiology' },
+  { name: 'HeartCrack', color: '#c75878', category: 'Cardiology' },
+  { name: 'Activity', color: '#41c0c2', category: 'Cardiology' },
+  { name: 'SquareActivity', color: '#3aafb1', category: 'Cardiology' },
+  { name: 'Droplet', color: '#e05555', category: 'Cardiology' },
+  { name: 'Droplets', color: '#e06060', category: 'Cardiology' },
+
+  // Neurology
+  { name: 'Brain', color: '#7c6cf7', category: 'Neurology' },
+  { name: 'BrainCircuit', color: '#8b7cf8', category: 'Neurology' },
+  { name: 'BrainCog', color: '#6e5ce0', category: 'Neurology' },
+
+  // Pharma
+  { name: 'Pill', color: '#44d7b6', category: 'Pharma' },
+  { name: 'PillBottle', color: '#3cc4a5', category: 'Pharma' },
+  { name: 'Tablets', color: '#38b99e', category: 'Pharma' },
+  { name: 'Syringe', color: '#5b8cf7', category: 'Pharma' },
+
+  // Diagnostics
+  { name: 'Stethoscope', color: '#41c0c2', category: 'Diagnostics' },
+  { name: 'Thermometer', color: '#e09044', category: 'Diagnostics' },
+  { name: 'ThermometerSun', color: '#e0a044', category: 'Diagnostics' },
+  { name: 'Microscope', color: '#6e8ef0', category: 'Diagnostics' },
+  { name: 'Dna', color: '#9b6cf7', category: 'Diagnostics' },
+  { name: 'TestTube', color: '#7c9cf7', category: 'Diagnostics' },
+  { name: 'TestTubeDiagonal', color: '#6e8ef0', category: 'Diagnostics' },
+  { name: 'TestTubes', color: '#5b80e8', category: 'Diagnostics' },
+  { name: 'FlaskConical', color: '#8b7cf8', category: 'Diagnostics' },
+  { name: 'FlaskRound', color: '#7c6cf7', category: 'Diagnostics' },
+  { name: 'Scan', color: '#5ba0e0', category: 'Diagnostics' },
+  { name: 'ScanFace', color: '#4a90d0', category: 'Diagnostics' },
+  { name: 'ScanEye', color: '#5b8cf7', category: 'Diagnostics' },
+  { name: 'CircleGauge', color: '#44d7b6', category: 'Diagnostics' },
+
+  // Organs & Body
+  { name: 'Baby', color: '#f0a0c0', category: 'Organs & Body' },
+  { name: 'Bone', color: '#c8c0b0', category: 'Organs & Body' },
+  { name: 'Ear', color: '#d49070', category: 'Organs & Body' },
+  { name: 'Eye', color: '#5ba0e0', category: 'Organs & Body' },
+
+  // Equipment
+  { name: 'Bandage', color: '#d4a574', category: 'Equipment' },
+  { name: 'Cross', color: '#e05555', category: 'Equipment' },
+  { name: 'Ribbon', color: '#e06894', category: 'Equipment' },
+  { name: 'Monitor', color: '#36a5e0', category: 'Equipment' },
+
+  // Facilities
+  { name: 'Hospital', color: '#36a5e0', category: 'Facilities' },
+  { name: 'Ambulance', color: '#e05555', category: 'Facilities' },
+  { name: 'Bed', color: '#6a8cd0', category: 'Facilities' },
+  { name: 'BedDouble', color: '#5a7cc0', category: 'Facilities' },
+
+  // Wellness
+  { name: 'Apple', color: '#44d780', category: 'Wellness' },
+  { name: 'Leaf', color: '#44c070', category: 'Wellness' },
+  { name: 'LeafyGreen', color: '#3cb868', category: 'Wellness' },
+  { name: 'Salad', color: '#44c070', category: 'Wellness' },
+  { name: 'CigaretteOff', color: '#44d7b6', category: 'Wellness' },
+  { name: 'Cigarette', color: '#a09090', category: 'Wellness' },
+  { name: 'Accessibility', color: '#44b8d7', category: 'Wellness' },
+
+  // Patient Care
+  { name: 'HandHeart', color: '#e06894', category: 'Patient Care' },
+  { name: 'HandHelping', color: '#44b8d7', category: 'Patient Care' },
+  { name: 'UserRound', color: '#5b8cf7', category: 'Patient Care' },
+  { name: 'Users', color: '#4a7ce0', category: 'Patient Care' },
+
+  // Records
+  { name: 'ClipboardCheck', color: '#44b8d7', category: 'Records' },
+  { name: 'ClipboardList', color: '#3aa8c7', category: 'Records' },
+  { name: 'ClipboardPlus', color: '#41c0c2', category: 'Records' },
+  { name: 'FileHeart', color: '#e06894', category: 'Records' },
+  { name: 'FileScan', color: '#5b8cf7', category: 'Records' },
+
+  // Safety
+  { name: 'ShieldCheck', color: '#44d7b6', category: 'Safety' },
+  { name: 'ShieldPlus', color: '#3cc4a5', category: 'Safety' },
 ];
 
 function SortableIconRow({
