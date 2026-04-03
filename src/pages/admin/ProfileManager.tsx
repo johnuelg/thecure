@@ -60,6 +60,7 @@ const ProfileManager = () => {
   const [brandNameImageUrl, setBrandNameImageUrl] = useState('');
   const [maxFeaturedProjects, setMaxFeaturedProjects] = useState(4);
   const [maxFeaturedVisualizations, setMaxFeaturedVisualizations] = useState(4);
+  const [maxParallaxIcons, setMaxParallaxIcons] = useState(32);
 
   const fetchProfile = async () => {
     try {
