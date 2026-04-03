@@ -94,8 +94,49 @@ const ProjectsManager = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('project_categories')
+        .select('*')
+        .order('display_order', { ascending: true });
+      if (error) throw error;
+      setCategories(data || []);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const handleAddCategory = async () => {
+    if (!newCategoryName.trim()) return;
+    try {
+      const { error } = await supabase
+        .from('project_categories')
+        .insert({ name: newCategoryName.trim(), display_order: categories.length });
+      if (error) throw error;
+      toast({ title: 'Category added' });
+      setNewCategoryName('');
+      fetchCategories();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    if (!confirm('Delete this category?')) return;
+    try {
+      const { error } = await supabase.from('project_categories').delete().eq('id', id);
+      if (error) throw error;
+      toast({ title: 'Category deleted' });
+      fetchCategories();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
+    fetchCategories();
   }, []);
 
   const resetForm = () => {
