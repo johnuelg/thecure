@@ -540,6 +540,11 @@ export type Database = {
           about_description: string | null
           analytics_description: string | null
           bio: string | null
+          blog_description: string | null
+          blog_layout: string | null
+          blog_meta_description: string | null
+          blog_page_title: string | null
+          blog_posts_per_page: number | null
           booking_url: string | null
           brand_name: string | null
           brand_name_image_url: string | null
@@ -591,6 +596,11 @@ export type Database = {
           about_description?: string | null
           analytics_description?: string | null
           bio?: string | null
+          blog_description?: string | null
+          blog_layout?: string | null
+          blog_meta_description?: string | null
+          blog_page_title?: string | null
+          blog_posts_per_page?: number | null
           booking_url?: string | null
           brand_name?: string | null
           brand_name_image_url?: string | null
@@ -642,6 +652,11 @@ export type Database = {
           about_description?: string | null
           analytics_description?: string | null
           bio?: string | null
+          blog_description?: string | null
+          blog_layout?: string | null
+          blog_meta_description?: string | null
+          blog_page_title?: string | null
+          blog_posts_per_page?: number | null
           booking_url?: string | null
           brand_name?: string | null
           brand_name_image_url?: string | null
