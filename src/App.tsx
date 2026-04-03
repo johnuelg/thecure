@@ -29,6 +29,7 @@ import ResumeManager from "./pages/admin/ResumeManager";
 import KnowledgeBaseManager from "./pages/admin/KnowledgeBaseManager";
 import HeroStatsManager from "./pages/admin/HeroStatsManager";
 import ExpertiseManager from "./pages/admin/ExpertiseManager";
+import KeywordHighlightsManager from "./pages/admin/KeywordHighlightsManager";
 
 const queryClient = new QueryClient();
 

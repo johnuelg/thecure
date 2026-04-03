@@ -331,14 +331,42 @@ export function HeroSection() {
             </svg>
           </motion.div>
 
-          {/* Description */}
+          {/* Description with keyword highlights */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
           >
-            {profile?.bio || "I help healthcare organizations leverage artificial intelligence to improve patient outcomes, streamline operations, and unlock insights from complex medical data."}
+            {(() => {
+              const bioText = profile?.bio || "I help healthcare organizations leverage artificial intelligence to improve patient outcomes, streamline operations, and unlock insights from complex medical data.";
+              if (!keywordHighlights || keywordHighlights.length === 0) return bioText;
+
+              // Build regex from keywords (case-insensitive, longest first)
+              const sorted = [...keywordHighlights].sort((a, b) => b.keyword.length - a.keyword.length);
+              const escaped = sorted.map(k => k.keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+              const regex = new RegExp(`(${escaped.join('|')})`, 'gi');
+              const parts = bioText.split(regex);
+
+              return parts.map((part, i) => {
+                const match = sorted.find(k => k.keyword.toLowerCase() === part.toLowerCase());
+                if (match) {
+                  return (
+                    <span
+                      key={i}
+                      className="font-semibold text-foreground transition-all duration-300"
+                      style={{
+                        textShadow: `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`,
+                        color: match.glow_color,
+                      }}
+                    >
+                      {part}
+                    </span>
+                  );
+                }
+                return part;
+              });
+            })()}
           </motion.p>
 
           {/* CTAs */}
