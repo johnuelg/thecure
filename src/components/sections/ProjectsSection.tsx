@@ -1,3 +1,4 @@
+import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { ExternalLink, ArrowRight } from "lucide-react";
@@ -11,6 +12,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 
 interface Project {
@@ -72,6 +74,17 @@ const fallbackProjects: Project[] = [
 ];
 
 export function ProjectsSection() {
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+    api.on("select", () => setCurrent(api.selectedScrollSnap()));
+  }, [api]);
+
   const { ref: sectionRef, isInView } = useScrollAnimation();
 
   const { data: profile } = useQuery({
@@ -152,7 +165,7 @@ export function ProjectsSection() {
             ))}
           </div>
         ) : (
-          <Carousel opts={{ align: "start", loop: true }} className="w-full">
+          <Carousel opts={{ align: "start", loop: true }} setApi={setApi} className="w-full">
             <CarouselContent className="-ml-4">
               {displayProjects.map((project, index) => (
                 <CarouselItem key={project.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
@@ -162,7 +175,6 @@ export function ProjectsSection() {
                     transition={{ duration: 0.4, delay: 0.1 + index * 0.1 }}
                     className="card-medical overflow-hidden group h-full"
                   >
-                    {/* Image */}
                     <div className="relative h-56 overflow-hidden">
                       <img
                         src={project.image_url || "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop"}
@@ -176,8 +188,6 @@ export function ProjectsSection() {
                         </span>
                       )}
                     </div>
-
-                    {/* Content */}
                     <div className="p-6">
                       <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
                         {project.title}
@@ -185,8 +195,6 @@ export function ProjectsSection() {
                       <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-3">
                         {project.description}
                       </p>
-
-                      {/* Tags */}
                       {getProjectTags(project).length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-4">
                           {getProjectTags(project).map((tag) => (
@@ -199,7 +207,6 @@ export function ProjectsSection() {
                           ))}
                         </div>
                       )}
-
                       <Link to={`/projects/${project.id}`}>
                         <Button variant="ghost" size="sm" className="group/btn p-0 h-auto">
                           View Case Study
@@ -211,8 +218,22 @@ export function ProjectsSection() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="flex justify-center gap-2 mt-8">
+            <div className="flex items-center justify-center gap-4 mt-8">
               <CarouselPrevious className="static translate-y-0" />
+              <div className="flex gap-2">
+                {Array.from({ length: count }).map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => api?.scrollTo(i)}
+                    className={`h-2.5 rounded-full transition-all duration-300 ${
+                      i === current
+                        ? "w-8 bg-primary"
+                        : "w-2.5 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                    }`}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
+                ))}
+              </div>
               <CarouselNext className="static translate-y-0" />
             </div>
           </Carousel>
