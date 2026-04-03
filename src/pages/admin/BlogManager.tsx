@@ -388,15 +388,14 @@ const BlogManager = () => {
                 accept="image/jpeg,image/png,image/gif,.jpg,.jpeg,.png,.gif"
                 sizeHint="Supports JPG, PNG, and GIF (max 10MB)"
               />
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
-                  <Input
-                    id="category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    placeholder="e.g., AI in Healthcare"
-                  />
+              <div className="space-y-2">
+                <Label htmlFor="category">Category</Label>
+                <Input
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  placeholder="e.g., AI in Healthcare"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="tags">Tags (comma-separated)</Label>
