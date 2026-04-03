@@ -9,6 +9,10 @@ import { motion } from "framer-motion";
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const cameFromAllProjects = location.state?.from === '/projects';
+  const backLink = cameFromAllProjects ? '/projects' : '/#projects';
+  const backLabel = cameFromAllProjects ? 'Back to All Projects' : 'Back to Projects';
 
   const { data: project, isLoading } = useQuery({
     queryKey: ["project-detail", id],
