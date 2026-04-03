@@ -136,3 +136,53 @@ export function ScrollEffectSelector({ selected, onSelect }: ScrollEffectSelecto
     </Card>
   );
 }
+
+const SPEED_OPTIONS: { id: SpeedOption; label: string; icon: string; description: string }[] = [
+  { id: 'slow', label: 'Slow', icon: '🐢', description: 'Calm & meditative — 30-45s cycles' },
+  { id: 'medium', label: 'Medium', icon: '🚶', description: 'Balanced rhythm — 15-25s cycles' },
+  { id: 'fast', label: 'Fast', icon: '⚡', description: 'Energetic motion — 8-15s cycles' },
+];
+
+interface SpeedSelectorProps {
+  selected: SpeedOption;
+  onSelect: (speed: SpeedOption) => void;
+}
+
+export function SpeedSelector({ selected, onSelect }: SpeedSelectorProps) {
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Gauge className="h-5 w-5" />
+          Animation Speed
+        </CardTitle>
+        <CardDescription>Control how fast the floating icons move</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-3 gap-3">
+          {SPEED_OPTIONS.map((opt) => (
+            <button
+              key={opt.id}
+              onClick={() => onSelect(opt.id)}
+              className={cn(
+                "relative text-center rounded-xl border-2 p-4 transition-all duration-200 hover:scale-[1.02]",
+                selected === opt.id
+                  ? "border-primary ring-2 ring-primary/30 shadow-lg bg-primary/5"
+                  : "border-border hover:border-primary/50 bg-card"
+              )}
+            >
+              {selected === opt.id && (
+                <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                  <Check className="h-3 w-3 text-primary-foreground" />
+                </div>
+              )}
+              <span className="text-2xl mb-2 block">{opt.icon}</span>
+              <p className="text-sm font-semibold">{opt.label}</p>
+              <p className="text-[11px] text-muted-foreground mt-1">{opt.description}</p>
+            </button>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
