@@ -16,6 +16,7 @@ interface KeywordHighlight {
   glow_color: string;
   is_active: boolean;
   display_order: number;
+  target: string;
 }
 
 const KeywordHighlightsManager = () => {
