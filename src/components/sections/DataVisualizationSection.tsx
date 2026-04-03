@@ -274,7 +274,7 @@ export function DataVisualizationSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("analytics_description")
+        .select("analytics_description, max_featured_visualizations")
         .maybeSingle();
       if (error) throw error;
       return data;
@@ -296,9 +296,10 @@ export function DataVisualizationSection() {
   });
 
   // Use database visualizations or fallback to demo data
-  const displayVisualizations = visualizations && visualizations.length > 0 
+  const maxViz = (profile as any)?.max_featured_visualizations ?? 4;
+  const displayVisualizations = (visualizations && visualizations.length > 0 
     ? visualizations 
-    : fallbackVisualizations;
+    : fallbackVisualizations).slice(0, maxViz);
 
   const sectionDescription = profile?.analytics_description || 
     "Interactive visualizations demonstrating the power of AI in transforming healthcare outcomes and operational efficiency.";

@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Save, User, Briefcase, Mail, Phone, MapPin, Linkedin, Github, Twitter, Palette } from 'lucide-react';
 import { ImageUpload } from '@/components/admin/ImageUpload';
+import { Slider } from '@/components/ui/slider';
 
 interface Profile {
   id: string;
@@ -57,6 +58,8 @@ const ProfileManager = () => {
   const [siteDescription, setSiteDescription] = useState('');
   const [brandName, setBrandName] = useState('');
   const [brandNameImageUrl, setBrandNameImageUrl] = useState('');
+  const [maxFeaturedProjects, setMaxFeaturedProjects] = useState(4);
+  const [maxFeaturedVisualizations, setMaxFeaturedVisualizations] = useState(4);
 
   const fetchProfile = async () => {
     try {
@@ -88,6 +91,8 @@ const ProfileManager = () => {
         setSiteDescription((data as any).site_description || '');
         setBrandName((data as any).brand_name || '');
         setBrandNameImageUrl((data as any).brand_name_image_url || '');
+        setMaxFeaturedProjects((data as any).max_featured_projects ?? 4);
+        setMaxFeaturedVisualizations((data as any).max_featured_visualizations ?? 4);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -129,6 +134,8 @@ const ProfileManager = () => {
       site_description: siteDescription || null,
       brand_name: brandName || 'HealthcareAI',
       brand_name_image_url: brandNameImageUrl || null,
+      max_featured_projects: maxFeaturedProjects,
+      max_featured_visualizations: maxFeaturedVisualizations,
     };
 
     try {
@@ -410,6 +417,43 @@ const ProfileManager = () => {
               requireSquare
               sizeHint="Recommended: square PNG, 32×32 or 512×512 px"
             />
+          </CardContent>
+        </Card>
+
+        {/* Display Limits */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Palette className="h-5 w-5" />
+              Display Limits
+            </CardTitle>
+            <CardDescription>Control how many featured items appear on the homepage</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-3">
+              <Label>Max Featured Projects: {maxFeaturedProjects}</Label>
+              <Slider
+                value={[maxFeaturedProjects]}
+                onValueCommit={(value) => setMaxFeaturedProjects(value[0])}
+                onValueChange={(value) => setMaxFeaturedProjects(value[0])}
+                min={1}
+                max={12}
+                step={1}
+              />
+              <p className="text-xs text-muted-foreground">Number of projects shown in the Featured Projects section</p>
+            </div>
+            <div className="space-y-3">
+              <Label>Max Data Analytics Showcases: {maxFeaturedVisualizations}</Label>
+              <Slider
+                value={[maxFeaturedVisualizations]}
+                onValueCommit={(value) => setMaxFeaturedVisualizations(value[0])}
+                onValueChange={(value) => setMaxFeaturedVisualizations(value[0])}
+                min={1}
+                max={12}
+                step={1}
+              />
+              <p className="text-xs text-muted-foreground">Number of visualizations shown in the Data Analytics Showcase section</p>
+            </div>
           </CardContent>
         </Card>
 
