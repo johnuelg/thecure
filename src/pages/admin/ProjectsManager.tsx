@@ -275,6 +275,71 @@ const ProjectsManager = () => {
         </Button>
       </div>
 
+      {/* Categories Management */}
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Tag className="h-5 w-5" />
+              Project Categories
+            </CardTitle>
+            <Button variant="outline" size="sm" onClick={() => setIsCategoryDialogOpen(true)}>
+              <Plus className="h-3 w-3 mr-1" />
+              Add Category
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {categories.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No categories yet. Add one to get started.</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => (
+                <Badge
+                  key={cat.id}
+                  variant={cat.is_active ? "default" : "secondary"}
+                  className="px-3 py-1.5 text-sm gap-1.5"
+                >
+                  {cat.name}
+                  <button
+                    onClick={() => handleDeleteCategory(cat.id)}
+                    className="ml-1 hover:text-destructive transition-colors"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Add Category Dialog */}
+      <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Add Category</DialogTitle>
+            <DialogDescription>Create a new project category</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="categoryName">Category Name</Label>
+              <Input
+                id="categoryName"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                placeholder="e.g., Machine Learning"
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddCategory(); setIsCategoryDialogOpen(false); }}}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsCategoryDialogOpen(false)}>Cancel</Button>
+            <Button onClick={() => { handleAddCategory(); setIsCategoryDialogOpen(false); }}>Add</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {projects.length === 0 ? (
         <Card>
           <CardContent className="text-center py-12">
