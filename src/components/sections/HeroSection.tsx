@@ -195,11 +195,11 @@ export function HeroSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("hero_keyword_highlights")
-        .select("keyword, glow_color")
+        .select("keyword, glow_color, target")
         .eq("is_active", true)
         .order("display_order", { ascending: true });
       if (error) throw error;
-      return data as { keyword: string; glow_color: string }[];
+      return data as { keyword: string; glow_color: string; target: string }[];
     },
   });
 
@@ -233,6 +233,44 @@ export function HeroSection() {
     "Through Intelligent Solutions"
   ];
 
+  // Filter highlights by target
+  const headlineHighlights = keywordHighlights?.filter(k => k.target === 'headline' || k.target === 'both') || [];
+  const bioHighlights = keywordHighlights?.filter(k => k.target === 'bio' || k.target === 'both') || [];
+
+  const renderHighlightedText = (text: string, highlights: { keyword: string; glow_color: string }[]) => {
+    if (!highlights.length) return text;
+    const sorted = [...highlights].sort((a, b) => b.keyword.length - a.keyword.length);
+    const escaped = sorted.map(k => k.keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const regex = new RegExp(`(${escaped.join('|')})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, i) => {
+      const match = sorted.find(k => k.keyword.toLowerCase() === part.toLowerCase());
+      if (match) {
+        return (
+          <span
+            key={i}
+            className="font-semibold transition-all duration-300 cursor-default hover:scale-105 inline-block"
+            style={{
+              textShadow: `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`,
+              color: match.glow_color,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.textShadow = `0 0 12px ${match.glow_color}cc, 0 0 30px ${match.glow_color}80, 0 0 50px ${match.glow_color}40`;
+              e.currentTarget.style.filter = `brightness(1.2)`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.textShadow = `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`;
+              e.currentTarget.style.filter = `brightness(1)`;
+            }}
+          >
+            {part}
+          </span>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <section
       id="about"
@@ -264,9 +302,9 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mb-6"
           >
-            {headlineParts[0]}
+            {renderHighlightedText(headlineParts[0], headlineHighlights)}
             {headlineParts[1] && (
-              <span className="block healthcare-gradient-text">{headlineParts[1]}</span>
+              <span className="block healthcare-gradient-text">{renderHighlightedText(headlineParts[1], headlineHighlights)}</span>
             )}
           </motion.h1>
 
@@ -340,40 +378,7 @@ export function HeroSection() {
           >
             {(() => {
               const bioText = profile?.bio || "I help healthcare organizations leverage artificial intelligence to improve patient outcomes, streamline operations, and unlock insights from complex medical data.";
-              if (!keywordHighlights || keywordHighlights.length === 0) return bioText;
-
-              // Build regex from keywords (case-insensitive, longest first)
-              const sorted = [...keywordHighlights].sort((a, b) => b.keyword.length - a.keyword.length);
-              const escaped = sorted.map(k => k.keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-              const regex = new RegExp(`(${escaped.join('|')})`, 'gi');
-              const parts = bioText.split(regex);
-
-              return parts.map((part, i) => {
-                const match = sorted.find(k => k.keyword.toLowerCase() === part.toLowerCase());
-                if (match) {
-                  return (
-                    <span
-                      key={i}
-                      className="font-semibold text-foreground transition-all duration-300 cursor-default hover:scale-105 inline-block"
-                      style={{
-                        textShadow: `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`,
-                        color: match.glow_color,
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.textShadow = `0 0 12px ${match.glow_color}cc, 0 0 30px ${match.glow_color}80, 0 0 50px ${match.glow_color}40`;
-                        e.currentTarget.style.filter = `brightness(1.2)`;
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.textShadow = `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`;
-                        e.currentTarget.style.filter = `brightness(1)`;
-                      }}
-                    >
-                      {part}
-                    </span>
-                  );
-                }
-                return part;
-              });
+              return renderHighlightedText(bioText, bioHighlights);
             })()}
           </motion.p>
 

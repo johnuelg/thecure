@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -15,6 +16,7 @@ interface KeywordHighlight {
   glow_color: string;
   is_active: boolean;
   display_order: number;
+  target: string;
 }
 
 const KeywordHighlightsManager = () => {
@@ -22,6 +24,7 @@ const KeywordHighlightsManager = () => {
   const queryClient = useQueryClient();
   const [newKeyword, setNewKeyword] = useState("");
   const [newColor, setNewColor] = useState("#41c0c2");
+  const [newTarget, setNewTarget] = useState("bio");
 
   const { data: keywords = [], isLoading } = useQuery({
     queryKey: ["admin-keyword-highlights"],
@@ -40,6 +43,7 @@ const KeywordHighlightsManager = () => {
       const { error } = await supabase.from("hero_keyword_highlights").insert({
         keyword: newKeyword.trim(),
         glow_color: newColor,
+        target: newTarget,
         display_order: keywords.length,
       });
       if (error) throw error;
@@ -83,7 +87,7 @@ const KeywordHighlightsManager = () => {
       <div>
         <h1 className="text-2xl font-bold">Keyword Highlights</h1>
         <p className="text-muted-foreground">
-          Add keywords that should glow/highlight in the hero sub-headline (bio text).
+          Add keywords that should glow/highlight in the hero headline and/or bio text. Choose where each keyword applies.
         </p>
       </div>
 
@@ -113,6 +117,19 @@ const KeywordHighlightsManager = () => {
                 className="w-28"
               />
             </div>
+          </div>
+          <div className="space-y-1">
+            <Label>Target</Label>
+            <Select value={newTarget} onValueChange={setNewTarget}>
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="bio">Bio</SelectItem>
+                <SelectItem value="headline">Headline</SelectItem>
+                <SelectItem value="both">Both</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <Button
             onClick={() => addMutation.mutate()}
@@ -151,6 +168,21 @@ const KeywordHighlightsManager = () => {
               }
               className="w-8 h-8 rounded cursor-pointer border-0 shrink-0"
             />
+            <Select
+              value={kw.target}
+              onValueChange={(val) =>
+                updateMutation.mutate({ id: kw.id, updates: { target: val } })
+              }
+            >
+              <SelectTrigger className="w-28 shrink-0">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="bio">Bio</SelectItem>
+                <SelectItem value="headline">Headline</SelectItem>
+                <SelectItem value="both">Both</SelectItem>
+              </SelectContent>
+            </Select>
             <Switch
               checked={kw.is_active}
               onCheckedChange={(checked) =>
