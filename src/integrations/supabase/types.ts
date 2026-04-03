@@ -445,6 +445,33 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_typewriter_keywords: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          is_active: boolean
+          keyword: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          keyword: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          keyword?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       knowledge_documents: {
         Row: {
           content: string

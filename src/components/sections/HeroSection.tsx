@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Activity, Heart, Stethoscope, Pill, Syringe, Brain, HeartPulse, Microscope, Dna, Thermometer, Cross, Hospital, Ambulance, Ribbon, Monitor, Database, UserRound, PersonStanding } from "lucide-react";
+import { TypewriterText } from "@/components/hero/TypewriterText";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -216,6 +217,19 @@ export function HeroSection() {
     },
   });
 
+  const { data: typewriterKeywords } = useQuery({
+    queryKey: ["public-typewriter-keywords"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("hero_typewriter_keywords")
+        .select("keyword")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data?.map(d => d.keyword) || [];
+    },
+  });
+
   const statsToShow = (heroStats && heroStats.length > 0)
     ? heroStats.map(s => ({ icon: s.icon, value: s.value, label: s.label }))
     : defaultStats;
@@ -305,6 +319,11 @@ export function HeroSection() {
             {renderHighlightedText(headlineParts[0], headlineHighlights)}
             {headlineParts[1] && (
               <span className="block healthcare-gradient-text">{renderHighlightedText(headlineParts[1], headlineHighlights)}</span>
+            )}
+            {typewriterKeywords && typewriterKeywords.length > 0 && (
+              <span className="block mt-2">
+                <TypewriterText words={typewriterKeywords} typingSpeed={80} deletingSpeed={50} pauseDuration={2000} />
+              </span>
             )}
           </motion.h1>
 

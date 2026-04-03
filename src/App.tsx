@@ -30,6 +30,7 @@ import KnowledgeBaseManager from "./pages/admin/KnowledgeBaseManager";
 import HeroStatsManager from "./pages/admin/HeroStatsManager";
 import ExpertiseManager from "./pages/admin/ExpertiseManager";
 import KeywordHighlightsManager from "./pages/admin/KeywordHighlightsManager";
+import TypewriterKeywordsManager from "./pages/admin/TypewriterKeywordsManager";
 
 const queryClient = new QueryClient();
 
@@ -71,6 +72,7 @@ const AppContent = () => {
             <Route path="knowledge-base" element={<KnowledgeBaseManager />} />
             <Route path="hero-stats" element={<HeroStatsManager />} />
             <Route path="keyword-highlights" element={<KeywordHighlightsManager />} />
+            <Route path="typewriter-keywords" element={<TypewriterKeywordsManager />} />
             <Route path="blog" element={<BlogManager />} />
             <Route path="testimonials" element={<TestimonialsManager />} />
             <Route path="messages" element={<MessagesManager />} />
