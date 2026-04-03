@@ -217,6 +217,19 @@ export function HeroSection() {
     },
   });
 
+  const { data: typewriterKeywords } = useQuery({
+    queryKey: ["public-typewriter-keywords"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("hero_typewriter_keywords")
+        .select("keyword")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data?.map(d => d.keyword) || [];
+    },
+  });
+
   const statsToShow = (heroStats && heroStats.length > 0)
     ? heroStats.map(s => ({ icon: s.icon, value: s.value, label: s.label }))
     : defaultStats;
