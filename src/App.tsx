@@ -40,7 +40,7 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   useDynamicFavicon();
-
+  useThemeGradient();
   return (
     <BrowserRouter>
       <AuthProvider>
