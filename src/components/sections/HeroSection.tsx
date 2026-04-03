@@ -195,11 +195,11 @@ export function HeroSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("hero_keyword_highlights")
-        .select("keyword, glow_color")
+        .select("keyword, glow_color, target")
         .eq("is_active", true)
         .order("display_order", { ascending: true });
       if (error) throw error;
-      return data as { keyword: string; glow_color: string }[];
+      return data as { keyword: string; glow_color: string; target: string }[];
     },
   });
 
