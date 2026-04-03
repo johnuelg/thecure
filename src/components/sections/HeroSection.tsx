@@ -180,23 +180,23 @@ function FloatingMedicalIcons() {
               ease: "easeInOut",
             }}
             whileHover={{
-              scale: 1.35 + depth * 0.15,
-              rotate: rotateAmt * 1.5,
+              scale: 1.08,
               filter: blurAmount > 0.5 ? 'blur(0px)' : undefined,
               transition: {
-                duration: hoverDuration,
-                ease: "easeInOut",
+                duration: 0.8,
+                ease: [0.25, 0.1, 0.25, 1],
               },
             }}
           >
-            {/* Light mode - enhanced visibility with soft shadow */}
+            {/* Light mode */}
             <motion.span className="dark:hidden block"
               style={{
                 filter: `drop-shadow(0 0 ${lightGlowSize}px rgba(var(--primary-rgb, 14,165,233), 0.15))`,
               }}
               whileHover={{
-                filter: `drop-shadow(0 0 ${lightGlowSize * 2.5}px rgba(var(--primary-rgb, 14,165,233), 0.4))`,
-                transition: { duration: hoverDuration, ease: "easeInOut" },
+                filter: `drop-shadow(0 0 ${lightGlowSize * 1.8}px rgba(var(--primary-rgb, 14,165,233), 0.3))`,
+                opacity: 1,
+                transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] },
               }}
             >
               <Icon
@@ -208,14 +208,15 @@ function FloatingMedicalIcons() {
                 }}
               />
             </motion.span>
-            {/* Dark mode with colored glow */}
+            {/* Dark mode */}
             <motion.span className="hidden dark:block"
               style={{
                 filter: `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`,
               }}
               whileHover={{
-                filter: `drop-shadow(0 0 ${glowSize * 2.5}px rgba(${glowColor.rgb}, 0.7))`,
-                transition: { duration: hoverDuration, ease: "easeInOut" },
+                filter: `drop-shadow(0 0 ${glowSize * 1.8}px rgba(${glowColor.rgb}, 0.5))`,
+                opacity: 1,
+                transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] },
               }}
             >
               <Icon
