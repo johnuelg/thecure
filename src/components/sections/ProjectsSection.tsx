@@ -93,7 +93,8 @@ export function ProjectsSection() {
     },
   });
 
-  const displayProjects = projects && projects.length > 0 ? projects : fallbackProjects;
+  const maxProjects = (profile as any)?.max_featured_projects ?? 4;
+  const displayProjects = (projects && projects.length > 0 ? projects : fallbackProjects).slice(0, maxProjects);
 
   const sectionDescription = profile?.projects_description || 
     "A selection of healthcare AI projects demonstrating measurable impact on patient outcomes and operational efficiency.";

@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Save, User, Briefcase, Mail, Phone, MapPin, Linkedin, Github, Twitter, Palette } from 'lucide-react';
 import { ImageUpload } from '@/components/admin/ImageUpload';
+import { Slider } from '@/components/ui/slider';
 
 interface Profile {
   id: string;
