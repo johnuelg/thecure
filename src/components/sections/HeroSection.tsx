@@ -169,8 +169,6 @@ function FloatingMedicalIcons() {
             animate={{
               y: [0, -moveY, 0, moveY * 0.6, 0],
               x: [0, moveX, -moveX * 0.8, moveX * 0.4, 0],
-              rotate: [0, rotateAmt, -rotateAmt * 0.7, rotateAmt * 0.5, 0],
-              scale: [1, 1 + depth * 0.08, 1, 1 - depth * 0.04, 1],
             }}
             transition={{
               duration,
