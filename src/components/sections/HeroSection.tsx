@@ -75,7 +75,7 @@ function hexToRgb(hex: string): string {
 }
 
 function generateIcons(iconNames: string[], glowColorsList?: { color: string; rgb: string }[], maxCount: number = 32): FloatingIcon[] {
-  const count = maxCount;
+  const count = Math.min(maxCount, iconNames.length);
   const half = Math.ceil(count / 2);
   const colors = glowColorsList || defaultGlowColors;
   return Array.from({ length: count }, (_, i) => {
@@ -83,7 +83,7 @@ function generateIcons(iconNames: string[], glowColorsList?: { color: string; rg
     const isLeft = i < half;
     const x = isLeft ? 2 + Math.random() * 36 : 62 + Math.random() * 36;
     const y = 10 + Math.random() * 80;
-    const iconName = iconNames[i % iconNames.length];
+    const iconName = iconNames[i];
     return {
       id: i,
       Icon: getIcon(iconName),
