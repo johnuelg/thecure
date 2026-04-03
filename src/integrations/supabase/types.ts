@@ -525,6 +525,8 @@ export type Database = {
           linkedin_url: string | null
           location: string | null
           logo_url: string | null
+          max_featured_projects: number | null
+          max_featured_visualizations: number | null
           phone: string | null
           professional_title: string
           profile_image_url: string | null
@@ -562,6 +564,8 @@ export type Database = {
           linkedin_url?: string | null
           location?: string | null
           logo_url?: string | null
+          max_featured_projects?: number | null
+          max_featured_visualizations?: number | null
           phone?: string | null
           professional_title?: string
           profile_image_url?: string | null
@@ -599,6 +603,8 @@ export type Database = {
           linkedin_url?: string | null
           location?: string | null
           logo_url?: string | null
+          max_featured_projects?: number | null
+          max_featured_visualizations?: number | null
           phone?: string | null
           professional_title?: string
           profile_image_url?: string | null
