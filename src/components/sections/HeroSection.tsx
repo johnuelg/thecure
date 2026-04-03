@@ -311,20 +311,25 @@ function FloatingMedicalIcons() {
         const whileHover = getWhileHover();
 
         return (
-          <motion.div
+          <div
             key={id}
-            className="absolute pointer-events-auto cursor-default"
+            className="absolute"
             style={{
               left: `${ix}%`,
               top: `${iy}%`,
-              x: scrollOffset.x,
-              y: scrollOffset.y,
-              filter: blurAmount > 0.5 ? `blur(${blurAmount}px)` : undefined,
+              transform: `translate(${scrollOffset.x}px, ${scrollOffset.y}px)`,
+              transition: 'transform 0.15s ease-out',
               zIndex: Math.round(depth * 10),
             }}
-            {...motionProps}
-            whileHover={whileHover}
           >
+            <motion.div
+              className="pointer-events-auto cursor-default"
+              style={{
+                filter: blurAmount > 0.5 ? `blur(${blurAmount}px)` : undefined,
+              }}
+              {...motionProps}
+              whileHover={whileHover}
+            >
             {/* Light mode */}
             <span className="dark:hidden"
               style={{
