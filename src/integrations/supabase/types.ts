@@ -535,6 +535,7 @@ export type Database = {
           site_description: string | null
           site_title: string | null
           tagline: string | null
+          tagline_line_break: number | null
           teams_meeting_url: string | null
           twitter_url: string | null
           typewriter_anchor: string | null
@@ -571,6 +572,7 @@ export type Database = {
           site_description?: string | null
           site_title?: string | null
           tagline?: string | null
+          tagline_line_break?: number | null
           teams_meeting_url?: string | null
           twitter_url?: string | null
           typewriter_anchor?: string | null
@@ -607,6 +609,7 @@ export type Database = {
           site_description?: string | null
           site_title?: string | null
           tagline?: string | null
+          tagline_line_break?: number | null
           teams_meeting_url?: string | null
           twitter_url?: string | null
           typewriter_anchor?: string | null

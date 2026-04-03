@@ -20,6 +20,7 @@ interface TypewriterKeyword {
 const TypewriterKeywordsManager = () => {
   const [newKeyword, setNewKeyword] = useState('');
   const [anchorText, setAnchorText] = useState('');
+  const [lineBreak, setLineBreak] = useState(4);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -28,16 +29,19 @@ const TypewriterKeywordsManager = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profile')
-        .select('tagline, typewriter_anchor')
+        .select('tagline, typewriter_anchor, tagline_line_break')
         .maybeSingle();
       if (error) throw error;
-      return data as { tagline: string | null; typewriter_anchor: string | null } | null;
+      return data as { tagline: string | null; typewriter_anchor: string | null; tagline_line_break: number | null } | null;
     },
   });
 
   useEffect(() => {
     if (profile?.typewriter_anchor) {
       setAnchorText(profile.typewriter_anchor);
+    }
+    if (profile?.tagline_line_break != null) {
+      setLineBreak(profile.tagline_line_break);
     }
   }, [profile]);
 
@@ -57,7 +61,7 @@ const TypewriterKeywordsManager = () => {
     mutationFn: async (anchor: string) => {
       const { error } = await supabase
         .from('profile')
-        .update({ typewriter_anchor: anchor || null })
+        .update({ typewriter_anchor: anchor || null } as any)
         .not('id', 'is', null);
       if (error) throw error;
     },
@@ -67,6 +71,22 @@ const TypewriterKeywordsManager = () => {
       toast({ title: 'Typewriter anchor saved' });
     },
     onError: () => toast({ title: 'Error saving anchor', variant: 'destructive' }),
+  });
+
+  const saveLineBreakMutation = useMutation({
+    mutationFn: async (value: number) => {
+      const { error } = await supabase
+        .from('profile')
+        .update({ tagline_line_break: value } as any)
+        .not('id', 'is', null);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-profile-typewriter'] });
+      queryClient.invalidateQueries({ queryKey: ['public-profile'] });
+      toast({ title: 'Headline line break saved' });
+    },
+    onError: () => toast({ title: 'Error saving line break', variant: 'destructive' }),
   });
 
   const addMutation = useMutation({
@@ -159,6 +179,60 @@ const TypewriterKeywordsManager = () => {
             <p className="text-xs text-muted-foreground">
               The anchor phrase will appear first, then cycle through your keywords below.
               Leave empty to show keywords on a separate line below the headline.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Headline Line Break */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Headline Line Break</CardTitle>
+          <CardDescription>
+            Control how many words appear on the first line of the hero headline. Remaining words wrap to the next line.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {currentTagline && (
+            <Alert>
+              <Info className="w-4 h-4" />
+              <AlertDescription>
+                <span className="font-medium">Preview:</span>{' '}
+                <span className="text-foreground font-semibold">
+                  {currentTagline.split(/\s+/).slice(0, lineBreak).join(' ')}
+                </span>
+                {currentTagline.split(/\s+/).length > lineBreak && (
+                  <>
+                    <br />
+                    <span className="text-muted-foreground">
+                      {currentTagline.split(/\s+/).slice(lineBreak).join(' ')}
+                    </span>
+                  </>
+                )}
+              </AlertDescription>
+            </Alert>
+          )}
+          <div className="space-y-2">
+            <Label>Words on first line</Label>
+            <div className="flex gap-2 items-center">
+              <Input
+                type="number"
+                min={1}
+                max={20}
+                value={lineBreak}
+                onChange={(e) => setLineBreak(Number(e.target.value))}
+                className="w-24"
+              />
+              <Button
+                onClick={() => saveLineBreakMutation.mutate(lineBreak)}
+                disabled={saveLineBreakMutation.isPending}
+                className="healthcare-gradient border-0"
+              >
+                <Save className="w-4 h-4 mr-1" /> Save
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Set to 0 to keep the entire headline on one line.
             </p>
           </div>
         </CardContent>

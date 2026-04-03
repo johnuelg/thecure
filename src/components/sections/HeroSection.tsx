@@ -183,11 +183,11 @@ export function HeroSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("full_name, professional_title, tagline, bio, typewriter_anchor")
+        .select("full_name, professional_title, tagline, bio, typewriter_anchor, tagline_line_break")
         .maybeSingle();
       
       if (error) throw error;
-      return data as (Profile & { typewriter_anchor: string | null }) | null;
+      return data as (Profile & { typewriter_anchor: string | null; tagline_line_break: number | null }) | null;
     },
   });
 
@@ -241,12 +241,13 @@ export function HeroSection() {
     }
   };
 
-  // Extract headline parts: first 4 words on line 1, rest on line 2
+  // Extract headline parts: split at configured word count
   const headlineParts = (() => {
     const tagline = profile?.tagline || "Transforming Healthcare Through Intelligent Solutions";
+    const breakAt = profile?.tagline_line_break ?? 4;
     const words = tagline.split(/\s+/);
-    if (words.length <= 4) return [tagline];
-    return [words.slice(0, 4).join(" "), words.slice(4).join(" ")];
+    if (breakAt <= 0 || words.length <= breakAt) return [tagline];
+    return [words.slice(0, breakAt).join(" "), words.slice(breakAt).join(" ")];
   })();
 
   // Filter highlights by target
