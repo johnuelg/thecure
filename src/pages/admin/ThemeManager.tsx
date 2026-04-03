@@ -199,6 +199,9 @@ const ThemeManager = () => {
   // Dark mode
   const [darkFrom, setDarkFrom] = useState('210 65% 55%');
   const [darkTo, setDarkTo] = useState('175 55% 45%');
+  // Fonts
+  const [fontHeading, setFontHeading] = useState('Plus Jakarta Sans');
+  const [fontBody, setFontBody] = useState('DM Sans');
 
   useEffect(() => {
     const fetchProfile = async () => {
