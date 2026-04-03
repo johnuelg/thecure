@@ -98,7 +98,7 @@ function generateIcons(iconNames: string[], glowColorsList?: { color: string; rg
       Icon: getIcon(iconName),
       x: Math.max(2, Math.min(98, x)),
       y: Math.max(5, Math.min(95, y)),
-      size: 14 + depth * 34,
+      size: 22 + depth * 20,
       duration: 30 + Math.random() * 15,
       delay: Math.random() * -30,
       parallaxFactor: 0.1 + depth * 0.9,
