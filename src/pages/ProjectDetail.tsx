@@ -86,11 +86,21 @@ export default function ProjectDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Back link */}
-            <Link to={backLink} className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-8">
-              <ArrowLeft className="mr-2 w-4 h-4" />
-              {backLabel}
-            </Link>
+            {/* Breadcrumb */}
+            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-muted-foreground mb-8 flex-wrap">
+              <Link to="/" className="inline-flex items-center gap-1 hover:text-primary transition-colors">
+                <Home className="w-3.5 h-3.5" />
+                Home
+              </Link>
+              <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+              <Link to={cameFromAllProjects ? '/projects' : '/#projects'} className="hover:text-primary transition-colors">
+                Projects
+              </Link>
+              <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+              <span className="text-foreground font-medium truncate max-w-[200px] sm:max-w-none">
+                {project.title}
+              </span>
+            </nav>
 
             {/* Category */}
             {project.category && (
