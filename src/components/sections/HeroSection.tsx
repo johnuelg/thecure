@@ -332,29 +332,19 @@ export function HeroSection() {
                   const after = fullHeadline.slice(anchorIndex + anchor.length);
                   const allWords = [anchor, ...typewriterKeywords.filter(k => k.toLowerCase() !== anchor.toLowerCase())];
                   
-                  // Count words before the anchor to determine line break placement
-                  const wordsBeforeAnchor = before.trim() ? before.trim().split(/\s+/).length : 0;
-                  const anchorWordCount = anchor.trim().split(/\s+/).length;
-                  const afterWords = after.trim() ? after.trim().split(/\s+/) : [];
+                  // Line 1: before text + typewriter; Line 2: everything after anchor
+                  const afterText = after.trim();
                   
-                  // Determine how many after-words go on line 1
-                  const wordsOnLine1 = breakAt - wordsBeforeAnchor - anchorWordCount;
-                  
-                  if (breakAt > 0 && afterWords.length > 0 && wordsOnLine1 >= 0) {
-                    const afterLine1 = afterWords.slice(0, wordsOnLine1).join(" ");
-                    const afterLine2 = afterWords.slice(wordsOnLine1).join(" ");
+                  if (afterText) {
                     return (
                       <>
                         <span>
                           {before.trim() && <>{renderHighlightedText(before, headlineHighlights)} </>}
                           <TypewriterText words={allWords} typingSpeed={80} deletingSpeed={50} pauseDuration={2000} />
-                          {afterLine1 && <> {renderHighlightedText(afterLine1, headlineHighlights)}</>}
                         </span>
-                        {afterLine2 && (
-                          <span className="block healthcare-gradient-text">
-                            {renderHighlightedText(afterLine2, headlineHighlights)}
-                          </span>
-                        )}
+                        <span className="block healthcare-gradient-text">
+                          {renderHighlightedText(afterText, headlineHighlights)}
+                        </span>
                       </>
                     );
                   }
