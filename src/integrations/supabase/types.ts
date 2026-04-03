@@ -566,6 +566,7 @@ export type Database = {
           max_parallax_icons: number | null
           parallax_animation_speed: string | null
           parallax_animation_style: string | null
+          parallax_enabled: boolean | null
           parallax_hover_effect: string | null
           parallax_scroll_effect: string | null
           phone: string | null
@@ -616,6 +617,7 @@ export type Database = {
           max_parallax_icons?: number | null
           parallax_animation_speed?: string | null
           parallax_animation_style?: string | null
+          parallax_enabled?: boolean | null
           parallax_hover_effect?: string | null
           parallax_scroll_effect?: string | null
           phone?: string | null
@@ -666,6 +668,7 @@ export type Database = {
           max_parallax_icons?: number | null
           parallax_animation_speed?: string | null
           parallax_animation_style?: string | null
+          parallax_enabled?: boolean | null
           parallax_hover_effect?: string | null
           parallax_scroll_effect?: string | null
           phone?: string | null
