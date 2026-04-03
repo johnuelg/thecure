@@ -90,6 +90,8 @@ const ProfileManager = () => {
         setSiteDescription((data as any).site_description || '');
         setBrandName((data as any).brand_name || '');
         setBrandNameImageUrl((data as any).brand_name_image_url || '');
+        setMaxFeaturedProjects((data as any).max_featured_projects ?? 4);
+        setMaxFeaturedVisualizations((data as any).max_featured_visualizations ?? 4);
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
