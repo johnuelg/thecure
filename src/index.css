@@ -459,15 +459,15 @@
   color: transparent;
   background: linear-gradient(
     90deg,
-    #41c0c2 0%,
-    #41c0c2 30%,
-    #7df3f5 50%,
-    #41c0c2 70%,
-    #41c0c2 100%
+    hsl(var(--healthcare-teal)) 0%,
+    hsl(var(--healthcare-teal)) 30%,
+    hsl(var(--healthcare-teal) / 0.6) 50%,
+    hsl(var(--healthcare-teal)) 70%,
+    hsl(var(--healthcare-teal)) 100%
   );
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
   animation: running-glow 3s linear infinite;
-  filter: drop-shadow(0 0 8px rgba(65, 192, 194, 0.5)) drop-shadow(0 0 20px rgba(65, 192, 194, 0.3));
+  filter: drop-shadow(0 0 8px hsl(var(--healthcare-teal) / 0.5)) drop-shadow(0 0 20px hsl(var(--healthcare-teal) / 0.3));
 }
