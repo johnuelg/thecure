@@ -366,7 +366,8 @@ function FloatingMedicalIcons() {
                 }}
               />
             </span>
-          </motion.div>
+            </motion.div>
+          </div>
         );
       })}
     </div>
