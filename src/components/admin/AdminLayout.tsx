@@ -34,6 +34,7 @@ const navItems = [
   { title: 'Section Descriptions', href: '/admin/sections', icon: AlignLeft },
   { title: 'Hero Stats', href: '/admin/hero-stats', icon: Gauge },
   { title: 'Keyword Highlights', href: '/admin/keyword-highlights', icon: Highlighter },
+  { title: 'Typewriter Keywords', href: '/admin/typewriter-keywords', icon: Type },
   { title: 'About Highlights', href: '/admin/about-highlights', icon: Sparkles },
   { title: 'Expertise Tags', href: '/admin/expertise', icon: Tags },
   { title: 'Footer Links', href: '/admin/footer-links', icon: Link2 },
