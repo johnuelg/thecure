@@ -380,16 +380,15 @@ const BlogManager = () => {
                   required
                 />
               </div>
+              <ImageUpload
+                value={featuredImageUrl}
+                onChange={setFeaturedImageUrl}
+                bucket="portfolio-images"
+                label="Featured Image"
+                accept="image/jpeg,image/png,image/gif,.jpg,.jpeg,.png,.gif"
+                sizeHint="Supports JPG, PNG, and GIF (max 10MB)"
+              />
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="featuredImageUrl">Featured Image URL</Label>
-                  <Input
-                    id="featuredImageUrl"
-                    value={featuredImageUrl}
-                    onChange={(e) => setFeaturedImageUrl(e.target.value)}
-                    placeholder="https://..."
-                  />
-                </div>
                 <div className="space-y-2">
                   <Label htmlFor="category">Category</Label>
                   <Input
