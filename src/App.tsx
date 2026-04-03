@@ -70,6 +70,7 @@ const AppContent = () => {
             <Route path="resume" element={<ResumeManager />} />
             <Route path="knowledge-base" element={<KnowledgeBaseManager />} />
             <Route path="hero-stats" element={<HeroStatsManager />} />
+            <Route path="keyword-highlights" element={<KeywordHighlightsManager />} />
             <Route path="blog" element={<BlogManager />} />
             <Route path="testimonials" element={<TestimonialsManager />} />
             <Route path="messages" element={<MessagesManager />} />
