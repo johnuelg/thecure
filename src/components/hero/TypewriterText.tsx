@@ -51,11 +51,7 @@ export function TypewriterText({
 
   return (
     <span
-      className="inline-block healthcare-gradient-text"
-      style={{
-        filter:
-          "drop-shadow(0 0 8px hsl(var(--healthcare-teal) / 0.4))",
-      }}
+      className="inline-block healthcare-gradient-text dark:drop-shadow-[0_0_8px_hsl(var(--healthcare-teal)/0.4)]"
     >
       {displayText}
       <span
@@ -63,9 +59,10 @@ export function TypewriterText({
         style={{
           height: "1em",
           background: "linear-gradient(to bottom, hsl(var(--healthcare-blue)), hsl(var(--healthcare-teal)))",
-          boxShadow: "0 0 6px hsl(var(--healthcare-teal) / 0.6)",
         }}
-      />
+      >
+        <span className="hidden dark:block w-full h-full" style={{ boxShadow: "0 0 6px hsl(var(--healthcare-teal) / 0.6)" }} />
+      </span>
     </span>
   );
 }
