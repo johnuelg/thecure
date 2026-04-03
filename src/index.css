@@ -194,10 +194,92 @@
   .card-medical {
     @apply bg-card rounded-xl border border-border;
     box-shadow: var(--shadow-card);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateY(0) scale(1);
   }
 
   .card-medical:hover {
-    box-shadow: var(--shadow-elevated);
+    box-shadow: 
+      var(--shadow-elevated),
+      0 0 0 1px hsl(var(--primary) / 0.12),
+      0 20px 60px -15px hsl(var(--primary) / 0.18);
+    border-color: hsl(var(--primary) / 0.3);
+    transform: translateY(-4px) scale(1.005);
+  }
+
+  /* Inner icon/accent areas lift with the card */
+  .card-medical:hover .bg-primary\/10 {
+    background-color: hsl(var(--primary) / 0.18);
+    transition: background-color 0.3s ease;
+  }
+
+  /* Subtle top-edge gradient accent on hover */
+  .card-medical::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, hsl(var(--primary) / 0), hsl(var(--primary) / 0.6), hsl(var(--accent) / 0.6), hsl(var(--primary) / 0));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .card-medical:hover::after {
+    opacity: 1;
+  }
+
+  /* Cards need relative positioning for the pseudo-element */
+  .card-medical {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Radial glow behind card on hover */
+  .card-medical::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      hsl(var(--primary) / 0.06) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .card-medical:hover::before {
+    opacity: 1;
+  }
+
+  /* Ensure card content stays above pseudo-elements */
+  .card-medical > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Dark mode: more vivid glow */
+  .dark .card-medical:hover {
+    box-shadow:
+      0 12px 40px -12px hsl(var(--primary) / 0.3),
+      0 0 0 1px hsl(var(--primary) / 0.2),
+      0 0 30px -10px hsl(var(--accent) / 0.15);
+    border-color: hsl(var(--primary) / 0.4);
+  }
+
+  .dark .card-medical::before {
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      hsl(var(--primary) / 0.1) 0%,
+      hsl(var(--accent) / 0.03) 40%,
+      transparent 70%
+    );
   }
 
   /* Section spacing */
