@@ -71,30 +71,51 @@ export function Header() {
 
       <div className="container-wide">
         <div className="flex items-center justify-between h-20 md:h-[84px]">
-          {/* Logo */}
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            className="flex items-center gap-3 group transition-transform duration-300 hover:scale-105"
-          >
-            {branding?.logo_url ? (
-              <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-12 w-12 sm:h-14 sm:w-14 lg:h-[75px] lg:w-[75px] object-contain" />
-            ) : (
-              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[75px] lg:h-[75px] rounded-lg healthcare-gradient flex items-center justify-center">
-                <span className="text-primary-foreground font-display font-bold text-xl sm:text-2xl lg:text-3xl">AI</span>
-              </div>
-            )}
-            {brandNameImageUrl ? (
-              <img src={brandNameImageUrl} alt={brandName} className="h-8 sm:h-10 lg:h-14 object-contain" />
-            ) : brandName ? (
-              <span className="font-display font-semibold text-base sm:text-lg lg:text-2xl brand-name-glow">
-                {brandName}
-              </span>
-            ) : null}
-          </a>
+          {isHomePage ? (
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="flex items-center gap-3 group transition-transform duration-300 hover:scale-105"
+            >
+              {branding?.logo_url ? (
+                <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-12 w-12 sm:h-14 sm:w-14 lg:h-[75px] lg:w-[75px] object-contain" />
+              ) : (
+                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[75px] lg:h-[75px] rounded-lg healthcare-gradient flex items-center justify-center">
+                  <span className="text-primary-foreground font-display font-bold text-xl sm:text-2xl lg:text-3xl">AI</span>
+                </div>
+              )}
+              {brandNameImageUrl ? (
+                <img src={brandNameImageUrl} alt={brandName} className="h-8 sm:h-10 lg:h-14 object-contain" />
+              ) : brandName ? (
+                <span className="font-display font-semibold text-base sm:text-lg lg:text-2xl brand-name-glow">
+                  {brandName}
+                </span>
+              ) : null}
+            </a>
+          ) : (
+            <Link
+              to="/"
+              className="flex items-center gap-3 group transition-transform duration-300 hover:scale-105"
+            >
+              {branding?.logo_url ? (
+                <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-12 w-12 sm:h-14 sm:w-14 lg:h-[75px] lg:w-[75px] object-contain" />
+              ) : (
+                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[75px] lg:h-[75px] rounded-lg healthcare-gradient flex items-center justify-center">
+                  <span className="text-primary-foreground font-display font-bold text-xl sm:text-2xl lg:text-3xl">AI</span>
+                </div>
+              )}
+              {brandNameImageUrl ? (
+                <img src={brandNameImageUrl} alt={brandName} className="h-8 sm:h-10 lg:h-14 object-contain" />
+              ) : brandName ? (
+                <span className="font-display font-semibold text-base sm:text-lg lg:text-2xl brand-name-glow">
+                  {brandName}
+                </span>
+              ) : null}
+            </Link>
+          )}
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
