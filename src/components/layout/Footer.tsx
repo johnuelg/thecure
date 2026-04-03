@@ -47,6 +47,8 @@ export function Footer() {
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
+    } else if (href.startsWith('/')) {
+      navigate(href);
     } else {
       window.open(href, '_blank');
     }
