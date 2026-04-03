@@ -104,6 +104,26 @@ const ProjectsManager = () => {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor)
+  );
+
+  const handleCategoryDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = categories.findIndex((c) => c.id === active.id);
+    const newIndex = categories.findIndex((c) => c.id === over.id);
+    const reordered = arrayMove(categories, oldIndex, newIndex);
+    setCategories(reordered);
+    // Persist
+    await Promise.all(
+      reordered.map((cat, i) =>
+        supabase.from('project_categories').update({ display_order: i }).eq('id', cat.id)
+      )
+    );
+  };
+
   // Form state
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
