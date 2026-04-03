@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Save, Palette, Check, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FontSelector, HEALTHCARE_FONT_PAIRS, type FontPair } from '@/components/admin/FontSelector';
 
 interface GradientPreset {
   name: string;
