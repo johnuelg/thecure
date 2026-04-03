@@ -354,10 +354,18 @@ export function HeroSection() {
                   return (
                     <span
                       key={i}
-                      className="font-semibold text-foreground transition-all duration-300"
+                      className="font-semibold text-foreground transition-all duration-300 cursor-default hover:scale-105 inline-block"
                       style={{
                         textShadow: `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`,
                         color: match.glow_color,
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.textShadow = `0 0 12px ${match.glow_color}cc, 0 0 30px ${match.glow_color}80, 0 0 50px ${match.glow_color}40`;
+                        e.currentTarget.style.filter = `brightness(1.2)`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.textShadow = `0 0 8px ${match.glow_color}80, 0 0 20px ${match.glow_color}40`;
+                        e.currentTarget.style.filter = `brightness(1)`;
                       }}
                     >
                       {part}
