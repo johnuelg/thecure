@@ -274,7 +274,7 @@ export function DataVisualizationSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("analytics_description")
+        .select("analytics_description, max_featured_visualizations")
         .maybeSingle();
       if (error) throw error;
       return data;
