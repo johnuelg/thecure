@@ -208,7 +208,7 @@ const ThemeManager = () => {
       try {
         const { data, error } = await supabase
           .from('profile')
-          .select('id, gradient_color_from, gradient_color_to, gradient_dark_from, gradient_dark_to')
+          .select('id, gradient_color_from, gradient_color_to, gradient_dark_from, gradient_dark_to, font_heading, font_body')
           .maybeSingle();
         if (error) throw error;
         if (data) {
