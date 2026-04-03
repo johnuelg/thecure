@@ -356,23 +356,15 @@ const ProjectsManager = () => {
           {categories.length === 0 ? (
             <p className="text-sm text-muted-foreground">No categories yet. Add one to get started.</p>
           ) : (
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <Badge
-                  key={cat.id}
-                  variant={cat.is_active ? "default" : "secondary"}
-                  className="px-3 py-1.5 text-sm gap-1.5"
-                >
-                  {cat.name}
-                  <button
-                    onClick={() => handleDeleteCategory(cat.id)}
-                    className="ml-1 hover:text-destructive transition-colors"
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </Badge>
-              ))}
-            </div>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleCategoryDragEnd}>
+              <SortableContext items={categories.map((c) => c.id)} strategy={horizontalListSortingStrategy}>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((cat) => (
+                    <SortableCategoryBadge key={cat.id} cat={cat} onDelete={handleDeleteCategory} />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
           )}
         </CardContent>
       </Card>
