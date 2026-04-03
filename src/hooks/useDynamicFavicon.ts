@@ -60,10 +60,11 @@ export function useDynamicFavicon() {
       const p = profile;
       if (!p) return;
 
-      if (p.favicon_url) {
+      const faviconSource = p.favicon_url || p.logo_url;
+      if (faviconSource) {
         try {
           // Use a simple fetch — Supabase storage has CORS enabled
-          const response = await fetch(p.favicon_url);
+          const response = await fetch(faviconSource);
 
           if (!response.ok) {
             throw new Error(`Failed to load favicon: ${response.status}`);
@@ -89,8 +90,8 @@ export function useDynamicFavicon() {
           if (isCancelled) return;
 
           // Fallback: use the URL directly (works if CORS allows it)
-          setFaviconLinks(p.favicon_url, '');
-          activeIconHrefRef.current = p.favicon_url;
+          setFaviconLinks(faviconSource, '');
+          activeIconHrefRef.current = faviconSource;
         }
       } else {
         if (isCancelled) return;
