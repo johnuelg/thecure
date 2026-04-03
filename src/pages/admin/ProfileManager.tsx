@@ -457,6 +457,18 @@ const ProfileManager = () => {
               />
               <p className="text-xs text-muted-foreground">Number of visualizations shown in the Data Analytics Showcase section</p>
             </div>
+            <div className="space-y-3">
+              <Label>Max Parallax Icons: {maxParallaxIcons}</Label>
+              <Slider
+                value={[maxParallaxIcons]}
+                onValueCommit={(value) => setMaxParallaxIcons(value[0])}
+                onValueChange={(value) => setMaxParallaxIcons(value[0])}
+                min={4}
+                max={64}
+                step={2}
+              />
+              <p className="text-xs text-muted-foreground">Number of floating animated icons in the hero section background</p>
+            </div>
           </CardContent>
         </Card>
 
