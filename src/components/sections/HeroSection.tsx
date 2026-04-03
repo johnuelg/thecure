@@ -112,6 +112,8 @@ interface Profile {
   bio: string | null;
 }
 function FloatingMedicalIcons() {
+  const prefersReducedMotion = useReducedMotion();
+
   const { data: dbIcons } = useQuery({
     queryKey: ["public-parallax-icons"],
     queryFn: async () => {
@@ -139,10 +141,16 @@ function FloatingMedicalIcons() {
 
   const parallaxEnabled = (iconSettings as any)?.parallax_enabled !== false;
   const maxCount = (iconSettings as any)?.max_parallax_icons ?? 32;
-  const animStyle = (iconSettings as any)?.parallax_animation_style || 'gentle-float';
-  const hoverEffect = (iconSettings as any)?.parallax_hover_effect || 'soft-glow';
-  const scrollEffect = (iconSettings as any)?.parallax_scroll_effect || 'parallax-shift';
+  const rawAnimStyle = (iconSettings as any)?.parallax_animation_style || 'gentle-float';
+  const rawHoverEffect = (iconSettings as any)?.parallax_hover_effect || 'soft-glow';
+  const rawScrollEffect = (iconSettings as any)?.parallax_scroll_effect || 'parallax-shift';
   const animSpeed = (iconSettings as any)?.parallax_animation_speed || 'slow';
+
+  // When user prefers reduced motion, force all effects to "none"
+  const animStyle = prefersReducedMotion ? 'none' : rawAnimStyle;
+  const hoverEffect = prefersReducedMotion ? 'none' : rawHoverEffect;
+  const scrollEffect = prefersReducedMotion ? 'none' : rawScrollEffect;
+
   const interactionEnabled = parallaxEnabled && scrollEffect !== 'none';
   const { x, y } = useParallax(interactionEnabled);
 
