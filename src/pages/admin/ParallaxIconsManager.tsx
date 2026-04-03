@@ -19,7 +19,7 @@ import { Plus, Trash2, Loader2, GripVertical, Sparkles } from 'lucide-react';
 import { icons } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { IconPicker } from '@/components/admin/IconPicker';
-import { AnimationStyleSelector, HoverEffectSelector, ScrollEffectSelector, type AnimationPreset } from '@/components/admin/AnimationStyleSelector';
+import { AnimationStyleSelector, HoverEffectSelector, ScrollEffectSelector, SpeedSelector, type AnimationPreset, type SpeedOption } from '@/components/admin/AnimationStyleSelector';
 import {
   DndContext,
   closestCenter,
@@ -102,6 +102,7 @@ const ParallaxIconsManager = () => {
   const [animationStyle, setAnimationStyle] = useState('gentle-float');
   const [hoverEffect, setHoverEffect] = useState('soft-glow');
   const [scrollEffect, setScrollEffect] = useState('parallax-shift');
+  const [animSpeed, setAnimSpeed] = useState<SpeedOption>('slow');
   const [profileId, setProfileId] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -130,12 +131,13 @@ const ParallaxIconsManager = () => {
   useEffect(() => {
     fetchItems();
     const fetchAnimStyle = async () => {
-      const { data } = await supabase.from('profile').select('id, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect').maybeSingle();
+      const { data } = await supabase.from('profile').select('id, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect, parallax_animation_speed').maybeSingle();
       if (data) {
         setProfileId(data.id);
         setAnimationStyle((data as any).parallax_animation_style || 'gentle-float');
         setHoverEffect((data as any).parallax_hover_effect || 'soft-glow');
         setScrollEffect((data as any).parallax_scroll_effect || 'parallax-shift');
+        setAnimSpeed(((data as any).parallax_animation_speed || 'slow') as SpeedOption);
       }
     };
     fetchAnimStyle();
@@ -224,6 +226,18 @@ const ParallaxIconsManager = () => {
             await supabase.from('profile').update({ parallax_animation_style: preset.id }).eq('id', profileId);
             queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
             toast({ title: `Float animation: "${preset.name}"` });
+          }
+        }}
+      />
+
+      <SpeedSelector
+        selected={animSpeed}
+        onSelect={async (speed: SpeedOption) => {
+          setAnimSpeed(speed);
+          if (profileId) {
+            await supabase.from('profile').update({ parallax_animation_speed: speed }).eq('id', profileId);
+            queryClient.invalidateQueries({ queryKey: ['public-profile-parallax'] });
+            toast({ title: `Speed set to "${speed}"` });
           }
         }}
       />

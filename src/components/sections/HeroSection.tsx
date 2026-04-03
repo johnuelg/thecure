@@ -123,7 +123,7 @@ function FloatingMedicalIcons() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("max_parallax_icons, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect")
+        .select("max_parallax_icons, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect, parallax_animation_speed")
         .maybeSingle();
       if (error) throw error;
       return data;
@@ -134,6 +134,10 @@ function FloatingMedicalIcons() {
   const animStyle = (iconSettings as any)?.parallax_animation_style || 'gentle-float';
   const hoverEffect = (iconSettings as any)?.parallax_hover_effect || 'soft-glow';
   const scrollEffect = (iconSettings as any)?.parallax_scroll_effect || 'parallax-shift';
+  const animSpeed = (iconSettings as any)?.parallax_animation_speed || 'slow';
+
+  // Speed multiplier: slow=1 (30-45s), medium=0.55 (15-25s), fast=0.3 (8-15s)
+  const speedMultiplier = animSpeed === 'fast' ? 0.3 : animSpeed === 'medium' ? 0.55 : 1;
 
   const iconNames = dbIcons && dbIcons.length > 0
     ? dbIcons.map(i => i.icon_name)
@@ -147,7 +151,8 @@ function FloatingMedicalIcons() {
 
   // Build animation props based on selected style
   const getAnimationProps = (icon: FloatingIcon) => {
-    const { depth, duration, delay } = icon;
+    const { depth, duration: baseDuration, delay } = icon;
+    const duration = baseDuration * speedMultiplier;
     const moveY = 5 + depth * 10;
     const moveX = 3 + depth * 6;
 
