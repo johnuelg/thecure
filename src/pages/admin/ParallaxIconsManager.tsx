@@ -296,14 +296,19 @@ const ParallaxIconsManager = () => {
     }
   };
 
+  const filteredHealthcareIcons = selectedCategory === 'All'
+    ? HEALTHCARE_ICONS
+    : HEALTHCARE_ICONS.filter(h => h.category === selectedCategory);
+
   const handleAddAllHealthcare = async () => {
     const existingNames = new Set(items.map(i => i.icon_name));
-    const toAdd = HEALTHCARE_ICONS.filter(h => !existingNames.has(h.name));
+    const toAdd = filteredHealthcareIcons.filter(h => !existingNames.has(h.name));
     if (toAdd.length === 0) {
-      toast({ title: 'All healthcare icons already added' });
+      toast({ title: selectedCategory === 'All' ? 'All healthcare icons already added' : `All ${selectedCategory} icons already added` });
       return;
     }
-    if (!confirm(`Add ${toAdd.length} healthcare icons to your parallax background?`)) return;
+    const label = selectedCategory === 'All' ? 'healthcare' : selectedCategory;
+    if (!confirm(`Add ${toAdd.length} ${label} icons to your parallax background?`)) return;
     try {
       const inserts = toAdd.map((h, i) => ({
         icon_name: h.name,
@@ -312,7 +317,7 @@ const ParallaxIconsManager = () => {
       }));
       const { error } = await supabase.from('hero_parallax_icons').insert(inserts);
       if (error) throw error;
-      toast({ title: `${toAdd.length} healthcare icons added` });
+      toast({ title: `${toAdd.length} ${label} icons added` });
       fetchItems();
       queryClient.invalidateQueries({ queryKey: ['public-parallax-icons'] });
     } catch (error: any) {
