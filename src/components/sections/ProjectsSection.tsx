@@ -245,10 +245,12 @@ export function ProjectsSection() {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="text-center mt-12"
         >
-          <Button variant="outline" size="lg">
-            View All Projects
-            <ExternalLink className="ml-2 w-4 h-4" />
-          </Button>
+          <Link to="/projects">
+            <Button variant="outline" size="lg">
+              View All Projects
+              <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

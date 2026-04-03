@@ -9,6 +9,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { useDynamicFavicon } from "@/hooks/useDynamicFavicon";
 import Index from "./pages/Index";
 import ProjectDetail from "./pages/ProjectDetail";
+import AllProjects from "./pages/AllProjects";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/admin/Login";
 import ForgotPassword from "./pages/admin/ForgotPassword";
@@ -43,6 +44,7 @@ const AppContent = () => {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Index />} />
+          <Route path="/projects" element={<AllProjects />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
 
           {/* Admin auth routes */}
