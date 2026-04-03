@@ -242,7 +242,7 @@ export function AboutSection() {
             >
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors shadow-md hover:shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg healthcare-gradient text-primary-foreground font-semibold text-sm border-0 shadow-md hover:shadow-[0_8px_30px_-4px_hsl(var(--primary)/0.5)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-300"
               >
                 Let&apos;s Work Together
                 <ArrowRight className="w-4 h-4" />
@@ -257,7 +257,7 @@ export function AboutSection() {
                     event.preventDefault();
                   }
                 }}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-card border border-border text-foreground font-semibold text-sm hover:border-primary/40 hover:bg-secondary transition-colors disabled:pointer-events-none"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-card border border-border text-foreground font-semibold text-sm hover:border-primary/40 hover:bg-secondary hover:shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.15)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-300"
               >
                 <Download className="w-4 h-4" />
                 Download CV
