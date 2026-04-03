@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/layout/Header";
@@ -9,6 +9,10 @@ import { motion } from "framer-motion";
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const cameFromAllProjects = location.state?.from === '/projects';
+  const backLink = cameFromAllProjects ? '/projects' : '/#projects';
+  const backLabel = cameFromAllProjects ? 'Back to All Projects' : 'Back to Projects';
 
   const { data: project, isLoading } = useQuery({
     queryKey: ["project-detail", id],
@@ -48,10 +52,10 @@ export default function ProjectDetail() {
         <main className="container-wide py-24 text-center">
           <h1 className="text-3xl font-bold mb-4">Project Not Found</h1>
           <p className="text-muted-foreground mb-8">The project you're looking for doesn't exist.</p>
-          <Link to="/#projects">
+          <Link to={backLink}>
             <Button variant="outline">
               <ArrowLeft className="mr-2 w-4 h-4" />
-              Back to Projects
+              {backLabel}
             </Button>
           </Link>
         </main>
@@ -83,9 +87,9 @@ export default function ProjectDetail() {
             transition={{ duration: 0.5 }}
           >
             {/* Back link */}
-            <Link to="/#projects" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-8">
+            <Link to={backLink} className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-8">
               <ArrowLeft className="mr-2 w-4 h-4" />
-              Back to Projects
+              {backLabel}
             </Link>
 
             {/* Category */}
