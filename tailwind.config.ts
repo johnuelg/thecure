@@ -123,6 +123,10 @@ export default {
           "0%": { strokeDashoffset: "2100" },
           "100%": { strokeDashoffset: "-2100" },
         },
+        "keyword-shimmer": {
+          "0%, 100%": { opacity: "1", textShadow: "0 0 8px var(--glow-color, hsl(var(--primary)))" },
+          "50%": { opacity: "0.85", textShadow: "0 0 18px var(--glow-color, hsl(var(--primary))), 0 0 36px var(--glow-color, hsl(var(--primary)))" },
+        },
         "chat-pulse": {
           "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.4)" },
           "50%": { boxShadow: "0 0 20px 8px hsl(var(--primary) / 0.2)" },
