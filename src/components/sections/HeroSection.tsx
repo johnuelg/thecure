@@ -123,7 +123,7 @@ function FloatingMedicalIcons() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("max_parallax_icons")
+        .select("max_parallax_icons, parallax_animation_style")
         .maybeSingle();
       if (error) throw error;
       return data;
