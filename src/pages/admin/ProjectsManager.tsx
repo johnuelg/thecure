@@ -49,6 +49,33 @@ interface ProjectCategory {
   is_active: boolean;
 }
 
+function SortableCategoryBadge({ cat, onDelete }: { cat: ProjectCategory; onDelete: (id: string) => void }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: cat.id });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    cursor: 'grab',
+  };
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <Badge
+        variant={cat.is_active ? "default" : "secondary"}
+        className="px-3 py-1.5 text-sm gap-1.5 select-none"
+      >
+        <GripVertical className="h-3 w-3 opacity-50" />
+        {cat.name}
+        <button
+          onClick={(e) => { e.stopPropagation(); onDelete(cat.id); }}
+          className="ml-1 hover:text-destructive transition-colors"
+        >
+          <X className="h-3 w-3" />
+        </button>
+      </Badge>
+    </div>
+  );
+}
+
 interface Project {
   id: string;
   title: string;
