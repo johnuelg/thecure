@@ -168,6 +168,21 @@ const KeywordHighlightsManager = () => {
               }
               className="w-8 h-8 rounded cursor-pointer border-0 shrink-0"
             />
+            <Select
+              value={kw.target}
+              onValueChange={(val) =>
+                updateMutation.mutate({ id: kw.id, updates: { target: val } })
+              }
+            >
+              <SelectTrigger className="w-28 shrink-0">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="bio">Bio</SelectItem>
+                <SelectItem value="headline">Headline</SelectItem>
+                <SelectItem value="both">Both</SelectItem>
+              </SelectContent>
+            </Select>
             <Switch
               checked={kw.is_active}
               onCheckedChange={(checked) =>
