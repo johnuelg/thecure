@@ -1,0 +1,1 @@
+ALTER TABLE public.profile ADD COLUMN max_parallax_icons integer DEFAULT 32;
