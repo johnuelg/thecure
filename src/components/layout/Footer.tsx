@@ -1,9 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import { Heart, Linkedin, Github, Twitter, Mail } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
 
   const { data: profile } = useQuery({
     queryKey: ['public-profile-footer'],
@@ -45,6 +47,8 @@ export function Footer() {
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
+    } else if (href.startsWith('/')) {
+      navigate(href);
     } else {
       window.open(href, '_blank');
     }

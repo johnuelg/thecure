@@ -1,0 +1,1 @@
+UPDATE footer_links SET href = '/blog' WHERE group_name = 'Resources' AND label = 'Blog' AND href = '#blog';
