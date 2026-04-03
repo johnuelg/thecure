@@ -272,27 +272,24 @@ function FloatingMedicalIcons() {
   };
 
   // Scroll/mouse interaction effect
-  const getScrollOffset = (parallaxFactor: number, iconX: number, iconY: number) => {
+  const getScrollOffset = (parallaxFactor: number) => {
     const multiplier = 40;
     switch (scrollEffect) {
       case 'none':
         return { x: 0, y: 0 };
       case 'scatter': {
-        // Icons move away from cursor position
         return {
           x: -x * parallaxFactor * multiplier * 0.8,
           y: -y * parallaxFactor * multiplier * 0.8,
         };
       }
       case 'magnetic': {
-        // Icons attracted toward cursor
         return {
           x: x * parallaxFactor * multiplier * 1.5,
           y: y * parallaxFactor * multiplier * 1.5,
         };
       }
       case 'wave-ripple': {
-        // Radial displacement based on distance from center
         const dist = Math.sqrt(x * x + y * y);
         const wave = Math.sin(dist * 3 + parallaxFactor * 6) * 0.5 + 0.5;
         return {
