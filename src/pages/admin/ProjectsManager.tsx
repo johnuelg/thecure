@@ -57,6 +57,10 @@ const ProjectsManager = () => {
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
+  const [categories, setCategories] = useState<ProjectCategory[]>([]);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
+
   // Form state
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
