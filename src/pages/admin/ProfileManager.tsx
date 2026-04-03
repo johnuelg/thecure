@@ -57,9 +57,6 @@ const ProfileManager = () => {
   const [siteDescription, setSiteDescription] = useState('');
   const [brandName, setBrandName] = useState('');
   const [brandNameImageUrl, setBrandNameImageUrl] = useState('');
-  const [bookingUrl, setBookingUrl] = useState('');
-  const [zoomMeetingUrl, setZoomMeetingUrl] = useState('');
-  const [teamsMeetingUrl, setTeamsMeetingUrl] = useState('');
 
   const fetchProfile = async () => {
     try {
@@ -91,9 +88,6 @@ const ProfileManager = () => {
         setSiteDescription((data as any).site_description || '');
         setBrandName((data as any).brand_name || '');
         setBrandNameImageUrl((data as any).brand_name_image_url || '');
-        setBookingUrl((data as any).booking_url || '');
-        setZoomMeetingUrl((data as any).zoom_meeting_url || '');
-        setTeamsMeetingUrl((data as any).teams_meeting_url || '');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -135,9 +129,6 @@ const ProfileManager = () => {
       site_description: siteDescription || null,
       brand_name: brandName || 'HealthcareAI',
       brand_name_image_url: brandNameImageUrl || null,
-      booking_url: bookingUrl || null,
-      zoom_meeting_url: zoomMeetingUrl || null,
-      teams_meeting_url: teamsMeetingUrl || null,
     };
 
     try {
@@ -261,38 +252,6 @@ const ProfileManager = () => {
             <CardDescription>How visitors can reach you</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="bookingUrl">Book a Call URL (Legacy/Fallback)</Label>
-              <Input
-                id="bookingUrl"
-                value={bookingUrl}
-                onChange={(e) => setBookingUrl(e.target.value)}
-                placeholder="https://calendly.com/your-name or any booking link"
-              />
-              <p className="text-xs text-muted-foreground">Optional fallback URL for scheduling</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="zoomMeetingUrl">Zoom Meeting URL</Label>
-                <Input
-                  id="zoomMeetingUrl"
-                  value={zoomMeetingUrl}
-                  onChange={(e) => setZoomMeetingUrl(e.target.value)}
-                  placeholder="https://zoom.us/j/your-meeting-id"
-                />
-                <p className="text-xs text-muted-foreground">Your permanent Zoom meeting room link</p>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="teamsMeetingUrl">Microsoft Teams Meeting URL</Label>
-                <Input
-                  id="teamsMeetingUrl"
-                  value={teamsMeetingUrl}
-                  onChange={(e) => setTeamsMeetingUrl(e.target.value)}
-                  placeholder="https://teams.microsoft.com/l/meetup-join/..."
-                />
-                <p className="text-xs text-muted-foreground">Your permanent Teams meeting link</p>
-              </div>
-            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="flex items-center gap-2">

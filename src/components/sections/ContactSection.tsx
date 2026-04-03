@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ScheduleCallDialog } from "./ScheduleCallDialog";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Mail, MapPin, Phone, Send, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,14 +15,12 @@ interface Profile {
   phone: string | null;
   location: string | null;
   contact_description: string | null;
-  booking_url: string | null;
 }
 
 export function ContactSection() {
   const { ref: sectionRef, isInView } = useScrollAnimation();
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [scheduleOpen, setScheduleOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -37,7 +34,7 @@ export function ContactSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("email, phone, location, contact_description, booking_url")
+        .select("email, phone, location, contact_description")
         .maybeSingle();
       
       if (error) throw error;
@@ -184,23 +181,7 @@ export function ContactSection() {
               </div>
             </div>
 
-            <div className="card-medical p-6 healthcare-gradient text-primary-foreground">
-              <h3 className="text-lg font-semibold mb-2">Schedule a Call</h3>
-              <p className="text-sm opacity-90 mb-4">
-                Prefer to talk? Book a free 30-minute discovery call to discuss 
-                your project.
-              </p>
-              <Button
-                variant="secondary"
-                className="w-full"
-                onClick={() => setScheduleOpen(true)}
-              >
-                Book a Call
-              </Button>
-            </div>
           </motion.div>
-
-          <ScheduleCallDialog open={scheduleOpen} onOpenChange={setScheduleOpen} />
 
           {/* Contact Form */}
           <motion.div
