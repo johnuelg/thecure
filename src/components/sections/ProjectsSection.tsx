@@ -177,7 +177,7 @@ export function ProjectsSection() {
                     className="card-medical overflow-hidden group h-full"
                   >
                     <div className="relative h-56 overflow-hidden">
-                      <img
+                      <ProjectMediaThumbnail
                         src={project.image_url || "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop"}
                         alt={project.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
