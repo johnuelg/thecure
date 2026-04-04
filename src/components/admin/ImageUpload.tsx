@@ -133,7 +133,25 @@ export function ImageUpload({
         {/* Preview */}
         {value && (
           <div className="relative group">
-            {isImage ? (
+            {isVideo ? (
+              <div className="relative w-full h-32 bg-muted rounded-lg overflow-hidden">
+                <video
+                  src={value}
+                  className="w-full h-full object-contain"
+                  controls
+                  muted
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                  onClick={handleRemove}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+            ) : isImage ? (
               <div className="relative w-full h-32 bg-muted rounded-lg overflow-hidden">
                 <img
                   src={value}
