@@ -562,11 +562,11 @@ const ProjectsManager = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <ImageUpload
-                  label="Project Image"
+                  label="Project Image / Video"
                   value={imageUrl}
                   onChange={setImageUrl}
                   bucket="portfolio-images"
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/gif,video/mp4"
                 />
                 <div className="space-y-2">
                   <Label htmlFor="demoUrl">Demo URL</Label>
