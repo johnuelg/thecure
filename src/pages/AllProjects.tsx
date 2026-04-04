@@ -8,6 +8,7 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { ProjectMediaThumbnail } from "@/components/ProjectMediaThumbnail";
 
 interface Project {
   id: string;
