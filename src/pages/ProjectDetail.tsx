@@ -71,12 +71,24 @@ export default function ProjectDetail() {
         {/* Hero Image */}
         {project.image_url && (
           <div className="w-full h-[40vh] md:h-[50vh] relative overflow-hidden">
-            <img
-              src={project.image_url}
-              alt={project.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+            {project.image_url.endsWith('.mp4') || project.image_url.endsWith('.webm') ? (
+              <video
+                src={project.image_url}
+                className="w-full h-full object-cover"
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+            ) : (
+              <img
+                src={project.image_url}
+                alt={project.title}
+                className="w-full h-full object-cover"
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none" />
           </div>
         )}
 
