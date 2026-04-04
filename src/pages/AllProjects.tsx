@@ -8,6 +8,7 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { ProjectMediaThumbnail } from "@/components/ProjectMediaThumbnail";
 
 interface Project {
   id: string;
@@ -119,14 +120,10 @@ export default function AllProjects() {
                   className="card-medical overflow-hidden group h-full flex flex-col"
                 >
                   <div className="relative h-56 overflow-hidden">
-                    <img
-                      src={
-                        project.image_url ||
-                        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop"
-                      }
+                    <ProjectMediaThumbnail
+                      src={project.image_url || "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop"}
                       alt={project.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     {project.category && (
