@@ -36,7 +36,8 @@ export function ImageUpload({
   const { toast } = useToast();
 
   const isResume = bucket === 'resume';
-  const isImage = !isResume && value && !value.endsWith('.pdf');
+  const isVideo = value && (value.endsWith('.mp4') || value.endsWith('.webm'));
+  const isImage = !isResume && !isVideo && value && !value.endsWith('.pdf');
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
