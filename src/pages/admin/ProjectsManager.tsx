@@ -133,6 +133,7 @@ const ProjectsManager = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [demoUrl, setDemoUrl] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [category, setCategory] = useState('');
   const [technologies, setTechnologies] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
@@ -212,6 +213,7 @@ const ProjectsManager = () => {
     setImageUrl('');
     setDemoUrl('');
     setVideoUrl('');
+    setGalleryImages([]);
     setCategory('');
     setTechnologies('');
     setIsFeatured(false);
@@ -233,6 +235,7 @@ const ProjectsManager = () => {
     setImageUrl(project.image_url || '');
     setDemoUrl(project.demo_url || '');
     setVideoUrl((project as any).video_url || '');
+    setGalleryImages((project as any).gallery_images || []);
     setCategory(project.category || '');
     setTechnologies(project.technologies?.join(', ') || '');
     setIsFeatured(project.is_featured);
@@ -261,6 +264,7 @@ const ProjectsManager = () => {
             image_url: imageUrl || null,
             demo_url: demoUrl || null,
             video_url: videoUrl || null,
+            gallery_images: galleryImages.length > 0 ? galleryImages : [],
             category: category || null,
             technologies: techArray.length > 0 ? techArray : null,
             is_featured: isFeatured,
@@ -281,6 +285,7 @@ const ProjectsManager = () => {
             image_url: imageUrl || null,
             demo_url: demoUrl || null,
             video_url: videoUrl || null,
+            gallery_images: galleryImages.length > 0 ? galleryImages : [],
             category: category || null,
             technologies: techArray.length > 0 ? techArray : null,
             is_featured: isFeatured,
@@ -580,6 +585,32 @@ const ProjectsManager = () => {
                   bucket="portfolio-images"
                   accept="video/mp4"
                 />
+              </div>
+              {/* Gallery Images */}
+              <div className="space-y-2">
+                <Label>Gallery Images</Label>
+                <p className="text-xs text-muted-foreground">Upload multiple images for the project gallery carousel.</p>
+                <div className="grid grid-cols-3 gap-3">
+                  {galleryImages.map((url, index) => (
+                    <div key={index} className="relative group aspect-video rounded-lg overflow-hidden border border-border bg-muted">
+                      <img src={url} alt={`Gallery ${index + 1}`} className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setGalleryImages(galleryImages.filter((_, i) => i !== index))}
+                        className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                  <ImageUpload
+                    label="Add Image"
+                    value=""
+                    onChange={(url) => { if (url) setGalleryImages([...galleryImages, url]); }}
+                    bucket="portfolio-images"
+                    accept="image/jpeg,image/png,image/gif"
+                  />
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="demoUrl">Demo URL</Label>
