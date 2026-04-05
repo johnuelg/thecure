@@ -1,11 +1,12 @@
+import { useState } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, ChevronRight, Home } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowLeft, ExternalLink, ChevronRight, Home, ChevronLeft } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -169,6 +170,11 @@ export default function ProjectDetail() {
                 </div>
               )}
             </div>
+
+            {/* Gallery Carousel */}
+            {(project as any).gallery_images && (project as any).gallery_images.length > 0 && (
+              <GalleryCarousel images={(project as any).gallery_images} />
+            )}
 
             {/* Demo Video */}
             {(project as any).video_url && (
