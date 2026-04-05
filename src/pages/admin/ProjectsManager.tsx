@@ -586,6 +586,32 @@ const ProjectsManager = () => {
                   accept="video/mp4"
                 />
               </div>
+              {/* Gallery Images */}
+              <div className="space-y-2">
+                <Label>Gallery Images</Label>
+                <p className="text-xs text-muted-foreground">Upload multiple images for the project gallery carousel.</p>
+                <div className="grid grid-cols-3 gap-3">
+                  {galleryImages.map((url, index) => (
+                    <div key={index} className="relative group aspect-video rounded-lg overflow-hidden border border-border bg-muted">
+                      <img src={url} alt={`Gallery ${index + 1}`} className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setGalleryImages(galleryImages.filter((_, i) => i !== index))}
+                        className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                  <ImageUpload
+                    label="Add Image"
+                    value=""
+                    onChange={(url) => { if (url) setGalleryImages([...galleryImages, url]); }}
+                    bucket="portfolio-images"
+                    accept="image/jpeg,image/png,image/gif"
+                  />
+                </div>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="demoUrl">Demo URL</Label>
                 <Input
