@@ -179,6 +179,9 @@ export default function ProjectDetail() {
                     src={(project as any).video_url}
                     className="w-full"
                     controls
+                    autoPlay
+                    muted
+                    loop
                     playsInline
                     preload="metadata"
                   />
