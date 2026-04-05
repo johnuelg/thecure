@@ -741,6 +741,7 @@ export type Database = {
           demo_url: string | null
           description: string
           display_order: number | null
+          gallery_images: string[] | null
           id: string
           image_url: string | null
           is_featured: boolean | null
@@ -759,6 +760,7 @@ export type Database = {
           demo_url?: string | null
           description: string
           display_order?: number | null
+          gallery_images?: string[] | null
           id?: string
           image_url?: string | null
           is_featured?: boolean | null
@@ -777,6 +779,7 @@ export type Database = {
           demo_url?: string | null
           description?: string
           display_order?: number | null
+          gallery_images?: string[] | null
           id?: string
           image_url?: string | null
           is_featured?: boolean | null
