@@ -8,6 +8,66 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, ChevronRight, Home, ChevronLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+function GalleryCarousel({ images }: { images: string[] }) {
+  const [current, setCurrent] = useState(0);
+  const total = images.length;
+
+  const prev = () => setCurrent((c) => (c - 1 + total) % total);
+  const next = () => setCurrent((c) => (c + 1) % total);
+
+  return (
+    <div className="mb-10">
+      <h2 className="text-xl font-semibold mb-4">Project Gallery</h2>
+      <div className="relative rounded-2xl overflow-hidden border border-border bg-muted">
+        <div className="relative aspect-video">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={current}
+              src={images[current]}
+              alt={`Gallery image ${current + 1}`}
+              className="w-full h-full object-cover absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+          </AnimatePresence>
+        </div>
+        {total > 1 && (
+          <>
+            <button
+              onClick={prev}
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border border-border rounded-full p-2 hover:bg-background transition-colors"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={next}
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border border-border rounded-full p-2 hover:bg-background transition-colors"
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    i === current ? 'bg-primary' : 'bg-foreground/30'
+                  }`}
+                  aria-label={`Go to image ${i + 1}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
