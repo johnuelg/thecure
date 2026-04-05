@@ -170,6 +170,22 @@ export default function ProjectDetail() {
               )}
             </div>
 
+            {/* Demo Video */}
+            {(project as any).video_url && (
+              <div className="mb-10">
+                <h2 className="text-xl font-semibold mb-4">Project Demo</h2>
+                <div className="rounded-2xl overflow-hidden border border-border">
+                  <video
+                    src={(project as any).video_url}
+                    className="w-full"
+                    controls
+                    playsInline
+                    preload="metadata"
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Demo link */}
             {project.demo_url && (
               <a href={project.demo_url} target="_blank" rel="noopener noreferrer">

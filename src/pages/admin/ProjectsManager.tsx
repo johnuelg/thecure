@@ -132,6 +132,7 @@ const ProjectsManager = () => {
   const [outcome, setOutcome] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [demoUrl, setDemoUrl] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
   const [category, setCategory] = useState('');
   const [technologies, setTechnologies] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
@@ -210,6 +211,7 @@ const ProjectsManager = () => {
     setOutcome('');
     setImageUrl('');
     setDemoUrl('');
+    setVideoUrl('');
     setCategory('');
     setTechnologies('');
     setIsFeatured(false);
@@ -230,6 +232,7 @@ const ProjectsManager = () => {
     setOutcome(project.outcome || '');
     setImageUrl(project.image_url || '');
     setDemoUrl(project.demo_url || '');
+    setVideoUrl((project as any).video_url || '');
     setCategory(project.category || '');
     setTechnologies(project.technologies?.join(', ') || '');
     setIsFeatured(project.is_featured);
@@ -257,6 +260,7 @@ const ProjectsManager = () => {
             outcome: outcome || null,
             image_url: imageUrl || null,
             demo_url: demoUrl || null,
+            video_url: videoUrl || null,
             category: category || null,
             technologies: techArray.length > 0 ? techArray : null,
             is_featured: isFeatured,
@@ -276,6 +280,7 @@ const ProjectsManager = () => {
             outcome: outcome || null,
             image_url: imageUrl || null,
             demo_url: demoUrl || null,
+            video_url: videoUrl || null,
             category: category || null,
             technologies: techArray.length > 0 ? techArray : null,
             is_featured: isFeatured,
@@ -562,21 +567,28 @@ const ProjectsManager = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <ImageUpload
-                  label="Project Image / Video"
+                  label="Project Thumbnail (Image/Video)"
                   value={imageUrl}
                   onChange={setImageUrl}
                   bucket="portfolio-images"
                   accept="image/jpeg,image/png,image/gif,video/mp4"
                 />
-                <div className="space-y-2">
-                  <Label htmlFor="demoUrl">Demo URL</Label>
-                  <Input
-                    id="demoUrl"
-                    value={demoUrl}
-                    onChange={(e) => setDemoUrl(e.target.value)}
-                    placeholder="https://..."
-                  />
-                </div>
+                <ImageUpload
+                  label="Demo / Presentation Video"
+                  value={videoUrl}
+                  onChange={setVideoUrl}
+                  bucket="portfolio-images"
+                  accept="video/mp4"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="demoUrl">Demo URL</Label>
+                <Input
+                  id="demoUrl"
+                  value={demoUrl}
+                  onChange={(e) => setDemoUrl(e.target.value)}
+                  placeholder="https://..."
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="technologies">Technologies (comma-separated)</Label>
