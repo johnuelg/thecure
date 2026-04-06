@@ -23,7 +23,7 @@ export function Header() {
   const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
 
-  const { data: branding } = useQuery({
+  const { data: branding, isLoading: isBrandingLoading } = useQuery({
     queryKey: ['profile-branding'],
     queryFn: async () => {
       const { data } = await supabase
@@ -93,6 +93,8 @@ export function Header() {
             >
               {branding?.logo_url ? (
                 <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-12 w-12 sm:h-14 sm:w-14 lg:h-[75px] lg:w-[75px] object-contain" />
+              ) : isBrandingLoading ? (
+                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[75px] lg:h-[75px]" />
               ) : (
                 <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[75px] lg:h-[75px] rounded-lg healthcare-gradient flex items-center justify-center">
                   <span className="text-primary-foreground font-display font-bold text-xl sm:text-2xl lg:text-3xl">AI</span>
@@ -113,6 +115,8 @@ export function Header() {
             >
               {branding?.logo_url ? (
                 <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-12 w-12 sm:h-14 sm:w-14 lg:h-[75px] lg:w-[75px] object-contain" />
+              ) : isBrandingLoading ? (
+                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[75px] lg:h-[75px]" />
               ) : (
                 <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[75px] lg:h-[75px] rounded-lg healthcare-gradient flex items-center justify-center">
                   <span className="text-primary-foreground font-display font-bold text-xl sm:text-2xl lg:text-3xl">AI</span>
