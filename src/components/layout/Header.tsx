@@ -23,7 +23,7 @@ export function Header() {
   const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
 
-  const { data: branding } = useQuery({
+  const { data: branding, isLoading: isBrandingLoading } = useQuery({
     queryKey: ['profile-branding'],
     queryFn: async () => {
       const { data } = await supabase
