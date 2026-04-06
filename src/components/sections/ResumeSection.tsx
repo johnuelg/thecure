@@ -182,17 +182,18 @@ export function ResumeSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <span className="section-badge">
             Resume
           </span>
           <h2 className="section-title">Experience & Background</h2>
-          <p className="section-description mb-6">
+          <p className="section-description mb-8">
             {sectionDescription}
           </p>
+          <div className="section-divider mb-8" />
           <Button 
-            className="healthcare-gradient border-0"
+            className="healthcare-gradient border-0 px-8 font-semibold tracking-wide shadow-md"
             onClick={handleDownloadResume}
             disabled={!profile?.resume_url}
           >

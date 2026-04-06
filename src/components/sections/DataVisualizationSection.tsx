@@ -305,14 +305,14 @@ export function DataVisualizationSection() {
     "Interactive visualizations demonstrating the power of AI in transforming healthcare outcomes and operational efficiency.";
 
   return (
-    <section id="visualizations" className="section-padding bg-secondary/30">
+    <section id="visualizations" className="section-padding bg-secondary/20">
       <div className="container-wide">
         <motion.div
           ref={sectionRef}
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <span className="section-badge">
             Data Analytics Showcase
@@ -321,6 +321,7 @@ export function DataVisualizationSection() {
           <p className="section-description">
             {sectionDescription}
           </p>
+          <div className="section-divider" />
         </motion.div>
 
         {isLoading ? (

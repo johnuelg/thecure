@@ -76,21 +76,23 @@ export function TestimonialsSection() {
   };
 
   return (
-    <section className="py-20 bg-muted/50">
-      <div className="container mx-auto px-4 max-w-4xl">
+    <section className="section-padding bg-muted/30">
+      <div className="container mx-auto px-5 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="text-center mb-14"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+          <span className="section-badge">Testimonials</span>
+          <h2 className="section-title">
             What Clients Say
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="section-description">
             Trusted by healthcare leaders and organizations worldwide.
           </p>
+          <div className="section-divider" />
         </motion.div>
 
         <div className="relative pt-16 sm:pt-20 md:pt-[100px]">

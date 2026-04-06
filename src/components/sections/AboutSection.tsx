@@ -60,28 +60,29 @@ export function AboutSection() {
   const resumeUrl = profile?.resume_url?.trim() || null;
 
   return (
-    <section id="about" className="section-padding bg-secondary/30 relative overflow-hidden">
+    <section id="about" className="section-padding bg-secondary/20 relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-primary/[0.03] blur-3xl -translate-y-1/2 translate-x-1/4" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-accent/[0.04] blur-3xl translate-y-1/3 -translate-x-1/4" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-primary/[0.02] blur-[100px] -translate-y-1/2 translate-x-1/4" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-accent/[0.03] blur-[100px] translate-y-1/3 -translate-x-1/4" />
       </div>
 
       <div className="container-wide relative z-10">
         <motion.div 
-          className="text-center mb-16"
+          className="text-center mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
           <div className="section-badge">
-            <User className="w-4 h-4" />
+            <User className="w-3.5 h-3.5" />
             About Me
           </div>
           <h2 className="section-title">
             Who I Am
           </h2>
+          <div className="section-divider" />
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -176,13 +177,13 @@ export function AboutSection() {
           >
             {/* Title & role */}
             {profile?.professional_title && (
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-                <CheckCircle2 className="w-4 h-4 text-primary" />
-                <span className="text-sm font-semibold text-primary">{profile.professional_title}</span>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 border border-primary/15">
+                <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                <span className="text-xs font-semibold text-primary uppercase tracking-wider">{profile.professional_title}</span>
               </div>
             )}
 
-            <p className="text-lg leading-relaxed text-muted-foreground">
+            <p className="text-base leading-[1.8] text-muted-foreground">
               {aboutDescription}
             </p>
 

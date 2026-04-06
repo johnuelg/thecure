@@ -75,7 +75,7 @@ export function Footer() {
   }, {} as Record<string, typeof footerLinks>) || {};
 
   return (
-    <footer className="bg-secondary/50 border-t border-border">
+    <footer className="bg-secondary/30 border-t border-border/50">
       <div className="container-wide section-padding">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
           {/* Brand */}

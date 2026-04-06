@@ -132,14 +132,14 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="section-padding bg-secondary/30">
+    <section id="contact" className="section-padding bg-secondary/20">
       <div className="container-wide">
         <motion.div
           ref={sectionRef}
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <span className="section-badge">
             Contact
@@ -148,6 +148,7 @@ export function ContactSection() {
           <p className="section-description">
             {sectionDescription}
           </p>
+          <div className="section-divider" />
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
