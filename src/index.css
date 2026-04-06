@@ -124,31 +124,37 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
   }
 
   /* Typography system — WCAG 2.1 AA compliant scale */
   h1, h2, h3, h4, h5, h6 {
     @apply font-display font-semibold tracking-tight text-foreground;
+    text-wrap: balance;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold leading-tight;
+    @apply text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl font-extrabold leading-[1.08];
+    letter-spacing: -0.035em;
   }
 
   h2 {
-    @apply text-3xl md:text-4xl font-bold;
+    @apply text-3xl md:text-[2.5rem] font-bold leading-[1.15];
+    letter-spacing: -0.03em;
   }
 
   h3 {
-    @apply text-xl md:text-2xl font-semibold;
+    @apply text-xl md:text-2xl font-semibold leading-snug;
+    letter-spacing: -0.02em;
   }
 
   h4 {
     @apply text-lg font-semibold;
+    letter-spacing: -0.015em;
   }
 
   p {
-    @apply leading-relaxed;
+    @apply leading-[1.7];
   }
 
   /* Focus visible for WCAG AA keyboard navigation */
@@ -291,33 +297,39 @@
 
   /* Section spacing */
   .section-padding {
-    @apply py-16 md:py-24 lg:py-32;
+    @apply py-20 md:py-28 lg:py-36;
   }
 
   .container-narrow {
-    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-4xl mx-auto px-5 sm:px-6 lg:px-8;
   }
 
   .container-wide {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto px-5 sm:px-6 lg:px-8;
   }
 
   /* Section header typography pattern */
   .section-badge {
-    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium font-display mb-4;
+    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 text-primary text-xs font-semibold font-display mb-5 uppercase tracking-widest;
   }
 
   .section-title {
-    @apply font-display font-bold mb-4;
+    @apply font-display font-bold mb-5;
   }
 
   .section-description {
-    @apply text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed;
+    @apply text-muted-foreground max-w-2xl mx-auto text-base md:text-lg leading-[1.7];
+  }
+
+  /* Decorative section divider */
+  .section-divider {
+    @apply w-12 h-[3px] rounded-full mx-auto mt-5 mb-0;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
   }
 
   /* Prose for readable body text */
   .prose-clinical {
-    @apply text-base leading-relaxed text-foreground;
+    @apply text-base leading-[1.7] text-foreground;
   }
   .prose-clinical p {
     @apply mb-4 last:mb-0;
