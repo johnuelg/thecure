@@ -92,7 +92,14 @@ export function Header() {
               className="flex items-center gap-3 group transition-transform duration-300 hover:scale-105"
             >
               {branding?.logo_url ? (
-                <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-12 w-12 sm:h-14 sm:w-14 lg:h-[75px] lg:w-[75px] object-contain" />
+                <motion.img
+                  src={branding.logo_url}
+                  alt={branding.full_name || 'Logo'}
+                  className="h-12 w-12 sm:h-14 sm:w-14 lg:h-[75px] lg:w-[75px] object-contain"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                />
               ) : isBrandingLoading ? (
                 <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[75px] lg:h-[75px]" />
               ) : (
@@ -101,11 +108,23 @@ export function Header() {
                 </div>
               )}
               {brandNameImageUrl ? (
-                <img src={brandNameImageUrl} alt={brandName} className="h-8 sm:h-10 lg:h-14 object-contain" />
+                <motion.img
+                  src={brandNameImageUrl}
+                  alt={brandName}
+                  className="h-8 sm:h-10 lg:h-14 object-contain"
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+                />
               ) : brandName ? (
-                <span className="font-display font-semibold text-base sm:text-lg lg:text-2xl brand-name-glow">
+                <motion.span
+                  className="font-display font-semibold text-base sm:text-lg lg:text-2xl brand-name-glow"
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+                >
                   {brandName}
-                </span>
+                </motion.span>
               ) : null}
             </a>
           ) : (
@@ -114,7 +133,14 @@ export function Header() {
               className="flex items-center gap-3 group transition-transform duration-300 hover:scale-105"
             >
               {branding?.logo_url ? (
-                <img src={branding.logo_url} alt={branding.full_name || 'Logo'} className="h-12 w-12 sm:h-14 sm:w-14 lg:h-[75px] lg:w-[75px] object-contain" />
+                <motion.img
+                  src={branding.logo_url}
+                  alt={branding.full_name || 'Logo'}
+                  className="h-12 w-12 sm:h-14 sm:w-14 lg:h-[75px] lg:w-[75px] object-contain"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                />
               ) : isBrandingLoading ? (
                 <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[75px] lg:h-[75px]" />
               ) : (
@@ -123,11 +149,23 @@ export function Header() {
                 </div>
               )}
               {brandNameImageUrl ? (
-                <img src={brandNameImageUrl} alt={brandName} className="h-8 sm:h-10 lg:h-14 object-contain" />
+                <motion.img
+                  src={brandNameImageUrl}
+                  alt={brandName}
+                  className="h-8 sm:h-10 lg:h-14 object-contain"
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+                />
               ) : brandName ? (
-                <span className="font-display font-semibold text-base sm:text-lg lg:text-2xl brand-name-glow">
+                <motion.span
+                  className="font-display font-semibold text-base sm:text-lg lg:text-2xl brand-name-glow"
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+                >
                   {brandName}
-                </span>
+                </motion.span>
               ) : null}
             </Link>
           )}
