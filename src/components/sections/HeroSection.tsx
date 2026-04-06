@@ -532,16 +532,16 @@ export function HeroSection() {
       {/* Floating Medical Icons Parallax */}
       <FloatingMedicalIcons />
 
-      <div className="container-wide relative z-10 pt-20">
+      <div className="container-wide relative z-10 pt-28 md:pt-32">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium font-display mb-8"
+            className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-primary/8 border border-primary/15 text-primary text-xs font-semibold font-display mb-10 uppercase tracking-[0.15em]"
           >
-            <Activity className="w-4 h-4" />
+            <Activity className="w-3.5 h-3.5" />
             {profile?.professional_title || "AI Healthcare Consultant & Developer"}
           </motion.div>
 
@@ -676,7 +676,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
+            className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-12 leading-[1.7]"
           >
             {(() => {
               const bioText = profile?.bio || "I help healthcare organizations leverage artificial intelligence to improve patient outcomes, streamline operations, and unlock insights from complex medical data.";
@@ -689,12 +689,12 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
             <Button
               size="lg"
               onClick={() => scrollToSection("#projects")}
-              className="healthcare-gradient border-0 px-8"
+              className="healthcare-gradient border-0 px-10 py-3 text-sm font-semibold tracking-wide shadow-lg hover:shadow-xl transition-shadow"
             >
               View My Work
             </Button>
@@ -702,6 +702,7 @@ export function HeroSection() {
               size="lg"
               variant="outline"
               onClick={() => scrollToSection("#contact")}
+              className="px-10 py-3 text-sm font-semibold tracking-wide border-border/60 hover:border-primary/40 hover:bg-primary/5"
             >
               Get in Touch
             </Button>
@@ -712,7 +713,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-2xl mx-auto pb-20 sm:pb-28"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-8 max-w-2xl mx-auto pb-24 sm:pb-32"
           >
             {statsToShow.map((stat, index) => {
               const IconComponent = getIcon(stat.icon);
@@ -722,13 +723,13 @@ export function HeroSection() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                  className="card-medical p-6 text-center"
+                  className="card-medical p-6 text-center group hover:border-primary/30"
                 >
-                  <IconComponent className="w-8 h-8 text-primary mx-auto mb-3" />
-                  <div className="text-3xl font-display font-bold text-foreground mb-1">
+                  <IconComponent className="w-7 h-7 text-primary mx-auto mb-3 group-hover:scale-110 transition-transform duration-300" />
+                  <div className="text-3xl font-display font-extrabold text-foreground mb-1 tracking-tight">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{stat.label}</div>
                 </motion.div>
               );
             })}

@@ -132,7 +132,7 @@ export function ServicesSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <span className="section-badge">
             Services
@@ -141,6 +141,7 @@ export function ServicesSection() {
           <p className="section-description">
             {sectionDescription}
           </p>
+          <div className="section-divider" />
         </motion.div>
 
         {isLoading ? (
@@ -155,7 +156,7 @@ export function ServicesSection() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
             {displayServices.map((service, index) => {
               const IconComponent = getIcon(service.icon);
               return (
@@ -164,13 +165,13 @@ export function ServicesSection() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                   transition={{ duration: 0.4, delay: 0.1 + index * 0.1 }}
-                  className="card-medical p-6 group hover:border-primary/50 transition-colors"
+                  className="card-medical p-7 group hover:border-primary/40 transition-all duration-300"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <IconComponent className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/12 to-accent/8 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent className="w-5.5 h-5.5 text-primary" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <h3 className="text-lg font-semibold mb-2.5 tracking-tight">{service.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-[1.7]">
                     {service.description}
                   </p>
                 </motion.div>

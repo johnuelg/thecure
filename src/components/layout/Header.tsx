@@ -69,9 +69,9 @@ export function Header() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm"
+          ? "bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-[0_1px_3px_0_hsl(var(--primary)/0.04)]"
           : "bg-transparent"
       }`}
     >
@@ -171,12 +171,12 @@ export function Header() {
           )}
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
+          <nav className="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
             {navLinks.map((link) => (
               <button
                 key={link.href}
                 onClick={() => scrollToSection(link.href)}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary"
+                className="relative px-4 py-2 text-[13px] font-medium text-muted-foreground hover:text-foreground transition-all duration-200 rounded-lg hover:bg-primary/5 tracking-wide uppercase"
               >
                 {link.label}
               </button>
@@ -184,11 +184,11 @@ export function Header() {
           </nav>
 
           {/* Right side actions */}
-          <div className="hidden lg:flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-3">
             <ThemeToggle />
             <Button
               onClick={() => scrollToSection("#contact")}
-              className="healthcare-gradient border-0"
+              className="healthcare-gradient border-0 text-[13px] font-semibold tracking-wide px-6 shadow-md hover:shadow-lg transition-shadow"
             >
               Get in Touch
             </Button>
