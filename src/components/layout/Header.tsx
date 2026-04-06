@@ -125,7 +125,7 @@ export function Header() {
                 >
                   {brandName}
                 </motion.span>
-            </a>
+              ) : null}
             </a>
           ) : (
             <Link
