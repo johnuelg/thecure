@@ -691,27 +691,21 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
-            <div className="relative group">
-              <div className="absolute -inset-[2px] rounded-lg bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] animate-[gradient-shift_3s_ease-in-out_infinite] opacity-75 group-hover:opacity-100 blur-[3px] transition-opacity duration-500" />
-              <Button
-                size="lg"
-                onClick={() => scrollToSection("#projects")}
-                className="relative healthcare-gradient border-0 px-10 py-3 text-sm font-semibold tracking-wide shadow-lg hover:shadow-xl transition-shadow"
-              >
-                View My Work
-              </Button>
-            </div>
-            <div className="relative group">
-              <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-primary/40 via-accent/40 to-primary/40 bg-[length:200%_100%] animate-[gradient-shift_3s_ease-in-out_infinite] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => scrollToSection("#contact")}
-                className="relative px-10 py-3 text-sm font-semibold tracking-wide border-border/60 hover:border-transparent hover:bg-background"
-              >
-                Get in Touch
-              </Button>
-            </div>
+            <Button
+              size="lg"
+              onClick={() => scrollToSection("#projects")}
+              className="healthcare-gradient border-0 px-10 py-3 text-sm font-semibold tracking-wide shadow-lg hover:shadow-xl transition-shadow"
+            >
+              View My Work
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => scrollToSection("#contact")}
+              className="px-10 py-3 text-sm font-semibold tracking-wide border-border/60 hover:border-primary/40 hover:bg-primary/5"
+            >
+              Get in Touch
+            </Button>
           </motion.div>
 
           {/* Stats */}
