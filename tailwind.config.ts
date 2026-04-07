@@ -123,6 +123,11 @@ export default {
           "0%": { strokeDashoffset: "2100" },
           "100%": { strokeDashoffset: "-2100" },
         },
+        "gradient-shift": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
         "chat-pulse": {
           "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--primary) / 0.4)" },
           "50%": { boxShadow: "0 0 20px 8px hsl(var(--primary) / 0.2)" },
