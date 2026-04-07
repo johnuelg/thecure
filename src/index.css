@@ -310,7 +310,8 @@
 
   /* Section header typography pattern */
   .section-badge {
-    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 text-primary text-xs font-semibold font-display mb-5 uppercase tracking-widest;
+    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-primary text-xs font-semibold font-display mb-5 uppercase tracking-widest;
+    background-color: hsl(var(--primary) / 0.08);
   }
 
   .section-title {
