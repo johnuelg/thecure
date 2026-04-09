@@ -24,7 +24,7 @@ export function Header() {
 
   const { data: branding, isLoading: isBrandingLoading } = useProfileBranding();
 
-  const brandName = branding?.brand_name || 'HealthcareAI';
+  const brandName = branding?.brand_name || '';
   const brandNameImageUrl = branding?.brand_name_image_url || null;
 
   useEffect(() => {

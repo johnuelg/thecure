@@ -134,7 +134,7 @@ const ProfileManager = () => {
       favicon_url: faviconUrl || null,
       site_title: siteTitle || null,
       site_description: siteDescription || null,
-      brand_name: brandName || 'HealthcareAI',
+      brand_name: brandName,
       brand_name_image_url: brandNameImageUrl || null,
       max_featured_projects: maxFeaturedProjects,
       max_featured_visualizations: maxFeaturedVisualizations,
