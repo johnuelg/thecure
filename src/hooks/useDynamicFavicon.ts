@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useQuery } from '@tanstack/react-query';
+import { useProfileBranding } from '@/hooks/useProfileBranding';
 
 const FAVICON_SELECTOR = "link[rel='icon'], link[rel='shortcut icon'], link[rel='apple-touch-icon']";
 const FALLBACK_FAVICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'/>";
@@ -36,22 +35,7 @@ const blobToDataUrl = (blob: Blob) =>
 export function useDynamicFavicon() {
   const activeIconHrefRef = useRef<string | null>(null);
 
-  const { data: profile } = useQuery({
-    queryKey: ['profile-branding'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('profile')
-        .select('favicon_url, logo_url, site_title, site_description')
-        .maybeSingle();
-      return data as {
-        favicon_url: string | null;
-        logo_url: string | null;
-        site_title: string | null;
-        site_description: string | null;
-      } | null;
-    },
-    staleTime: 1000 * 60 * 10,
-  });
+  const { data: profile } = useProfileBranding();
 
   useEffect(() => {
     let isCancelled = false;

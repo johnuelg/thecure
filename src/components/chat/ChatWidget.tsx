@@ -7,7 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
-import { useQuery } from "@tanstack/react-query";
+import { useProfileBranding } from "@/hooks/useProfileBranding";
 
 interface Message {
   id: string;
@@ -33,17 +33,7 @@ const ChatWidget = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { data: brandingProfile } = useQuery({
-    queryKey: ['profile-branding'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('profile')
-        .select('logo_url, full_name')
-        .maybeSingle();
-      return data;
-    },
-    staleTime: 1000 * 60 * 10,
-  });
+  const { data: brandingProfile } = useProfileBranding();
 
   const logoUrl = brandingProfile?.logo_url;
 
