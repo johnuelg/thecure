@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
+import { useProfileBranding } from "@/hooks/useProfileBranding";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const navLinks = [
@@ -23,20 +22,10 @@ export function Header() {
   const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
 
-  const { data: branding, isLoading: isBrandingLoading } = useQuery({
-    queryKey: ['profile-branding'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('profile')
-        .select('logo_url, full_name, brand_name, brand_name_image_url')
-        .maybeSingle();
-      return data as { logo_url: string | null; full_name: string; brand_name: string | null; brand_name_image_url: string | null } | null;
-    },
-    staleTime: 1000 * 60 * 10,
-  });
+  const { data: branding, isLoading: isBrandingLoading } = useProfileBranding();
 
   const brandName = branding?.brand_name || 'HealthcareAI';
-  const brandNameImageUrl = (branding as any)?.brand_name_image_url || null;
+  const brandNameImageUrl = branding?.brand_name_image_url || null;
 
   useEffect(() => {
     const handleScroll = () => {
