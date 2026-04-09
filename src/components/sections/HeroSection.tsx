@@ -271,21 +271,30 @@ function FloatingMedicalIcons() {
     }
   };
 
-  const getWhileHover = () => {
+  // CSS-based hover scale (avoids conflict with framer-motion infinite animate)
+  const getHoverScale = () => {
     switch (hoverEffect) {
-      case 'none':
-        return undefined;
-      case 'scale-up':
-        return { scale: 1.25, transition: { duration: 0.3 } };
-      case 'pulse-ring':
-        return { scale: 1.1, transition: { duration: 0.2 } };
-      case 'color-shift':
-        return { scale: 1.12, transition: { duration: 0.3 } };
-      case 'frost-glow':
-        return { scale: 1.08, transition: { duration: 0.4 } };
+      case 'none': return 1;
+      case 'scale-up': return 1.25;
+      case 'pulse-ring': return 1.1;
+      case 'color-shift': return 1.12;
+      case 'frost-glow': return 1.08;
       case 'soft-glow':
-      default:
-        return { scale: 1.15, transition: { duration: 0.3 } };
+      default: return 1.15;
+    }
+  };
+
+  // Light mode hover filter
+  const getLightHoverStyle = (depth: number) => {
+    const glowSize = 4 + depth * 8;
+    switch (hoverEffect) {
+      case 'none': return undefined;
+      case 'scale-up': return `drop-shadow(0 0 ${glowSize * 1.5}px rgba(var(--primary-rgb, 14,165,233), 0.3)) brightness(1.1)`;
+      case 'color-shift': return `drop-shadow(0 0 ${glowSize * 1.3}px rgba(var(--primary-rgb, 14,165,233), 0.35)) brightness(1.25)`;
+      case 'pulse-ring': return `drop-shadow(0 0 ${glowSize * 2.5}px rgba(var(--primary-rgb, 14,165,233), 0.25))`;
+      case 'frost-glow': return `drop-shadow(0 0 ${glowSize * 2}px rgba(200,230,255, 0.4)) brightness(1.15)`;
+      case 'soft-glow':
+      default: return `drop-shadow(0 0 ${glowSize * 1.2}px rgba(var(--primary-rgb, 14,165,233), 0.3))`;
     }
   };
 
@@ -335,9 +344,10 @@ function FloatingMedicalIcons() {
         const glowOpacity = (0.2 + depth * 0.3).toFixed(2);
 
         const motionProps = getAnimationProps(icon);
-        const hoverFilter = getHoverStyle(glowColor, depth);
+        const darkHoverFilter = getHoverStyle(glowColor, depth);
+        const lightHoverFilter = getLightHoverStyle(depth);
         const scrollOffset = getScrollOffset(parallaxFactor);
-        const whileHover = getWhileHover();
+        const hoverScale = getHoverScale();
 
         return (
           <div
@@ -352,52 +362,75 @@ function FloatingMedicalIcons() {
             }}
           >
             <motion.div
-              className="pointer-events-auto cursor-default"
               style={{
                 filter: blurAmount > 0.5 ? `blur(${blurAmount}px)` : undefined,
               }}
               animate={motionProps?.animate}
               transition={motionProps?.transition}
-              whileHover={whileHover}
             >
-            {/* Light mode */}
-            <span className="dark:hidden"
-              style={{
-                filter: `drop-shadow(0 0 ${lightGlowSize}px rgba(var(--primary-rgb, 14,165,233), 0.15))`,
-                transition: 'filter 0.3s ease',
-              }}
-            >
-              <Icon
-                size={size}
-                strokeWidth={depth > 0.5 ? 1.8 : 1.4}
+              {/* Hover wrapper — CSS scale to avoid conflict with framer-motion infinite animate */}
+              <div
+                className="pointer-events-auto cursor-default"
                 style={{
-                  color: 'hsl(var(--primary))',
-                  opacity: baseOpacityLight,
-                  transition: 'opacity 0.3s ease',
+                  transform: 'scale(1)',
+                  transition: 'transform 0.3s ease',
                 }}
-              />
-            </span>
-            {/* Dark mode with colored glow */}
-            <span className="hidden dark:block"
-              style={{
-                filter: `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`,
-                transition: 'filter 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                if (hoverEffect !== 'none') e.currentTarget.style.filter = hoverFilter;
-              }}
-              onMouseLeave={(e) => { e.currentTarget.style.filter = `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`; }}
-            >
-              <Icon
-                size={size}
-                strokeWidth={depth > 0.5 ? 1.5 : 1.2}
-                style={{
-                  color: glowColor.color,
-                  opacity: 0.15 + depth * 0.2,
-                  transition: 'opacity 0.3s ease',
+                onMouseEnter={(e) => {
+                  if (hoverEffect !== 'none') {
+                    e.currentTarget.style.transform = `scale(${hoverScale})`;
+                  }
                 }}
-              />
-            </span>
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                }}
+              >
+                {/* Light mode */}
+                <span className="dark:hidden"
+                  style={{
+                    filter: `drop-shadow(0 0 ${lightGlowSize}px rgba(var(--primary-rgb, 14,165,233), 0.15))`,
+                    transition: 'filter 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (lightHoverFilter) e.currentTarget.style.filter = lightHoverFilter;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.filter = `drop-shadow(0 0 ${lightGlowSize}px rgba(var(--primary-rgb, 14,165,233), 0.15))`;
+                  }}
+                >
+                  <Icon
+                    size={size}
+                    strokeWidth={depth > 0.5 ? 1.8 : 1.4}
+                    style={{
+                      color: 'hsl(var(--primary))',
+                      opacity: baseOpacityLight,
+                      transition: 'opacity 0.3s ease',
+                    }}
+                  />
+                </span>
+                {/* Dark mode with colored glow */}
+                <span className="hidden dark:block"
+                  style={{
+                    filter: `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`,
+                    transition: 'filter 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (hoverEffect !== 'none') e.currentTarget.style.filter = darkHoverFilter;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.filter = `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`;
+                  }}
+                >
+                  <Icon
+                    size={size}
+                    strokeWidth={depth > 0.5 ? 1.5 : 1.2}
+                    style={{
+                      color: glowColor.color,
+                      opacity: 0.15 + depth * 0.2,
+                      transition: 'opacity 0.3s ease',
+                    }}
+                  />
+                </span>
+              </div>
             </motion.div>
           </div>
         );
