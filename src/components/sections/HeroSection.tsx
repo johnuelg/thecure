@@ -427,9 +427,10 @@ function FloatingMedicalIcons() {
                       color: glowColor.color,
                       opacity: 0.15 + depth * 0.2,
                       transition: 'opacity 0.3s ease',
-                }}
-              />
-            </span>
+                    }}
+                  />
+                </span>
+              </div>
             </motion.div>
           </div>
         );
