@@ -281,15 +281,27 @@ const ParallaxIconsManager = () => {
   }, []);
 
   const handleAdd = async () => {
+    const iconName = newIconType === 'custom' ? (newIconName || 'Custom Icon') : newIconName;
     try {
+      const insertData: any = {
+        icon_name: iconName,
+        glow_color: newGlowColor,
+        display_order: items.length,
+        icon_type: newIconType,
+      };
+      if (newIconType === 'custom' && newCustomIconUrl) {
+        insertData.custom_icon_url = newCustomIconUrl;
+      }
       const { error } = await supabase
         .from('hero_parallax_icons')
-        .insert({ icon_name: newIconName, glow_color: newGlowColor, display_order: items.length });
+        .insert(insertData);
       if (error) throw error;
       toast({ title: 'Icon added' });
       setIsDialogOpen(false);
       setNewIconName('Brain');
       setNewGlowColor('#41c0c2');
+      setNewIconType('lucide');
+      setNewCustomIconUrl('');
       fetchItems();
     } catch (error: any) {
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
