@@ -193,9 +193,18 @@ function SortableIconRow({
         <GripVertical className="h-4 w-4" />
       </button>
       <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-        <Icon className="h-5 w-5 text-primary" />
+        {item.icon_type === 'custom' && item.custom_icon_url ? (
+          <img src={item.custom_icon_url} alt={item.icon_name} className="h-6 w-6 object-contain" />
+        ) : (
+          <Icon className="h-5 w-5 text-primary" />
+        )}
       </div>
-      <span className="font-medium flex-1 text-sm">{item.icon_name}</span>
+      <div className="flex flex-col flex-1 min-w-0">
+        <span className="font-medium text-sm truncate">{item.icon_name}</span>
+        {item.icon_type === 'custom' && (
+          <span className="text-[10px] text-muted-foreground">Custom icon</span>
+        )}
+      </div>
       <div className="flex items-center gap-2">
         <Input
           type="color"
