@@ -591,34 +591,61 @@ const ParallaxIconsManager = () => {
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle>Add Parallax Icon</DialogTitle>
-            <DialogDescription>Choose an icon and glow color for the hero background</DialogDescription>
+            <DialogDescription>Choose a Lucide icon or upload your own custom icon</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div className="space-y-2">
-              <Label>Icon</Label>
-              <IconPicker value={newIconName} onChange={setNewIconName} />
-            </div>
-            <div className="space-y-2">
-              <Label>Glow Color (Dark Mode)</Label>
-              <div className="flex items-center gap-3">
+          <Tabs value={newIconType} onValueChange={(v) => setNewIconType(v as 'lucide' | 'custom')} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="lucide">Lucide Icon</TabsTrigger>
+              <TabsTrigger value="custom">Upload Custom</TabsTrigger>
+            </TabsList>
+            <TabsContent value="lucide" className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <Label>Icon</Label>
+                <IconPicker value={newIconName} onChange={setNewIconName} />
+              </div>
+            </TabsContent>
+            <TabsContent value="custom" className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <Label>Icon Name</Label>
                 <Input
-                  type="color"
-                  value={newGlowColor}
-                  onChange={(e) => setNewGlowColor(e.target.value)}
-                  className="w-12 h-10 p-1 cursor-pointer"
-                />
-                <Input
-                  value={newGlowColor}
-                  onChange={(e) => setNewGlowColor(e.target.value)}
-                  placeholder="#41c0c2"
-                  className="flex-1"
+                  value={newIconName}
+                  onChange={(e) => setNewIconName(e.target.value)}
+                  placeholder="e.g. Custom Dental Icon"
                 />
               </div>
+              <div className="space-y-2">
+                <Label>Icon Image (SVG or PNG)</Label>
+                <ImageUpload
+                  value={newCustomIconUrl}
+                  onChange={setNewCustomIconUrl}
+                  bucket="portfolio-images"
+                  accept="image/svg+xml,image/png,image/webp"
+                  placeholder="Upload an SVG or PNG icon"
+                  sizeHint="Recommended: 64×64px or larger, transparent background"
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+          <div className="space-y-2">
+            <Label>Glow Color (Dark Mode)</Label>
+            <div className="flex items-center gap-3">
+              <Input
+                type="color"
+                value={newGlowColor}
+                onChange={(e) => setNewGlowColor(e.target.value)}
+                className="w-12 h-10 p-1 cursor-pointer"
+              />
+              <Input
+                value={newGlowColor}
+                onChange={(e) => setNewGlowColor(e.target.value)}
+                placeholder="#41c0c2"
+                className="flex-1"
+              />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleAdd}>Add Icon</Button>
+            <Button onClick={handleAdd} disabled={newIconType === 'custom' && !newCustomIconUrl}>Add Icon</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
