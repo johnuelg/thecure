@@ -35,6 +35,8 @@ interface FloatingIcon {
   parallaxFactor: number;
   depth: number;
   glowColor: GlowColor;
+  isCustom: boolean;
+  customIconUrl: string | null;
 }
 
 function useParallax(enabled: boolean) {
