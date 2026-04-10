@@ -146,6 +146,26 @@ const HEALTHCARE_ICONS: HealthcareIcon[] = [
   // Safety
   { name: 'ShieldCheck', color: '#44d7b6', category: 'Safety' },
   { name: 'ShieldPlus', color: '#3cc4a5', category: 'Safety' },
+
+  // Dental
+  { name: 'Smile', color: '#f0c040', category: 'Dental' },
+  { name: 'SmilePlus', color: '#e0b030', category: 'Dental' },
+  { name: 'Sparkles', color: '#a0d8f0', category: 'Dental' },
+  { name: 'Brush', color: '#5ba0e0', category: 'Dental' },
+  { name: 'Scaling', color: '#44b8d7', category: 'Dental' },
+  { name: 'CircleCheck', color: '#44d7b6', category: 'Dental' },
+
+  // Mental Health
+  { name: 'BrainCircuit', color: '#9b6cf7', category: 'Mental Health' },
+  { name: 'Cloudy', color: '#8a9cc0', category: 'Mental Health' },
+  { name: 'Sun', color: '#f0c040', category: 'Mental Health' },
+  { name: 'Sunrise', color: '#f0a060', category: 'Mental Health' },
+  { name: 'Moon', color: '#8888c0', category: 'Mental Health' },
+  { name: 'Flower2', color: '#d070b0', category: 'Mental Health' },
+  { name: 'TreePine', color: '#44c070', category: 'Mental Health' },
+  { name: 'MessageCircleHeart', color: '#e06894', category: 'Mental Health' },
+  { name: 'Puzzle', color: '#7c9cf7', category: 'Mental Health' },
+  { name: 'Wind', color: '#88c8e0', category: 'Mental Health' },
 ];
 
 function SortableIconRow({
