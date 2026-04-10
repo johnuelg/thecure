@@ -15,11 +15,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Trash2, Loader2, GripVertical, Sparkles, HeartPulse, Filter } from 'lucide-react';
+import { Plus, Trash2, Loader2, GripVertical, Sparkles, HeartPulse, Filter, Upload, Image as ImageIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { icons } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { IconPicker } from '@/components/admin/IconPicker';
+import { ImageUpload } from '@/components/admin/ImageUpload';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AnimationStyleSelector, HoverEffectSelector, ScrollEffectSelector, SpeedSelector, type AnimationPreset, type SpeedOption } from '@/components/admin/AnimationStyleSelector';
 import {
   DndContext,
@@ -44,6 +46,8 @@ interface ParallaxIcon {
   glow_color: string;
   display_order: number;
   is_active: boolean;
+  icon_type: string;
+  custom_icon_url: string | null;
 }
 
 const getIcon = (name: string): LucideIcon => {
