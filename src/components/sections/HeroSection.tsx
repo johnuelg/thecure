@@ -183,9 +183,17 @@ function FloatingMedicalIcons() {
     ? dbIcons.map(i => ({ color: i.glow_color, rgb: hexToRgb(i.glow_color) }))
     : defaultGlowColors;
 
+  const iconTypes = dbIcons && dbIcons.length > 0
+    ? dbIcons.map(i => (i as any).icon_type || 'lucide')
+    : undefined;
+
+  const customUrls = dbIcons && dbIcons.length > 0
+    ? dbIcons.map(i => (i as any).custom_icon_url || null)
+    : undefined;
+
   const currentIcons = useMemo(
-    () => generateIcons(iconNames, glowColorsList, maxCount),
-    [maxCount, iconNames.join('|'), glowColorsList.map((color) => `${color.color}:${color.rgb}`).join('|')]
+    () => generateIcons(iconNames, glowColorsList, maxCount, iconTypes, customUrls),
+    [maxCount, iconNames.join('|'), glowColorsList.map((color) => `${color.color}:${color.rgb}`).join('|'), iconTypes?.join('|'), customUrls?.join('|')]
   );
 
   if (!parallaxEnabled) return null;
