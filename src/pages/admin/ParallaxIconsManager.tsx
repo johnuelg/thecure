@@ -231,6 +231,8 @@ const ParallaxIconsManager = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newIconName, setNewIconName] = useState('Brain');
   const [newGlowColor, setNewGlowColor] = useState('#41c0c2');
+  const [newIconType, setNewIconType] = useState<'lucide' | 'custom'>('lucide');
+  const [newCustomIconUrl, setNewCustomIconUrl] = useState('');
   const [animationStyle, setAnimationStyle] = useState('gentle-float');
   const [hoverEffect, setHoverEffect] = useState('soft-glow');
   const [scrollEffect, setScrollEffect] = useState('parallax-shift');
