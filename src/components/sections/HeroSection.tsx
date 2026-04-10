@@ -138,7 +138,7 @@ function FloatingMedicalIcons() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("hero_parallax_icons")
-        .select("icon_name, glow_color")
+        .select("icon_name, glow_color, icon_type, custom_icon_url")
         .eq("is_active", true)
         .order("display_order", { ascending: true });
       if (error) throw error;
