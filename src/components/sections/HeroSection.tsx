@@ -415,15 +415,11 @@ function FloatingMedicalIcons() {
                     e.currentTarget.style.filter = `drop-shadow(0 0 ${lightGlowSize}px rgba(var(--primary-rgb, 14,165,233), 0.15))`;
                   }}
                 >
-                  <Icon
-                    size={size}
-                    strokeWidth={depth > 0.5 ? 1.8 : 1.4}
-                    style={{
-                      color: 'hsl(var(--primary))',
-                      opacity: baseOpacityLight,
-                      transition: 'opacity 0.3s ease',
-                    }}
-                  />
+                  {isCustom && customIconUrl ? (
+                    <img src={customIconUrl} alt="" width={size} height={size} style={{ opacity: baseOpacityLight, transition: 'opacity 0.3s ease' }} className="object-contain" />
+                  ) : (
+                    <Icon size={size} strokeWidth={depth > 0.5 ? 1.8 : 1.4} style={{ color: 'hsl(var(--primary))', opacity: baseOpacityLight, transition: 'opacity 0.3s ease' }} />
+                  )}
                 </span>
                 {/* Dark mode with colored glow */}
                 <span className="hidden dark:block"
@@ -438,15 +434,11 @@ function FloatingMedicalIcons() {
                     e.currentTarget.style.filter = `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`;
                   }}
                 >
-                  <Icon
-                    size={size}
-                    strokeWidth={depth > 0.5 ? 1.5 : 1.2}
-                    style={{
-                      color: glowColor.color,
-                      opacity: 0.15 + depth * 0.2,
-                      transition: 'opacity 0.3s ease',
-                    }}
-                  />
+                  {isCustom && customIconUrl ? (
+                    <img src={customIconUrl} alt="" width={size} height={size} style={{ opacity: 0.15 + depth * 0.2, transition: 'opacity 0.3s ease' }} className="object-contain" />
+                  ) : (
+                    <Icon size={size} strokeWidth={depth > 0.5 ? 1.5 : 1.2} style={{ color: glowColor.color, opacity: 0.15 + depth * 0.2, transition: 'opacity 0.3s ease' }} />
+                  )}
                 </span>
               </div>
             </motion.div>
