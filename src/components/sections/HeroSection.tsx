@@ -354,7 +354,7 @@ function FloatingMedicalIcons() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
       {currentIcons.map((icon) => {
-        const { id, Icon, x: ix, y: iy, size, parallaxFactor, depth, glowColor } = icon;
+        const { id, Icon, x: ix, y: iy, size, parallaxFactor, depth, glowColor, isCustom, customIconUrl } = icon;
         const baseOpacityLight = 0.12 + depth * 0.18;
         const lightGlowSize = 3 + depth * 5;
         const blurAmount = Math.max(0, (1 - depth) * 1.5);
