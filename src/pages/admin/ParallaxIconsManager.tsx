@@ -51,11 +51,12 @@ const getIcon = (name: string): LucideIcon => {
 };
 
 // Healthcare icon categories
-type HealthcareCategory = 'All' | 'Cardiology' | 'Neurology' | 'Pharma' | 'Diagnostics' | 'Organs & Body' | 'Equipment' | 'Facilities' | 'Wellness' | 'Patient Care' | 'Records' | 'Safety';
+type HealthcareCategory = 'All' | 'Cardiology' | 'Neurology' | 'Pharma' | 'Diagnostics' | 'Organs & Body' | 'Equipment' | 'Facilities' | 'Wellness' | 'Patient Care' | 'Records' | 'Safety' | 'Dental' | 'Mental Health';
 
 const HEALTHCARE_CATEGORIES: HealthcareCategory[] = [
   'All', 'Cardiology', 'Neurology', 'Pharma', 'Diagnostics', 'Organs & Body',
   'Equipment', 'Facilities', 'Wellness', 'Patient Care', 'Records', 'Safety',
+  'Dental', 'Mental Health',
 ];
 
 interface HealthcareIcon {
