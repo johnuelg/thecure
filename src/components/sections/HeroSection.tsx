@@ -76,15 +76,20 @@ function hexToRgb(hex: string): string {
   return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : '65,192,194';
 }
 
-function generateIcons(iconNames: string[], glowColorsList?: { color: string; rgb: string }[], maxCount: number = 32): FloatingIcon[] {
+function generateIcons(
+  iconNames: string[],
+  glowColorsList?: { color: string; rgb: string }[],
+  maxCount: number = 32,
+  iconTypes?: string[],
+  customUrls?: (string | null)[]
+): FloatingIcon[] {
   const count = Math.min(maxCount, iconNames.length);
   const colors = glowColorsList || defaultGlowColors;
 
-  // Calculate grid layout to scatter icons evenly across the header area
-  const cols = Math.ceil(Math.sqrt(count * 1.5)); // wider than tall
+  const cols = Math.ceil(Math.sqrt(count * 1.5));
   const rows = Math.ceil(count / cols);
-  const cellW = 96 / cols; // leave 2% margin each side
-  const cellH = 80 / rows; // spread across 10%-90% vertically
+  const cellW = 96 / cols;
+  const cellH = 80 / rows;
 
   return Array.from({ length: count }, (_, i) => {
     const col = i % cols;
@@ -95,6 +100,7 @@ function generateIcons(iconNames: string[], glowColorsList?: { color: string; rg
     const x = 2 + col * cellW + cellW / 2 + jitterX;
     const y = 10 + row * cellH + cellH / 2 + jitterY;
     const iconName = iconNames[i];
+    const isCustom = iconTypes ? iconTypes[i] === 'custom' : false;
     return {
       id: i,
       Icon: getIcon(iconName),
@@ -106,6 +112,8 @@ function generateIcons(iconNames: string[], glowColorsList?: { color: string; rg
       parallaxFactor: 0.1 + depth * 0.9,
       depth,
       glowColor: colors[i % colors.length],
+      isCustom,
+      customIconUrl: isCustom && customUrls ? customUrls[i] : null,
     };
   });
 }
