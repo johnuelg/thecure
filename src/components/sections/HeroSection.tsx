@@ -35,6 +35,8 @@ interface FloatingIcon {
   parallaxFactor: number;
   depth: number;
   glowColor: GlowColor;
+  isCustom: boolean;
+  customIconUrl: string | null;
 }
 
 function useParallax(enabled: boolean) {
@@ -74,15 +76,20 @@ function hexToRgb(hex: string): string {
   return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : '65,192,194';
 }
 
-function generateIcons(iconNames: string[], glowColorsList?: { color: string; rgb: string }[], maxCount: number = 32): FloatingIcon[] {
+function generateIcons(
+  iconNames: string[],
+  glowColorsList?: { color: string; rgb: string }[],
+  maxCount: number = 32,
+  iconTypes?: string[],
+  customUrls?: (string | null)[]
+): FloatingIcon[] {
   const count = Math.min(maxCount, iconNames.length);
   const colors = glowColorsList || defaultGlowColors;
 
-  // Calculate grid layout to scatter icons evenly across the header area
-  const cols = Math.ceil(Math.sqrt(count * 1.5)); // wider than tall
+  const cols = Math.ceil(Math.sqrt(count * 1.5));
   const rows = Math.ceil(count / cols);
-  const cellW = 96 / cols; // leave 2% margin each side
-  const cellH = 80 / rows; // spread across 10%-90% vertically
+  const cellW = 96 / cols;
+  const cellH = 80 / rows;
 
   return Array.from({ length: count }, (_, i) => {
     const col = i % cols;
@@ -93,6 +100,7 @@ function generateIcons(iconNames: string[], glowColorsList?: { color: string; rg
     const x = 2 + col * cellW + cellW / 2 + jitterX;
     const y = 10 + row * cellH + cellH / 2 + jitterY;
     const iconName = iconNames[i];
+    const isCustom = iconTypes ? iconTypes[i] === 'custom' : false;
     return {
       id: i,
       Icon: getIcon(iconName),
@@ -104,6 +112,8 @@ function generateIcons(iconNames: string[], glowColorsList?: { color: string; rg
       parallaxFactor: 0.1 + depth * 0.9,
       depth,
       glowColor: colors[i % colors.length],
+      isCustom,
+      customIconUrl: isCustom && customUrls ? customUrls[i] : null,
     };
   });
 }
@@ -128,7 +138,7 @@ function FloatingMedicalIcons() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("hero_parallax_icons")
-        .select("icon_name, glow_color")
+        .select("icon_name, glow_color, icon_type, custom_icon_url")
         .eq("is_active", true)
         .order("display_order", { ascending: true });
       if (error) throw error;
@@ -173,9 +183,17 @@ function FloatingMedicalIcons() {
     ? dbIcons.map(i => ({ color: i.glow_color, rgb: hexToRgb(i.glow_color) }))
     : defaultGlowColors;
 
+  const iconTypes = dbIcons && dbIcons.length > 0
+    ? dbIcons.map(i => (i as any).icon_type || 'lucide')
+    : undefined;
+
+  const customUrls = dbIcons && dbIcons.length > 0
+    ? dbIcons.map(i => (i as any).custom_icon_url || null)
+    : undefined;
+
   const currentIcons = useMemo(
-    () => generateIcons(iconNames, glowColorsList, maxCount),
-    [maxCount, iconNames.join('|'), glowColorsList.map((color) => `${color.color}:${color.rgb}`).join('|')]
+    () => generateIcons(iconNames, glowColorsList, maxCount, iconTypes, customUrls),
+    [maxCount, iconNames.join('|'), glowColorsList.map((color) => `${color.color}:${color.rgb}`).join('|'), iconTypes?.join('|'), customUrls?.join('|')]
   );
 
   if (!parallaxEnabled) return null;
@@ -336,7 +354,7 @@ function FloatingMedicalIcons() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
       {currentIcons.map((icon) => {
-        const { id, Icon, x: ix, y: iy, size, parallaxFactor, depth, glowColor } = icon;
+        const { id, Icon, x: ix, y: iy, size, parallaxFactor, depth, glowColor, isCustom, customIconUrl } = icon;
         const baseOpacityLight = 0.12 + depth * 0.18;
         const lightGlowSize = 3 + depth * 5;
         const blurAmount = Math.max(0, (1 - depth) * 1.5);
@@ -397,15 +415,11 @@ function FloatingMedicalIcons() {
                     e.currentTarget.style.filter = `drop-shadow(0 0 ${lightGlowSize}px rgba(var(--primary-rgb, 14,165,233), 0.15))`;
                   }}
                 >
-                  <Icon
-                    size={size}
-                    strokeWidth={depth > 0.5 ? 1.8 : 1.4}
-                    style={{
-                      color: 'hsl(var(--primary))',
-                      opacity: baseOpacityLight,
-                      transition: 'opacity 0.3s ease',
-                    }}
-                  />
+                  {isCustom && customIconUrl ? (
+                    <img src={customIconUrl} alt="" width={size} height={size} style={{ opacity: baseOpacityLight, transition: 'opacity 0.3s ease' }} className="object-contain" />
+                  ) : (
+                    <Icon size={size} strokeWidth={depth > 0.5 ? 1.8 : 1.4} style={{ color: 'hsl(var(--primary))', opacity: baseOpacityLight, transition: 'opacity 0.3s ease' }} />
+                  )}
                 </span>
                 {/* Dark mode with colored glow */}
                 <span className="hidden dark:block"
@@ -420,15 +434,11 @@ function FloatingMedicalIcons() {
                     e.currentTarget.style.filter = `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`;
                   }}
                 >
-                  <Icon
-                    size={size}
-                    strokeWidth={depth > 0.5 ? 1.5 : 1.2}
-                    style={{
-                      color: glowColor.color,
-                      opacity: 0.15 + depth * 0.2,
-                      transition: 'opacity 0.3s ease',
-                    }}
-                  />
+                  {isCustom && customIconUrl ? (
+                    <img src={customIconUrl} alt="" width={size} height={size} style={{ opacity: 0.15 + depth * 0.2, transition: 'opacity 0.3s ease' }} className="object-contain" />
+                  ) : (
+                    <Icon size={size} strokeWidth={depth > 0.5 ? 1.5 : 1.2} style={{ color: glowColor.color, opacity: 0.15 + depth * 0.2, transition: 'opacity 0.3s ease' }} />
+                  )}
                 </span>
               </div>
             </motion.div>

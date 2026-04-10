@@ -15,11 +15,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Trash2, Loader2, GripVertical, Sparkles, HeartPulse, Filter } from 'lucide-react';
+import { Plus, Trash2, Loader2, GripVertical, Sparkles, HeartPulse, Filter, Upload, Image as ImageIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { icons } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { IconPicker } from '@/components/admin/IconPicker';
+import { ImageUpload } from '@/components/admin/ImageUpload';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AnimationStyleSelector, HoverEffectSelector, ScrollEffectSelector, SpeedSelector, type AnimationPreset, type SpeedOption } from '@/components/admin/AnimationStyleSelector';
 import {
   DndContext,
@@ -44,6 +46,8 @@ interface ParallaxIcon {
   glow_color: string;
   display_order: number;
   is_active: boolean;
+  icon_type: string;
+  custom_icon_url: string | null;
 }
 
 const getIcon = (name: string): LucideIcon => {
@@ -189,9 +193,18 @@ function SortableIconRow({
         <GripVertical className="h-4 w-4" />
       </button>
       <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-        <Icon className="h-5 w-5 text-primary" />
+        {item.icon_type === 'custom' && item.custom_icon_url ? (
+          <img src={item.custom_icon_url} alt={item.icon_name} className="h-6 w-6 object-contain" />
+        ) : (
+          <Icon className="h-5 w-5 text-primary" />
+        )}
       </div>
-      <span className="font-medium flex-1 text-sm">{item.icon_name}</span>
+      <div className="flex flex-col flex-1 min-w-0">
+        <span className="font-medium text-sm truncate">{item.icon_name}</span>
+        {item.icon_type === 'custom' && (
+          <span className="text-[10px] text-muted-foreground">Custom icon</span>
+        )}
+      </div>
       <div className="flex items-center gap-2">
         <Input
           type="color"
@@ -218,6 +231,8 @@ const ParallaxIconsManager = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newIconName, setNewIconName] = useState('Brain');
   const [newGlowColor, setNewGlowColor] = useState('#41c0c2');
+  const [newIconType, setNewIconType] = useState<'lucide' | 'custom'>('lucide');
+  const [newCustomIconUrl, setNewCustomIconUrl] = useState('');
   const [animationStyle, setAnimationStyle] = useState('gentle-float');
   const [hoverEffect, setHoverEffect] = useState('soft-glow');
   const [scrollEffect, setScrollEffect] = useState('parallax-shift');
@@ -266,15 +281,27 @@ const ParallaxIconsManager = () => {
   }, []);
 
   const handleAdd = async () => {
+    const iconName = newIconType === 'custom' ? (newIconName || 'Custom Icon') : newIconName;
     try {
+      const insertData: any = {
+        icon_name: iconName,
+        glow_color: newGlowColor,
+        display_order: items.length,
+        icon_type: newIconType,
+      };
+      if (newIconType === 'custom' && newCustomIconUrl) {
+        insertData.custom_icon_url = newCustomIconUrl;
+      }
       const { error } = await supabase
         .from('hero_parallax_icons')
-        .insert({ icon_name: newIconName, glow_color: newGlowColor, display_order: items.length });
+        .insert(insertData);
       if (error) throw error;
       toast({ title: 'Icon added' });
       setIsDialogOpen(false);
       setNewIconName('Brain');
       setNewGlowColor('#41c0c2');
+      setNewIconType('lucide');
+      setNewCustomIconUrl('');
       fetchItems();
     } catch (error: any) {
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
@@ -564,34 +591,61 @@ const ParallaxIconsManager = () => {
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle>Add Parallax Icon</DialogTitle>
-            <DialogDescription>Choose an icon and glow color for the hero background</DialogDescription>
+            <DialogDescription>Choose a Lucide icon or upload your own custom icon</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div className="space-y-2">
-              <Label>Icon</Label>
-              <IconPicker value={newIconName} onChange={setNewIconName} />
-            </div>
-            <div className="space-y-2">
-              <Label>Glow Color (Dark Mode)</Label>
-              <div className="flex items-center gap-3">
+          <Tabs value={newIconType} onValueChange={(v) => setNewIconType(v as 'lucide' | 'custom')} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="lucide">Lucide Icon</TabsTrigger>
+              <TabsTrigger value="custom">Upload Custom</TabsTrigger>
+            </TabsList>
+            <TabsContent value="lucide" className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <Label>Icon</Label>
+                <IconPicker value={newIconName} onChange={setNewIconName} />
+              </div>
+            </TabsContent>
+            <TabsContent value="custom" className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <Label>Icon Name</Label>
                 <Input
-                  type="color"
-                  value={newGlowColor}
-                  onChange={(e) => setNewGlowColor(e.target.value)}
-                  className="w-12 h-10 p-1 cursor-pointer"
-                />
-                <Input
-                  value={newGlowColor}
-                  onChange={(e) => setNewGlowColor(e.target.value)}
-                  placeholder="#41c0c2"
-                  className="flex-1"
+                  value={newIconName}
+                  onChange={(e) => setNewIconName(e.target.value)}
+                  placeholder="e.g. Custom Dental Icon"
                 />
               </div>
+              <div className="space-y-2">
+                <Label>Icon Image (SVG or PNG)</Label>
+                <ImageUpload
+                  value={newCustomIconUrl}
+                  onChange={setNewCustomIconUrl}
+                  bucket="portfolio-images"
+                  accept="image/svg+xml,image/png,image/webp"
+                  placeholder="Upload an SVG or PNG icon"
+                  sizeHint="Recommended: 64×64px or larger, transparent background"
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+          <div className="space-y-2">
+            <Label>Glow Color (Dark Mode)</Label>
+            <div className="flex items-center gap-3">
+              <Input
+                type="color"
+                value={newGlowColor}
+                onChange={(e) => setNewGlowColor(e.target.value)}
+                className="w-12 h-10 p-1 cursor-pointer"
+              />
+              <Input
+                value={newGlowColor}
+                onChange={(e) => setNewGlowColor(e.target.value)}
+                placeholder="#41c0c2"
+                className="flex-1"
+              />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleAdd}>Add Icon</Button>
+            <Button onClick={handleAdd} disabled={newIconType === 'custom' && !newCustomIconUrl}>Add Icon</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

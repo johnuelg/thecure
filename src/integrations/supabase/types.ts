@@ -412,27 +412,33 @@ export type Database = {
       hero_parallax_icons: {
         Row: {
           created_at: string
+          custom_icon_url: string | null
           display_order: number
           glow_color: string
           icon_name: string
+          icon_type: string
           id: string
           is_active: boolean
           updated_at: string
         }
         Insert: {
           created_at?: string
+          custom_icon_url?: string | null
           display_order?: number
           glow_color?: string
           icon_name: string
+          icon_type?: string
           id?: string
           is_active?: boolean
           updated_at?: string
         }
         Update: {
           created_at?: string
+          custom_icon_url?: string | null
           display_order?: number
           glow_color?: string
           icon_name?: string
+          icon_type?: string
           id?: string
           is_active?: boolean
           updated_at?: string
