@@ -182,159 +182,33 @@ function FloatingMedicalIcons() {
     [maxCount, iconNames.join('|'), glowColorsList.map((color) => `${color.color}:${color.rgb}`).join('|'), iconTypes?.join('|'), customUrls?.join('|')]
   );
 
+  const { x: mouseX, y: mouseY } = useParallax(parallaxEnabled && !prefersReducedMotion);
+
   if (!parallaxEnabled) return null;
 
-  // Build animation props based on selected style
+  // Healthcare-themed animation: calm breathing float with gentle parallax
   const getAnimationProps = (icon: FloatingIcon) => {
-    if (animStyle === 'none') {
-      return undefined;
-    }
+    if (prefersReducedMotion) return undefined;
 
     const { depth, duration: baseDuration, delay } = icon;
-    const duration = baseDuration * speedMultiplier;
-    const moveY = 5 + depth * 10;
-    const moveX = 3 + depth * 6;
-
-    // Base float keyframes
-    let animateObj: Record<string, number[]> = {};
-    let transitionDuration = duration;
-
-    switch (animStyle) {
-      case 'breathing-glow':
-        animateObj = {
-          y: [0, -moveY * 0.5, 0],
-          x: [0, moveX * 0.3, 0],
-          scale: [1, 1.08 + depth * 0.06, 1],
-          opacity: [0.7, 1, 0.7],
-        };
-        transitionDuration = duration * 0.8;
-        break;
-      case 'orbital-drift':
-        animateObj = {
-          y: [0, -moveY, moveY * 0.3, -moveY * 0.5, 0],
-          x: [0, moveX, moveX * 1.2, -moveX * 0.5, 0],
-        };
-        transitionDuration = duration * 1.2;
-        break;
-      case 'rising-bubbles':
-        animateObj = {
-          y: [0, -moveY * 2, -moveY * 3, 0],
-          x: [0, moveX * 0.8, -moveX * 0.6, 0],
-          opacity: [0.5, 1, 0.8, 0.5],
-        };
-        transitionDuration = duration * 1.5;
-        break;
-      case 'wave-motion': {
-        const phase = icon.id * 0.5;
-        animateObj = {
-          y: [0, -moveY * Math.sin(phase), moveY * Math.cos(phase), 0],
-          x: [0, moveX * Math.cos(phase), -moveX * Math.sin(phase), 0],
-        };
-        break;
-      }
-      case 'firefly-twinkle':
-        animateObj = {
-          y: [0, -moveY * 0.7, 0, moveY * 0.4, 0],
-          x: [0, moveX * 0.5, -moveX * 0.3, moveX * 0.2, 0],
-          opacity: [0.3, 1, 0.4, 0.9, 0.3],
-        };
-        transitionDuration = duration * 1.1;
-        break;
-      case 'gentle-float':
-      default:
-        animateObj = {
-          y: [0, -moveY, 0, moveY * 0.6, 0],
-          x: [0, moveX, -moveX * 0.8, moveX * 0.4, 0],
-        };
-        break;
-    }
+    const duration = baseDuration; // Slow ~30-45s cycles for calm healthcare feel
+    const moveY = 4 + depth * 8;
+    const moveX = 2 + depth * 5;
 
     return {
-      animate: animateObj,
-      transition: { duration: transitionDuration, delay, repeat: Infinity, ease: "easeInOut" as const },
+      animate: {
+        y: [0, -moveY, 0, moveY * 0.5, 0],
+        x: [0, moveX * 0.6, -moveX * 0.4, moveX * 0.3, 0],
+        scale: [1, 1.03 + depth * 0.03, 1, 0.98, 1],
+        opacity: [0.85, 1, 0.9, 1, 0.85],
+      },
+      transition: {
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "easeInOut" as const,
+      },
     };
-  };
-
-  // Hover style based on hover effect setting
-  const getHoverStyle = (glowColor: GlowColor, depth: number) => {
-    const glowSize = 4 + depth * 8;
-    switch (hoverEffect) {
-      case 'none':
-        return `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${(0.2 + depth * 0.3).toFixed(2)}))`;
-      case 'scale-up':
-        return `drop-shadow(0 0 ${glowSize * 1.5}px rgba(${glowColor.rgb}, 0.5)) brightness(1.1)`;
-      case 'color-shift':
-        return `drop-shadow(0 0 ${glowSize * 1.3}px rgba(${glowColor.rgb}, 0.55)) brightness(1.25) saturate(1.3)`;
-      case 'pulse-ring':
-        return `drop-shadow(0 0 ${glowSize * 2.5}px rgba(${glowColor.rgb}, 0.4)) drop-shadow(0 0 ${glowSize * 4}px rgba(${glowColor.rgb}, 0.15))`;
-      case 'frost-glow':
-        return `drop-shadow(0 0 ${glowSize * 2}px rgba(200,230,255, 0.5)) drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, 0.3)) brightness(1.15)`;
-      case 'soft-glow':
-      default:
-        return `drop-shadow(0 0 ${glowSize * 1.2}px rgba(${glowColor.rgb}, 0.45))`;
-    }
-  };
-
-  // CSS-based hover scale (avoids conflict with framer-motion infinite animate)
-  const getHoverScale = () => {
-    switch (hoverEffect) {
-      case 'none': return 1;
-      case 'scale-up': return 1.25;
-      case 'pulse-ring': return 1.1;
-      case 'color-shift': return 1.12;
-      case 'frost-glow': return 1.08;
-      case 'soft-glow':
-      default: return 1.15;
-    }
-  };
-
-  // Light mode hover filter
-  const getLightHoverStyle = (depth: number) => {
-    const glowSize = 4 + depth * 8;
-    switch (hoverEffect) {
-      case 'none': return undefined;
-      case 'scale-up': return `drop-shadow(0 0 ${glowSize * 1.5}px rgba(var(--primary-rgb, 14,165,233), 0.3)) brightness(1.1)`;
-      case 'color-shift': return `drop-shadow(0 0 ${glowSize * 1.3}px rgba(var(--primary-rgb, 14,165,233), 0.35)) brightness(1.25)`;
-      case 'pulse-ring': return `drop-shadow(0 0 ${glowSize * 2.5}px rgba(var(--primary-rgb, 14,165,233), 0.25))`;
-      case 'frost-glow': return `drop-shadow(0 0 ${glowSize * 2}px rgba(200,230,255, 0.4)) brightness(1.15)`;
-      case 'soft-glow':
-      default: return `drop-shadow(0 0 ${glowSize * 1.2}px rgba(var(--primary-rgb, 14,165,233), 0.3))`;
-    }
-  };
-
-  // Scroll/mouse interaction effect
-  const getScrollOffset = (parallaxFactor: number) => {
-    const multiplier = 40;
-    switch (scrollEffect) {
-      case 'none':
-        return { x: 0, y: 0 };
-      case 'scatter': {
-        return {
-          x: -x * parallaxFactor * multiplier * 0.8,
-          y: -y * parallaxFactor * multiplier * 0.8,
-        };
-      }
-      case 'magnetic': {
-        return {
-          x: x * parallaxFactor * multiplier * 1.5,
-          y: y * parallaxFactor * multiplier * 1.5,
-        };
-      }
-      case 'wave-ripple': {
-        const dist = Math.sqrt(x * x + y * y);
-        const wave = Math.sin(dist * 3 + parallaxFactor * 6) * 0.5 + 0.5;
-        return {
-          x: x * parallaxFactor * multiplier * wave,
-          y: y * parallaxFactor * multiplier * wave,
-        };
-      }
-      case 'parallax-shift':
-      default:
-        return {
-          x: x * parallaxFactor * multiplier,
-          y: y * parallaxFactor * multiplier,
-        };
-    }
   };
 
   return (
@@ -348,10 +222,12 @@ function FloatingMedicalIcons() {
         const glowOpacity = (0.2 + depth * 0.3).toFixed(2);
 
         const motionProps = getAnimationProps(icon);
-        const darkHoverFilter = getHoverStyle(glowColor, depth);
-        const lightHoverFilter = getLightHoverStyle(depth);
-        const scrollOffset = getScrollOffset(parallaxFactor);
-        const hoverScale = getHoverScale();
+        const scrollOffsetX = mouseX * parallaxFactor * 40;
+        const scrollOffsetY = mouseY * parallaxFactor * 40;
+
+        // Healthcare soft-glow hover
+        const darkHoverFilter = `drop-shadow(0 0 ${glowSize * 1.5}px rgba(${glowColor.rgb}, 0.5)) brightness(1.1)`;
+        const lightHoverFilter = `drop-shadow(0 0 ${lightGlowSize * 1.5}px rgba(var(--primary-rgb, 14,165,233), 0.35)) brightness(1.05)`;
 
         return (
           <div
@@ -360,8 +236,8 @@ function FloatingMedicalIcons() {
             style={{
               left: `${ix}%`,
               top: `${iy}%`,
-              transform: `translate(${scrollOffset.x}px, ${scrollOffset.y}px)`,
-              transition: interactionEnabled ? 'transform 0.15s ease-out' : undefined,
+              transform: `translate(${scrollOffsetX}px, ${scrollOffsetY}px)`,
+              transition: 'transform 0.15s ease-out',
               zIndex: Math.round(depth * 10),
             }}
           >
@@ -372,7 +248,6 @@ function FloatingMedicalIcons() {
               animate={motionProps?.animate}
               transition={motionProps?.transition}
             >
-              {/* Hover wrapper — CSS scale to avoid conflict with framer-motion infinite animate */}
               <div
                 className="pointer-events-auto cursor-default"
                 style={{
@@ -380,9 +255,7 @@ function FloatingMedicalIcons() {
                   transition: 'transform 0.3s ease',
                 }}
                 onMouseEnter={(e) => {
-                  if (hoverEffect !== 'none') {
-                    e.currentTarget.style.transform = `scale(${hoverScale})`;
-                  }
+                  e.currentTarget.style.transform = 'scale(1.15)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
@@ -395,7 +268,7 @@ function FloatingMedicalIcons() {
                     transition: 'filter 0.3s ease',
                   }}
                   onMouseEnter={(e) => {
-                    if (lightHoverFilter) e.currentTarget.style.filter = lightHoverFilter;
+                    e.currentTarget.style.filter = lightHoverFilter;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.filter = `drop-shadow(0 0 ${lightGlowSize}px rgba(var(--primary-rgb, 14,165,233), 0.15))`;
@@ -414,7 +287,7 @@ function FloatingMedicalIcons() {
                     transition: 'filter 0.3s ease',
                   }}
                   onMouseEnter={(e) => {
-                    if (hoverEffect !== 'none') e.currentTarget.style.filter = darkHoverFilter;
+                    e.currentTarget.style.filter = darkHoverFilter;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.filter = `drop-shadow(0 0 ${glowSize}px rgba(${glowColor.rgb}, ${glowOpacity}))`;
