@@ -484,3 +484,7 @@
   animation: running-glow 3s linear infinite;
   filter: drop-shadow(0 0 8px hsl(var(--healthcare-teal) / 0.5)) drop-shadow(0 0 20px hsl(var(--healthcare-teal) / 0.3));
 }
+
+#lovable-badge {
+  display: none !important;
+}
