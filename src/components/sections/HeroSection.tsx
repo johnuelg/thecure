@@ -151,7 +151,7 @@ function FloatingMedicalIcons() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profile")
-        .select("max_parallax_icons, parallax_animation_style, parallax_hover_effect, parallax_scroll_effect, parallax_animation_speed, parallax_enabled")
+        .select("max_parallax_icons, parallax_enabled")
         .maybeSingle();
       if (error) throw error;
       return data;
@@ -160,20 +160,6 @@ function FloatingMedicalIcons() {
 
   const parallaxEnabled = (iconSettings as any)?.parallax_enabled !== false;
   const maxCount = (iconSettings as any)?.max_parallax_icons ?? 32;
-  const rawAnimStyle = (iconSettings as any)?.parallax_animation_style || 'gentle-float';
-  const rawHoverEffect = (iconSettings as any)?.parallax_hover_effect || 'soft-glow';
-  const rawScrollEffect = (iconSettings as any)?.parallax_scroll_effect || 'parallax-shift';
-  const animSpeed = (iconSettings as any)?.parallax_animation_speed || 'slow';
-
-  // When user prefers reduced motion, force all effects to "none"
-  const animStyle = prefersReducedMotion ? 'none' : rawAnimStyle;
-  const hoverEffect = prefersReducedMotion ? 'none' : rawHoverEffect;
-  const scrollEffect = prefersReducedMotion ? 'none' : rawScrollEffect;
-
-  const interactionEnabled = parallaxEnabled && scrollEffect !== 'none';
-  const { x, y } = useParallax(interactionEnabled);
-
-  const speedMultiplier = animSpeed === 'fast' ? 0.3 : animSpeed === 'medium' ? 0.55 : 1;
 
   const iconNames = dbIcons && dbIcons.length > 0
     ? dbIcons.map(i => i.icon_name)
