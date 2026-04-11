@@ -165,25 +165,25 @@ function FloatingMedicalIcons() {
 
   if (!parallaxEnabled) return null;
 
-  // Healthcare-themed animation: calm breathing float with gentle parallax
+  // Healthcare floating animation: gentle up-down bobbing with subtle drift
   const getAnimationProps = (icon: FloatingIcon) => {
     if (prefersReducedMotion) return undefined;
 
-    const { depth, duration: baseDuration, delay } = icon;
-    const duration = baseDuration; // Slow ~30-45s cycles for calm healthcare feel
-    const moveY = 4 + depth * 8;
-    const moveX = 2 + depth * 5;
+    const { depth, delay } = icon;
+    // Each icon gets a unique duration (6-12s) for organic feel
+    const duration = 6 + depth * 6;
+    const moveY = 12 + depth * 18; // 12-30px vertical movement — clearly visible
+    const moveX = 4 + depth * 8;   // subtle horizontal sway
 
     return {
       animate: {
-        y: [0, -moveY, 0, moveY * 0.5, 0],
-        x: [0, moveX * 0.6, -moveX * 0.4, moveX * 0.3, 0],
-        scale: [1, 1.03 + depth * 0.03, 1, 0.98, 1],
-        opacity: [0.85, 1, 0.9, 1, 0.85],
+        y: [0, -moveY, 0, moveY * 0.6, 0],
+        x: [0, moveX * 0.5, 0, -moveX * 0.4, 0],
+        rotate: [0, 2 + depth * 3, 0, -(1 + depth * 2), 0],
       },
       transition: {
         duration,
-        delay,
+        delay: delay * -1, // stagger start times
         repeat: Infinity,
         ease: "easeInOut" as const,
       },
