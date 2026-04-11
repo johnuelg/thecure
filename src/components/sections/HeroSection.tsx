@@ -39,27 +39,6 @@ interface FloatingIcon {
   customIconUrl: string | null;
 }
 
-function useParallax(enabled: boolean) {
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    if (!enabled) {
-      setOffset({ x: 0, y: 0 });
-      return;
-    }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const cx = (e.clientX / window.innerWidth - 0.5) * 2;
-      const cy = (e.clientY / window.innerHeight - 0.5) * 2;
-      setOffset({ x: cx, y: cy });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [enabled]);
-
-  return offset;
-}
 
 // Default glow color palette
 const defaultGlowColors: GlowColor[] = [
@@ -182,7 +161,7 @@ function FloatingMedicalIcons() {
     [maxCount, iconNames.join('|'), glowColorsList.map((color) => `${color.color}:${color.rgb}`).join('|'), iconTypes?.join('|'), customUrls?.join('|')]
   );
 
-  const { x: mouseX, y: mouseY } = useParallax(parallaxEnabled && !prefersReducedMotion);
+  
 
   if (!parallaxEnabled) return null;
 
@@ -222,8 +201,6 @@ function FloatingMedicalIcons() {
         const glowOpacity = (0.2 + depth * 0.3).toFixed(2);
 
         const motionProps = getAnimationProps(icon);
-        const scrollOffsetX = mouseX * parallaxFactor * 40;
-        const scrollOffsetY = mouseY * parallaxFactor * 40;
 
         // Healthcare soft-glow hover
         const darkHoverFilter = `drop-shadow(0 0 ${glowSize * 1.5}px rgba(${glowColor.rgb}, 0.5)) brightness(1.1)`;
@@ -236,8 +213,6 @@ function FloatingMedicalIcons() {
             style={{
               left: `${ix}%`,
               top: `${iy}%`,
-              transform: `translate(${scrollOffsetX}px, ${scrollOffsetY}px)`,
-              transition: 'transform 0.15s ease-out',
               zIndex: Math.round(depth * 10),
             }}
           >
