@@ -12,14 +12,14 @@ serve(async (req) => {
   }
 
   try {
-    const PERPLEXITY_API_KEY = Deno.env.get("PERPLEXITY_API_KEY");
-    if (!PERPLEXITY_API_KEY) {
-      throw new Error("PERPLEXITY_API_KEY is not configured");
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) {
+      throw new Error("LOVABLE_API_KEY is not configured");
     }
 
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
-    
+
     if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
       throw new Error("Supabase environment variables are not configured");
     }
@@ -46,27 +46,20 @@ serve(async (req) => {
       console.error("Error fetching knowledge documents:", docsError);
     }
 
-    // Also fetch profile info for context
-    const { data: profile } = await supabase
-      .from("profile")
-      .select("*")
-      .single();
+    const { data: profile } = await supabase.from("profile").select("*").single();
 
-    // Fetch services for context
     const { data: services } = await supabase
       .from("services")
       .select("title, description")
       .eq("is_active", true);
 
-    // Fetch projects for context
     const { data: projects } = await supabase
       .from("projects")
       .select("title, description, category, technologies")
       .limit(10);
 
-    // Build knowledge context
     let knowledgeContext = "";
-    
+
     if (profile) {
       knowledgeContext += `## About Me\nName: ${profile.full_name}\nTitle: ${profile.professional_title}\nBio: ${profile.bio || "Not provided"}\nLocation: ${profile.location || "Not provided"}\nEmail: ${profile.email || "Not provided"}\n\n`;
     }
@@ -97,9 +90,8 @@ serve(async (req) => {
       });
     }
 
-    // Get or create conversation
     let activeConversationId = conversationId;
-    
+
     if (!activeConversationId) {
       const { data: newConversation, error: convError } = await supabase
         .from("chat_conversations")
@@ -112,21 +104,18 @@ serve(async (req) => {
       }
       activeConversationId = newConversation.id;
     } else {
-      // Update last_message_at
       await supabase
         .from("chat_conversations")
         .update({ last_message_at: new Date().toISOString() })
         .eq("id", activeConversationId);
     }
 
-    // Save user message
     await supabase.from("chat_messages").insert({
       conversation_id: activeConversationId,
       role: "user",
       content: message,
     });
 
-    // Fetch conversation history
     const { data: history } = await supabase
       .from("chat_messages")
       .select("role, content")
@@ -134,12 +123,12 @@ serve(async (req) => {
       .order("created_at", { ascending: true })
       .limit(20);
 
-    const conversationHistory = history?.map((msg: { role: string; content: string }) => ({
-      role: msg.role,
-      content: msg.content,
-    })) || [];
+    const conversationHistory =
+      history?.map((msg: { role: string; content: string }) => ({
+        role: msg.role,
+        content: msg.content,
+      })) || [];
 
-    // Build system prompt
     const systemPrompt = `You are a helpful AI assistant for a professional portfolio website. Your role is to answer questions about the portfolio owner's services, experience, expertise, and projects.
 
 Use the following knowledge base to provide accurate and helpful responses:
@@ -155,42 +144,47 @@ Guidelines:
 - Keep responses focused and relevant to the portfolio content
 - Do not make up information not present in the knowledge base`;
 
-    // Call Perplexity API
-    const response = await fetch("https://api.perplexity.ai/chat/completions", {
+    // Call Lovable AI Gateway (Google Gemini)
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${PERPLEXITY_API_KEY}`,
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "sonar",
+        model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
           ...conversationHistory,
         ],
-        max_tokens: 500,
-        temperature: 0.3,
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Perplexity API error:", response.status, errorText);
-      
+      console.error("Lovable AI Gateway error:", response.status, errorText);
+
       if (response.status === 429) {
         return new Response(
           JSON.stringify({ error: "Too many requests. Please try again in a moment." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      
-      throw new Error(`Perplexity API error: ${response.status}`);
+      if (response.status === 402) {
+        return new Response(
+          JSON.stringify({ error: "AI credits exhausted. Please add credits in Lovable workspace settings." }),
+          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      throw new Error(`AI gateway error: ${response.status}`);
     }
 
     const data = await response.json();
-    const assistantMessage = data.choices?.[0]?.message?.content || "I apologize, but I couldn't generate a response. Please try again.";
+    const assistantMessage =
+      data.choices?.[0]?.message?.content ||
+      "I apologize, but I couldn't generate a response. Please try again.";
 
-    // Save assistant response
     await supabase.from("chat_messages").insert({
       conversation_id: activeConversationId,
       role: "assistant",
