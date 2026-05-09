@@ -35,6 +35,34 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
     });
   };
 
+  const extractTextFromPdf = async (file: File): Promise<string> => {
+    const pdfjs = await import('pdfjs-dist');
+    const workerUrl = (await import('pdfjs-dist/build/pdf.worker.min.mjs?url')).default;
+    pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
+    const pageTexts: string[] = [];
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items
+        .map((item: { str?: string }) => ('str' in item ? item.str ?? '' : ''))
+        .join(' ');
+      pageTexts.push(pageText);
+    }
+
+    return pageTexts.join('\n\n').trim();
+  };
+
+  const extractTextFromDocx = async (file: File): Promise<string> => {
+    const mammoth = await import('mammoth/mammoth.browser');
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    return (result.value as string).trim();
+  };
+
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
