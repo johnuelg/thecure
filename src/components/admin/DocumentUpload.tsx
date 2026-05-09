@@ -47,8 +47,8 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const textContent = await page.getTextContent();
-      const pageText = textContent.items
-        .map((item: { str?: string }) => ('str' in item ? item.str ?? '' : ''))
+      const pageText = (textContent.items as Array<{ str?: string }>)
+        .map((item) => ('str' in item ? item.str ?? '' : ''))
         .join(' ');
       pageTexts.push(pageText);
     }
