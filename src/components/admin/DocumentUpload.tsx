@@ -232,7 +232,7 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
       )}
 
       <p className="text-xs text-muted-foreground">
-        TXT files: Content will be extracted automatically. PDF/Word: Upload the file, then paste the content below.
+        Text is extracted automatically from TXT, PDF, and DOCX files. Scanned PDFs and legacy .doc files require manual paste.
       </p>
     </div>
   );
