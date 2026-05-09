@@ -35,6 +35,34 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
     });
   };
 
+  const extractTextFromPdf = async (file: File): Promise<string> => {
+    const pdfjs = await import('pdfjs-dist');
+    const workerUrl = (await import('pdfjs-dist/build/pdf.worker.min.mjs?url')).default;
+    pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
+    const pageTexts: string[] = [];
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = (textContent.items as Array<{ str?: string }>)
+        .map((item) => ('str' in item ? item.str ?? '' : ''))
+        .join(' ');
+      pageTexts.push(pageText);
+    }
+
+    return pageTexts.join('\n\n').trim();
+  };
+
+  const extractTextFromDocx = async (file: File): Promise<string> => {
+    const mammoth = await import('mammoth/mammoth.browser');
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    return (result.value as string).trim();
+  };
+
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -80,22 +108,43 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
         extractedContent = await extractTextFromTxt(file);
         toast({ title: 'Text extracted successfully' });
       } else if (file.type === 'application/pdf' || fileExt === 'pdf') {
-        toast({
-          title: 'PDF uploaded',
-          description: 'Please paste the document content below, or the AI will reference the file URL.',
-        });
-        extractedContent = `[PDF Document: ${file.name}]\nFile URL: ${publicUrlData.publicUrl}\n\n--- Please paste the document content below ---`;
+        try {
+          extractedContent = await extractTextFromPdf(file);
+          if (!extractedContent) {
+            extractedContent = `[PDF Document: ${file.name}]\nFile URL: ${publicUrlData.publicUrl}\n\nNo extractable text found (the PDF may be a scanned image). Please paste the content manually.`;
+            toast({ title: 'No text found in PDF', description: 'The PDF appears to be scanned. Paste content manually.', variant: 'destructive' });
+          } else {
+            toast({ title: 'PDF text extracted', description: `${extractedContent.length.toLocaleString()} characters extracted.` });
+          }
+        } catch (err) {
+          console.error('PDF extraction failed:', err);
+          extractedContent = `[PDF Document: ${file.name}]\nFile URL: ${publicUrlData.publicUrl}\n\nAutomatic extraction failed. Please paste the content manually.`;
+          toast({ title: 'PDF extraction failed', description: 'Please paste content manually.', variant: 'destructive' });
+        }
       } else if (
         file.type === 'application/msword' ||
         file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
         fileExt === 'doc' ||
         fileExt === 'docx'
       ) {
-        toast({
-          title: 'Word document uploaded',
-          description: 'Please paste the document content below, or the AI will reference the file URL.',
-        });
-        extractedContent = `[Word Document: ${file.name}]\nFile URL: ${publicUrlData.publicUrl}\n\n--- Please paste the document content below ---`;
+        if (fileExt === 'doc') {
+          extractedContent = `[Word Document: ${file.name}]\nFile URL: ${publicUrlData.publicUrl}\n\nLegacy .doc format is not supported for automatic extraction. Please save as .docx or paste the content manually.`;
+          toast({ title: 'Legacy .doc not supported', description: 'Please save as .docx for automatic extraction.', variant: 'destructive' });
+        } else {
+          try {
+            extractedContent = await extractTextFromDocx(file);
+            if (!extractedContent) {
+              extractedContent = `[Word Document: ${file.name}]\nFile URL: ${publicUrlData.publicUrl}\n\nNo extractable text found.`;
+              toast({ title: 'No text found in document', variant: 'destructive' });
+            } else {
+              toast({ title: 'Word text extracted', description: `${extractedContent.length.toLocaleString()} characters extracted.` });
+            }
+          } catch (err) {
+            console.error('DOCX extraction failed:', err);
+            extractedContent = `[Word Document: ${file.name}]\nFile URL: ${publicUrlData.publicUrl}\n\nAutomatic extraction failed. Please paste the content manually.`;
+            toast({ title: 'Word extraction failed', description: 'Please paste content manually.', variant: 'destructive' });
+          }
+        }
       }
 
       onContentExtracted(extractedContent, file.name);
@@ -183,7 +232,7 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
       )}
 
       <p className="text-xs text-muted-foreground">
-        TXT files: Content will be extracted automatically. PDF/Word: Upload the file, then paste the content below.
+        Text is extracted automatically from TXT, PDF, and DOCX files. Scanned PDFs and legacy .doc files require manual paste.
       </p>
     </div>
   );
