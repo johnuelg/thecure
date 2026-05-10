@@ -131,6 +131,10 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
     setIsUploading(true);
 
     try {
+      // Compute content hash for caching
+      const fileHash = await hashFile(file);
+      const cached = getCachedExtraction(fileHash);
+
       // Generate unique filename
       const fileExt = file.name.split('.').pop()?.toLowerCase();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
@@ -154,7 +158,13 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
 
       // Extract content based on file type
       let extractedContent = '';
-      
+
+      if (cached !== null) {
+        onContentExtracted(cached, file.name);
+        toast({ title: 'Reused cached extraction', description: `${cached.length.toLocaleString()} characters loaded from cache.` });
+        return;
+      }
+
       if (file.type === 'text/plain' || fileExt === 'txt') {
         extractedContent = await extractTextFromTxt(file);
         toast({ title: 'Text extracted successfully' });
