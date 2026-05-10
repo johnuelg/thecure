@@ -208,6 +208,9 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
         }
       }
 
+      if (extractedContent) {
+        setCachedExtraction(fileHash, extractedContent, file.name);
+      }
       onContentExtracted(extractedContent, file.name);
       toast({ title: 'File uploaded successfully' });
     } catch (error: unknown) {
