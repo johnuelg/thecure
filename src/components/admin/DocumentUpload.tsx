@@ -26,6 +26,57 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
+  const CACHE_PREFIX = 'kb-extract:';
+  const CACHE_MAX_ENTRIES = 50;
+
+  const hashFile = async (file: File): Promise<string> => {
+    const buf = await file.arrayBuffer();
+    const digest = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  };
+
+  const getCachedExtraction = (hash: string): string | null => {
+    try {
+      const raw = localStorage.getItem(CACHE_PREFIX + hash);
+      if (!raw) return null;
+      const entry = JSON.parse(raw) as { content: string };
+      // Refresh recency
+      localStorage.setItem(CACHE_PREFIX + hash, JSON.stringify({ ...entry, lastUsed: Date.now() }));
+      return entry.content ?? null;
+    } catch {
+      return null;
+    }
+  };
+
+  const setCachedExtraction = (hash: string, content: string, fileName: string) => {
+    try {
+      // Evict oldest if at capacity
+      const keys = Object.keys(localStorage).filter((k) => k.startsWith(CACHE_PREFIX));
+      if (keys.length >= CACHE_MAX_ENTRIES) {
+        const sorted = keys
+          .map((k) => {
+            try {
+              const v = JSON.parse(localStorage.getItem(k) || '{}');
+              return { k, lastUsed: v.lastUsed ?? 0 };
+            } catch {
+              return { k, lastUsed: 0 };
+            }
+          })
+          .sort((a, b) => a.lastUsed - b.lastUsed);
+        const toRemove = sorted.slice(0, keys.length - CACHE_MAX_ENTRIES + 1);
+        toRemove.forEach((e) => localStorage.removeItem(e.k));
+      }
+      localStorage.setItem(
+        CACHE_PREFIX + hash,
+        JSON.stringify({ content, fileName, lastUsed: Date.now() })
+      );
+    } catch (err) {
+      console.warn('Failed to cache extraction:', err);
+    }
+  };
+
   const extractTextFromTxt = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -80,6 +131,10 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
     setIsUploading(true);
 
     try {
+      // Compute content hash for caching
+      const fileHash = await hashFile(file);
+      const cached = getCachedExtraction(fileHash);
+
       // Generate unique filename
       const fileExt = file.name.split('.').pop()?.toLowerCase();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
@@ -103,7 +158,13 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
 
       // Extract content based on file type
       let extractedContent = '';
-      
+
+      if (cached !== null) {
+        onContentExtracted(cached, file.name);
+        toast({ title: 'Reused cached extraction', description: `${cached.length.toLocaleString()} characters loaded from cache.` });
+        return;
+      }
+
       if (file.type === 'text/plain' || fileExt === 'txt') {
         extractedContent = await extractTextFromTxt(file);
         toast({ title: 'Text extracted successfully' });
@@ -147,6 +208,9 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
         }
       }
 
+      if (extractedContent) {
+        setCachedExtraction(fileHash, extractedContent, file.name);
+      }
       onContentExtracted(extractedContent, file.name);
       toast({ title: 'File uploaded successfully' });
     } catch (error: unknown) {
