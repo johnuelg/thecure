@@ -37,12 +37,11 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
       .join('');
   };
 
-  const getCachedExtraction = (hash: string): string | null => {
+  const getLocalCachedExtraction = (hash: string): string | null => {
     try {
       const raw = localStorage.getItem(CACHE_PREFIX + hash);
       if (!raw) return null;
       const entry = JSON.parse(raw) as { content: string };
-      // Refresh recency
       localStorage.setItem(CACHE_PREFIX + hash, JSON.stringify({ ...entry, lastUsed: Date.now() }));
       return entry.content ?? null;
     } catch {
@@ -50,9 +49,8 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
     }
   };
 
-  const setCachedExtraction = (hash: string, content: string, fileName: string) => {
+  const setLocalCachedExtraction = (hash: string, content: string, fileName: string) => {
     try {
-      // Evict oldest if at capacity
       const keys = Object.keys(localStorage).filter((k) => k.startsWith(CACHE_PREFIX));
       if (keys.length >= CACHE_MAX_ENTRIES) {
         const sorted = keys
@@ -73,8 +71,63 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
         JSON.stringify({ content, fileName, lastUsed: Date.now() })
       );
     } catch (err) {
-      console.warn('Failed to cache extraction:', err);
+      console.warn('Failed to cache extraction locally:', err);
     }
+  };
+
+  const getRemoteCachedExtraction = async (hash: string): Promise<string | null> => {
+    try {
+      const { data, error } = await supabase
+        .from('knowledge_extraction_cache')
+        .select('content')
+        .eq('content_hash', hash)
+        .maybeSingle();
+      if (error || !data) return null;
+      supabase
+        .from('knowledge_extraction_cache')
+        .update({ last_used_at: new Date().toISOString() })
+        .eq('content_hash', hash)
+        .then(() => {}, () => {});
+      return (data as { content: string }).content ?? null;
+    } catch (err) {
+      console.warn('Remote cache lookup failed:', err);
+      return null;
+    }
+  };
+
+  const setRemoteCachedExtraction = async (hash: string, content: string, fileName: string) => {
+    try {
+      await supabase
+        .from('knowledge_extraction_cache')
+        .upsert(
+          {
+            content_hash: hash,
+            content,
+            file_name: fileName,
+            char_count: content.length,
+            last_used_at: new Date().toISOString(),
+          },
+          { onConflict: 'content_hash' }
+        );
+    } catch (err) {
+      console.warn('Failed to cache extraction remotely:', err);
+    }
+  };
+
+  const getCachedExtraction = async (hash: string): Promise<string | null> => {
+    const local = getLocalCachedExtraction(hash);
+    if (local !== null) return local;
+    const remote = await getRemoteCachedExtraction(hash);
+    if (remote !== null) {
+      setLocalCachedExtraction(hash, remote, '');
+      return remote;
+    }
+    return null;
+  };
+
+  const setCachedExtraction = async (hash: string, content: string, fileName: string) => {
+    setLocalCachedExtraction(hash, content, fileName);
+    await setRemoteCachedExtraction(hash, content, fileName);
   };
 
   const extractTextFromTxt = async (file: File): Promise<string> => {
@@ -133,7 +186,7 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
     try {
       // Compute content hash for caching
       const fileHash = await hashFile(file);
-      const cached = getCachedExtraction(fileHash);
+      const cached = await getCachedExtraction(fileHash);
 
       // Generate unique filename
       const fileExt = file.name.split('.').pop()?.toLowerCase();
@@ -209,7 +262,7 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
       }
 
       if (extractedContent) {
-        setCachedExtraction(fileHash, extractedContent, file.name);
+        await setCachedExtraction(fileHash, extractedContent, file.name);
       }
       onContentExtracted(extractedContent, file.name);
       toast({ title: 'File uploaded successfully' });
