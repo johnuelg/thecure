@@ -186,7 +186,7 @@ export function DocumentUpload({ onContentExtracted, className }: DocumentUpload
     try {
       // Compute content hash for caching
       const fileHash = await hashFile(file);
-      const cached = getCachedExtraction(fileHash);
+      const cached = await getCachedExtraction(fileHash);
 
       // Generate unique filename
       const fileExt = file.name.split('.').pop()?.toLowerCase();
