@@ -541,6 +541,36 @@ export type Database = {
         }
         Relationships: []
       }
+      knowledge_extraction_cache: {
+        Row: {
+          char_count: number
+          content: string
+          content_hash: string
+          created_at: string
+          file_name: string
+          id: string
+          last_used_at: string
+        }
+        Insert: {
+          char_count?: number
+          content: string
+          content_hash: string
+          created_at?: string
+          file_name: string
+          id?: string
+          last_used_at?: string
+        }
+        Update: {
+          char_count?: number
+          content?: string
+          content_hash?: string
+          created_at?: string
+          file_name?: string
+          id?: string
+          last_used_at?: string
+        }
+        Relationships: []
+      }
       profile: {
         Row: {
           about_description: string | null
