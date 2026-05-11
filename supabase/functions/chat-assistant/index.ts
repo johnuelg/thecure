@@ -6,6 +6,22 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Rate limits (per IP+session)
+const BURST_MAX = 5;
+const BURST_WINDOW_SECONDS = 20;
+const SUSTAINED_MAX = 30;
+const SUSTAINED_WINDOW_SECONDS = 3600;
+
+// Input limits
+const MAX_MESSAGE_CHARS = 2000;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -18,24 +34,72 @@ serve(async (req) => {
     }
 
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-    const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
       throw new Error("Supabase environment variables are not configured");
     }
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Service-role client: edge function is trusted server code and must bypass
+    // the locked-down RLS policies on chat_conversations / chat_messages.
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+      auth: { persistSession: false },
+    });
 
     const { message, conversationId, sessionId } = await req.json();
 
-    if (!message || !sessionId) {
-      return new Response(
-        JSON.stringify({ error: "Message and sessionId are required" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    // --- Input validation -----------------------------------------------
+    if (typeof message !== "string" || typeof sessionId !== "string") {
+      return json({ error: "Message and sessionId are required" }, 400);
+    }
+    const cleanMessage = message.replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, "").trim();
+    if (!cleanMessage) {
+      return json({ error: "Message cannot be empty" }, 400);
+    }
+    if (cleanMessage.length > MAX_MESSAGE_CHARS) {
+      return json({ error: `Message is too long (max ${MAX_MESSAGE_CHARS} characters).` }, 400);
+    }
+    if (!UUID_RE.test(sessionId)) {
+      return json({ error: "Invalid sessionId" }, 400);
+    }
+    if (conversationId !== undefined && conversationId !== null && !UUID_RE.test(String(conversationId))) {
+      return json({ error: "Invalid conversationId" }, 400);
+    }
+
+    // --- Rate limiting --------------------------------------------------
+    const forwarded = req.headers.get("x-forwarded-for") || "";
+    const ip = forwarded.split(",")[0].trim() || "unknown";
+    const rlKey = `${ip}:${sessionId}`;
+
+    const burst = await supabase.rpc("check_and_increment_rate_limit", {
+      _key: `burst:${rlKey}`,
+      _max_requests: BURST_MAX,
+      _window_seconds: BURST_WINDOW_SECONDS,
+    });
+    if (burst.error) {
+      console.error("Rate limit RPC (burst) error:", burst.error);
+    } else if (burst.data === false) {
+      return json(
+        { error: "You're sending messages too quickly. Please wait a few seconds and try again." },
+        429,
       );
     }
 
-    // Fetch knowledge base documents
+    const sustained = await supabase.rpc("check_and_increment_rate_limit", {
+      _key: `hour:${rlKey}`,
+      _max_requests: SUSTAINED_MAX,
+      _window_seconds: SUSTAINED_WINDOW_SECONDS,
+    });
+    if (sustained.error) {
+      console.error("Rate limit RPC (sustained) error:", sustained.error);
+    } else if (sustained.data === false) {
+      return json(
+        { error: "You've reached the hourly chat limit. Please try again later." },
+        429,
+      );
+    }
+
+    // --- Knowledge base context ----------------------------------------
     const { data: knowledgeDocs, error: docsError } = await supabase
       .from("knowledge_documents")
       .select("title, content, document_type")
@@ -90,6 +154,7 @@ serve(async (req) => {
       });
     }
 
+    // --- Conversation persistence --------------------------------------
     let activeConversationId = conversationId;
 
     if (!activeConversationId) {
@@ -113,7 +178,7 @@ serve(async (req) => {
     await supabase.from("chat_messages").insert({
       conversation_id: activeConversationId,
       role: "user",
-      content: message,
+      content: cleanMessage,
     });
 
     const { data: history } = await supabase
@@ -144,7 +209,7 @@ Guidelines:
 - Keep responses focused and relevant to the portfolio content
 - Do not make up information not present in the knowledge base`;
 
-    // Call Google Gemini API directly
+    // --- LLM call ------------------------------------------------------
     const geminiContents = conversationHistory.map((msg: { role: string; content: string }) => ({
       role: msg.role === "assistant" ? "model" : "user",
       parts: [{ text: msg.content }],
@@ -168,10 +233,7 @@ Guidelines:
       console.error("Gemini API error:", response.status, errorText);
 
       if (response.status === 429) {
-        return new Response(
-          JSON.stringify({ error: "Too many requests. Please try again in a moment." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+        return json({ error: "Too many requests. Please try again in a moment." }, 429);
       }
 
       throw new Error(`Gemini API error: ${response.status}`);
@@ -188,18 +250,15 @@ Guidelines:
       content: assistantMessage,
     });
 
-    return new Response(
-      JSON.stringify({
-        message: assistantMessage,
-        conversationId: activeConversationId,
-      }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return json({
+      message: assistantMessage,
+      conversationId: activeConversationId,
+    });
   } catch (error) {
     console.error("Chat assistant error:", error);
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error occurred" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    return json(
+      { error: error instanceof Error ? error.message : "Unknown error occurred" },
+      500,
     );
   }
 });
