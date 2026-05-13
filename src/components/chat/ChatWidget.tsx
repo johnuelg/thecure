@@ -302,11 +302,15 @@ const ChatWidget = () => {
                             <ReactMarkdown
                               remarkPlugins={[remarkGfm]}
                               skipHtml
-                              urlTransform={(url) => {
+                              urlTransform={(url, key) => {
                                 try {
                                   const trimmed = url.trim();
-                                  if (/^(https?:|mailto:|tel:|#|\/)/i.test(trimmed)) return trimmed;
-                                  return "";
+                                  // Images: only http(s) or relative/anchor — block data:, javascript:, mailto:, tel:, etc.
+                                  if (key === "src") {
+                                    return /^(https?:|\/|#)/i.test(trimmed) ? trimmed : "";
+                                  }
+                                  // Links: allow http(s), mailto, tel, anchor, relative
+                                  return /^(https?:|mailto:|tel:|#|\/)/i.test(trimmed) ? trimmed : "";
                                 } catch {
                                   return "";
                                 }
@@ -315,6 +319,19 @@ const ChatWidget = () => {
                                 a: ({ node, ...props }) => (
                                   <a {...props} target="_blank" rel="noopener noreferrer nofollow" />
                                 ),
+                                img: ({ node, src, alt, ...props }) => {
+                                  if (!src) return null;
+                                  return (
+                                    <img
+                                      {...props}
+                                      src={src}
+                                      alt={alt ?? ""}
+                                      loading="lazy"
+                                      referrerPolicy="no-referrer"
+                                      crossOrigin="anonymous"
+                                    />
+                                  );
+                                },
                               }}
                             >
                               {message.content}
