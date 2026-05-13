@@ -299,7 +299,26 @@ const ChatWidget = () => {
                       >
                         {message.role === "assistant" ? (
                           <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0.5 prose-table:my-3 prose-th:px-2 prose-th:py-1 prose-td:px-2 prose-td:py-1 prose-table:border prose-table:border-border prose-th:border prose-th:border-border prose-td:border prose-td:border-border prose-table:text-xs">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              skipHtml
+                              urlTransform={(url) => {
+                                try {
+                                  const trimmed = url.trim();
+                                  if (/^(https?:|mailto:|tel:|#|\/)/i.test(trimmed)) return trimmed;
+                                  return "";
+                                } catch {
+                                  return "";
+                                }
+                              }}
+                              components={{
+                                a: ({ node, ...props }) => (
+                                  <a {...props} target="_blank" rel="noopener noreferrer nofollow" />
+                                ),
+                              }}
+                            >
+                              {message.content}
+                            </ReactMarkdown>
                           </div>
                         ) : (
                           message.content
