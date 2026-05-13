@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useProfileBranding } from "@/hooks/useProfileBranding";
+import SafeChatImage from "./SafeChatImage";
 
 interface Message {
   id: string;
@@ -321,16 +322,7 @@ const ChatWidget = () => {
                                 ),
                                 img: ({ node, src, alt, ...props }) => {
                                   if (!src) return null;
-                                  return (
-                                    <img
-                                      {...props}
-                                      src={src}
-                                      alt={alt ?? ""}
-                                      loading="lazy"
-                                      referrerPolicy="no-referrer"
-                                      crossOrigin="anonymous"
-                                    />
-                                  );
+                                  return <SafeChatImage {...props} src={src} alt={alt} />;
                                 },
                               }}
                             >
