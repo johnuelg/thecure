@@ -2,60 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-/* AI Healthcare Portfolio - Clinical Design System */
-/* Typography: Plus Jakarta Sans (display) + DM Sans (body) */
+/* Premium Healthcare Brand — Ocean Deep palette */
+/* Typography: Sora (display) + Manrope (body) */
 /* All colors MUST be HSL — WCAG 2.1 AA compliant */
 
 @layer base {
   :root {
-    /* Clinical color palette - Trust-inspiring medical blues and teals */
-    --background: 210 20% 98%;
-    --foreground: 215 25% 15%;
+    /* Ocean Deep — calm, trustworthy, professional */
+    --background: 200 40% 99%;
+    --foreground: 213 55% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    --card-foreground: 213 55% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
+    --popover-foreground: 213 55% 12%;
 
-    /* Primary - Medical Blue */
-    --primary: 210 70% 45%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary — deep ocean blue (#1a4a6e) */
+    --primary: 205 62% 27%;
+    --primary-foreground: 200 40% 99%;
 
-    /* Secondary - Subtle gray-blue */
-    --secondary: 210 20% 94%;
-    --secondary-foreground: 215 25% 25%;
+    /* Secondary — soft cool surface */
+    --secondary: 200 30% 95%;
+    --secondary-foreground: 213 55% 18%;
 
-    /* Muted - Light backgrounds */
-    --muted: 210 15% 96%;
-    --muted-foreground: 215 15% 40%;
+    /* Muted — pale clinical surface */
+    --muted: 200 30% 96%;
+    --muted-foreground: 210 18% 42%;
 
-    /* Accent - Teal for highlights */
-    --accent: 175 60% 40%;
+    /* Accent — luminous teal (#5cbdb9 / #2d8a9e mid) */
+    --accent: 184 56% 40%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 20% 88%;
-    --input: 210 20% 88%;
-    --ring: 210 70% 45%;
+    --border: 205 25% 88%;
+    --input: 205 25% 88%;
+    --ring: 184 56% 40%;
 
-    --radius: 0.625rem;
+    --radius: 0.875rem;
 
-    /* Custom healthcare tokens */
-    --healthcare-blue: 210 70% 45%;
-    --healthcare-teal: 175 60% 40%;
-    --healthcare-light-blue: 210 60% 95%;
-    --healthcare-pulse: 175 70% 50%;
-    
+    /* Healthcare tokens — Ocean Deep */
+    --healthcare-blue: 205 62% 27%;
+    --healthcare-teal: 178 41% 55%;
+    --healthcare-light-blue: 195 60% 96%;
+    --healthcare-pulse: 184 56% 50%;
+
     /* Gradients */
-    --gradient-medical: linear-gradient(135deg, hsl(210 70% 45%) 0%, hsl(175 60% 40%) 100%);
-    --gradient-subtle: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(210 15% 96%) 100%);
-    
-    /* Shadows */
-    --shadow-card: 0 4px 20px -4px hsl(210 70% 45% / 0.08);
-    --shadow-elevated: 0 12px 40px -12px hsl(210 70% 45% / 0.15);
+    --gradient-medical: linear-gradient(135deg, hsl(213 68% 18%) 0%, hsl(205 62% 27%) 40%, hsl(184 56% 40%) 80%, hsl(178 41% 55%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(200 40% 99%) 0%, hsl(200 30% 96%) 100%);
+    --gradient-hero: radial-gradient(ellipse 80% 60% at 50% 0%, hsl(184 56% 40% / 0.10) 0%, transparent 60%), linear-gradient(180deg, hsl(195 60% 96%) 0%, hsl(200 40% 99%) 100%);
+
+    /* Premium clinical shadows */
+    --shadow-card: 0 1px 2px -1px hsl(213 55% 12% / 0.04), 0 4px 16px -4px hsl(205 62% 27% / 0.06);
+    --shadow-elevated: 0 8px 24px -8px hsl(205 62% 27% / 0.12), 0 24px 48px -16px hsl(213 55% 12% / 0.08);
+    --shadow-glow: 0 0 0 1px hsl(184 56% 40% / 0.18), 0 12px 40px -8px hsl(184 56% 40% / 0.25);
 
     /* Sidebar */
     --sidebar-background: 0 0% 98%;
