@@ -71,38 +71,43 @@
   }
 
   .dark {
-    --background: 215 30% 8%;
-    --foreground: 210 20% 92%;
+    /* Ocean Deep — premium clinical dark */
+    --background: 213 55% 7%;
+    --foreground: 195 30% 94%;
 
-    --card: 215 25% 12%;
-    --card-foreground: 210 20% 92%;
+    --card: 213 45% 11%;
+    --card-foreground: 195 30% 94%;
 
-    --popover: 215 25% 12%;
-    --popover-foreground: 210 20% 92%;
+    --popover: 213 45% 11%;
+    --popover-foreground: 195 30% 94%;
 
-    --primary: 210 65% 55%;
-    --primary-foreground: 215 30% 8%;
+    --primary: 184 56% 50%;
+    --primary-foreground: 213 55% 7%;
 
-    --secondary: 215 20% 18%;
-    --secondary-foreground: 210 20% 88%;
+    --secondary: 213 35% 16%;
+    --secondary-foreground: 195 25% 88%;
 
-    --muted: 215 20% 16%;
-    --muted-foreground: 210 15% 55%;
+    --muted: 213 35% 14%;
+    --muted-foreground: 200 18% 62%;
 
-    --accent: 175 55% 45%;
-    --accent-foreground: 215 30% 8%;
+    --accent: 178 41% 55%;
+    --accent-foreground: 213 55% 7%;
 
     --destructive: 0 65% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 20% 20%;
-    --input: 215 20% 20%;
-    --ring: 210 65% 55%;
+    --border: 213 30% 20%;
+    --input: 213 30% 20%;
+    --ring: 184 56% 50%;
 
-    --healthcare-blue: 210 65% 55%;
-    --healthcare-teal: 175 55% 45%;
-    --healthcare-light-blue: 210 40% 15%;
-    --healthcare-pulse: 175 65% 55%;
+    --healthcare-blue: 205 62% 45%;
+    --healthcare-teal: 178 60% 60%;
+    --healthcare-light-blue: 205 50% 18%;
+    --healthcare-pulse: 184 70% 60%;
+
+    --shadow-card: 0 1px 2px -1px hsl(213 55% 3% / 0.5), 0 8px 24px -8px hsl(213 55% 3% / 0.6);
+    --shadow-elevated: 0 12px 40px -12px hsl(184 56% 40% / 0.35), 0 24px 60px -20px hsl(213 55% 3% / 0.8);
+    --shadow-glow: 0 0 0 1px hsl(184 56% 50% / 0.35), 0 0 40px -4px hsl(178 60% 60% / 0.4);
 
     --sidebar-background: 215 30% 10%;
     --sidebar-foreground: 210 20% 88%;
