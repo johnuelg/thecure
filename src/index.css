@@ -188,13 +188,14 @@
   /* Healthcare-inspired decorative elements */
   .healthcare-gradient {
     background: linear-gradient(135deg, hsl(var(--healthcare-blue)) 0%, hsl(var(--healthcare-teal)) 100%);
-    transition: all 0.3s ease-out;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .healthcare-gradient:hover {
     background: linear-gradient(135deg, hsl(var(--healthcare-blue)) 0%, hsl(var(--healthcare-teal)) 100%);
-    filter: brightness(1.1);
-    box-shadow: 0 6px 24px -4px hsl(var(--primary) / 0.45);
+    filter: brightness(1.08) saturate(1.05);
+    box-shadow: 0 10px 32px -8px hsl(var(--accent) / 0.5), 0 0 0 1px hsl(var(--accent) / 0.2);
+    transform: translateY(-1px);
   }
 
   .healthcare-gradient-text {
@@ -219,101 +220,89 @@
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0c8.284 0 15 6.716 15 15 0 8.284-6.716 15-15 15-8.284 0-15-6.716-15-15C15 6.716 21.716 0 30 0zm0 40c8.284 0 15 6.716 15 15 0 8.284-6.716 15-15 15-8.284 0-15-6.716-15-15 0-8.284 6.716-15 15-15z' fill='%23e0f2fe' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
   }
 
-  /* Card with medical shadow */
+  /* Premium clinical card */
   .card-medical {
-    @apply bg-card rounded-xl border border-border;
+    @apply bg-card rounded-2xl border border-border/70;
     box-shadow: var(--shadow-card);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transform: translateY(0) scale(1);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: saturate(1.1);
   }
 
   .card-medical:hover {
-    box-shadow: 
-      var(--shadow-elevated),
-      0 0 0 1px hsl(var(--primary) / 0.12),
-      0 20px 60px -15px hsl(var(--primary) / 0.18);
-    border-color: hsl(var(--primary) / 0.3);
-    transform: translateY(-4px) scale(1.005);
+    box-shadow: var(--shadow-elevated), 0 0 0 1px hsl(var(--accent) / 0.18);
+    border-color: hsl(var(--accent) / 0.35);
+    transform: translateY(-6px);
   }
 
   /* Inner icon/accent areas lift with the card */
   .card-medical:hover .bg-primary\/10 {
-    background-color: hsl(var(--primary) / 0.18);
+    background-color: hsl(var(--accent) / 0.16);
     transition: background-color 0.3s ease;
   }
 
-  /* Subtle top-edge gradient accent on hover */
+  /* Sharp top-edge gradient line on hover */
   .card-medical::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
-    border-radius: inherit;
-    background: linear-gradient(90deg, hsl(var(--primary) / 0), hsl(var(--primary) / 0.6), hsl(var(--accent) / 0.6), hsl(var(--primary) / 0));
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, hsl(var(--accent) / 0.7), hsl(var(--healthcare-teal) / 0.9), hsl(var(--accent) / 0.7), transparent);
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.5s ease;
   }
 
-  .card-medical:hover::after {
-    opacity: 1;
-  }
+  .card-medical:hover::after { opacity: 1; }
 
-  /* Cards need relative positioning for the pseudo-element */
-  .card-medical {
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Radial glow behind card on hover */
+  /* Soft radial glow */
   .card-medical::before {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: radial-gradient(
-      ellipse at 50% 0%,
-      hsl(var(--primary) / 0.06) 0%,
-      transparent 70%
-    );
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, hsl(var(--accent) / 0.07) 0%, transparent 70%);
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.5s ease;
     pointer-events: none;
     z-index: 0;
   }
 
-  .card-medical:hover::before {
-    opacity: 1;
-  }
+  .card-medical:hover::before { opacity: 1; }
 
-  /* Ensure card content stays above pseudo-elements */
   .card-medical > * {
     position: relative;
     z-index: 1;
   }
 
-  /* Dark mode: more vivid glow */
+  /* Dark mode: vivid teal glow */
   .dark .card-medical:hover {
     box-shadow:
-      0 12px 40px -12px hsl(var(--primary) / 0.3),
-      0 0 0 1px hsl(var(--primary) / 0.2),
-      0 0 30px -10px hsl(var(--accent) / 0.15);
-    border-color: hsl(var(--primary) / 0.4);
+      0 16px 48px -16px hsl(213 55% 3% / 0.8),
+      0 0 0 1px hsl(var(--accent) / 0.35),
+      0 0 32px -8px hsl(var(--healthcare-teal) / 0.3);
+    border-color: hsl(var(--accent) / 0.5);
   }
 
   .dark .card-medical::before {
-    background: radial-gradient(
-      ellipse at 50% 0%,
-      hsl(var(--primary) / 0.1) 0%,
-      hsl(var(--accent) / 0.03) 40%,
-      transparent 70%
-    );
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, hsl(var(--accent) / 0.14) 0%, hsl(var(--healthcare-teal) / 0.05) 40%, transparent 70%);
   }
 
-  /* Section spacing */
+  /* Glass surface */
+  .glass-surface {
+    background: hsl(var(--card) / 0.65);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid hsl(var(--border) / 0.8);
+  }
+
+  /* Section spacing — generous, premium */
   .section-padding {
-    @apply py-20 md:py-28 lg:py-36;
+    @apply py-24 md:py-32 lg:py-40;
   }
 
   .container-narrow {
@@ -326,12 +315,13 @@
 
   /* Section header typography pattern */
   .section-badge {
-    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-primary text-xs font-semibold font-display mb-5 uppercase tracking-widest;
-    background-color: hsl(var(--primary) / 0.08);
+    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-primary text-[11px] font-semibold font-display mb-6 uppercase tracking-[0.18em];
+    background-color: hsl(var(--accent) / 0.10);
+    border: 1px solid hsl(var(--accent) / 0.18);
   }
 
   .section-title {
-    @apply font-display font-bold mb-5;
+    @apply font-display font-bold mb-5 tracking-tight;
   }
 
   .section-description {
@@ -340,8 +330,20 @@
 
   /* Decorative section divider */
   .section-divider {
-    @apply w-12 h-[3px] rounded-full mx-auto mt-5 mb-0;
-    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
+    @apply w-16 h-[2px] rounded-full mx-auto mt-6 mb-0;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary)), hsl(var(--accent)), transparent);
+  }
+
+  /* Reveal-on-scroll utilities for static sections */
+  .reveal-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-up.in-view { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-up { opacity: 1; transform: none; transition: none; }
   }
 
   /* Prose for readable body text */
